@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "509959175595",
+    "firebase_url": "https://nanny-app-4ebcd.firebaseio.com",
+    "project_id": "nanny-app-4ebcd",
+    "storage_bucket": "nanny-app-4ebcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:509959175595:android:14783177a40c680fd426ee",
+        "android_client_info": {
+          "package_name": "com.zeev.superNanny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "509959175595-9v0ni4rr6bhdabp10tfgidvabn98rjvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKcwHs7GQoesxYCJ6dVPPWlO8w2YDgo-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "509959175595-9v0ni4rr6bhdabp10tfgidvabn98rjvi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

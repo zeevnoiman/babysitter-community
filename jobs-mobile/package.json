@@ -1,0 +1,51 @@
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "@react-native-community/datetimepicker": "2.1.0",
+    "@react-native-community/masked-view": "0.1.5",
+    "@react-navigation/native": "^5.1.4",
+    "@use-expo/font": "^1.0.1",
+    "axios": "^0.19.2",
+    "date-fns": "^2.12.0",
+    "date-fns-tz": "^1.0.10",
+    "expo": "~36.0.0",
+    "expo-background-fetch": "~8.0.0",
+    "expo-constants": "~8.0.0",
+    "expo-image-picker": "~8.0.1",
+    "expo-location": "^8.0.0",
+    "expo-mail-composer": "~8.0.0",
+    "expo-permissions": "~8.0.0",
+    "expo-task-manager": "~8.0.0",
+    "formik": "^2.1.4",
+    "intl": "^1.2.5",
+    "react": "~16.9.0",
+    "react-dom": "~16.9.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-date-picker": "^2.7.9",
+    "react-native-elements": "^1.2.7",
+    "react-native-gesture-handler": "~1.5.0",
+    "react-native-maps": "0.26.1",
+    "react-native-multi-select-picker": "^1.0.11",
+    "react-native-reanimated": "~1.4.0",
+    "react-native-safe-area-context": "0.6.0",
+    "react-native-screens": "2.0.0-alpha.12",
+    "react-native-star-rating": "^1.1.0",
+    "react-native-web": "~0.11.7",
+    "react-native-webview": "7.4.3",
+    "react-navigation": "^4.3.1",
+    "react-navigation-stack": "^2.3.1",
+    "yup": "^0.28.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "babel-preset-expo": "~8.0.0"
+  },
+  "private": true
+}
