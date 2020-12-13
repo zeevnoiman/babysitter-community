@@ -10,6 +10,8 @@ exports.up = function(knex) {
         table.string('street')
         table.specificType("location", "geometry(point, 4326)");
         table.string('bio')
+        table.string('photo')
+        table.string('phone')
         table.text('languages')
         table.float('rate')   
         table.float('stars')   

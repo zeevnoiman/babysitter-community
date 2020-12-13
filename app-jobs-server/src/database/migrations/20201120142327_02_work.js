@@ -9,8 +9,8 @@ exports.up = function(knex) {
         table.boolean('reviewed')
         table.float('defined_value_to_pay')
         
-        table.integer('babysitter_schedule_id').references('babysitter_schedule.id')
-        table.integer('user_id').references('user.id')
+        table.integer('babysitter_schedule_id').references('id').inTable('babysitter_schedule')
+        table.integer('user_id').references('id').inTable('user')
     })
 };
 

@@ -10,7 +10,8 @@ exports.up = function(knex) {
         
         table.integer('babysitter_id')
         .notNullable()
-        .references('babysitter.id')
+        .references('id')
+        .inTable('babysitter')
         .onDelete('CASCADE')
         .onUpdate('CASCADE');
     })

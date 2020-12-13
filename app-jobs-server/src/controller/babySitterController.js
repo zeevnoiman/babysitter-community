@@ -10,7 +10,7 @@ module.exports = {
         const {user_id} = req.params;
 
         
-        const babysitter = await BabySitter.findOne({_id : user_id});
+        const babysitter = await BabySitter.findOne({id : user_id});
 
         console.log(babysitter);
 
@@ -34,14 +34,14 @@ module.exports = {
     },
 
     async store(req, res) {
-        const {age, gender, country, city, neighborhood, street, start_hour, finish_hour, bio, phone, rate, user_id, languages} = req.body;
+        const {age, gender, country, city, street, bio, phone, languages, rate, user_id} = req.body;
         var filename = '';
         if(req.file){
              filename = req.file.filename;
         } 
 
         console.log(languages);
-        const user = await User.findOne({_id : user_id});
+        const user = await User.findOne({id : user_id});
         
         
         var api_url = 'https://api.opencagedata.com/geocode/v1/json'
@@ -62,8 +62,8 @@ module.exports = {
         console.log(pos);
     
         const location = {
-            type: 'Point',
-            coordinates: [pos[0].lng, pos[0].lat],
+            lat : pos[0].lat,
+            lon : pos[0].lng
         };
 
         const languagesArray = languages.split(',').map(language => language.trim());
