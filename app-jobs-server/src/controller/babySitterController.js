@@ -34,7 +34,7 @@ module.exports = {
     },
 
     async store(req, res) {
-        const {age, gender, country, city, street, bio, phone, languages, rate, user_id} = req.body;
+        const {age, gender, country, city, street, bio, phone, languages, rate, user_id, schedules} = req.body;
         var filename = '';
         if(req.file){
              filename = req.file.filename;
@@ -74,19 +74,18 @@ module.exports = {
             age,
             email : user.email,
             gender,
-            country,
             city,
-            neighborhood,
             location,
             street,
-            start_hour,
-            finish_hour,
             bio,
             photo: filename,
             phone,
-            languagesArray,
+            languages : languagesArray,
             rate,
+            start_hour,
+            finish_hour,
             user_id,
+            schedules
         }
 
         console.log(babysitter);

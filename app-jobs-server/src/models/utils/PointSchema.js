@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PointSchema = new mongoose.Schema({
+exports.PointSchema = new mongoose.Schema({
     type: {
         type: String,
         enum: ['Point'],
@@ -12,4 +12,10 @@ const PointSchema = new mongoose.Schema({
     }
 });
 
-module.exports = PointSchema;
+exports.convertTimeToMin = function convertTimeToMin(time){
+    const [hour, min] = time.split(':').map(Number);
+
+    const timeInMin = (hour*60)+min;
+
+    return timeInMin;
+}

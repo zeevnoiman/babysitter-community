@@ -3,7 +3,8 @@ module.exports = {
 
     jwtSecret: "0f732e8f60660f1a63cacf025e145712",
 
-    apiGeoKey: '7468e9313284439ba144a9f081377e2a',
+    apiGeoKey: '72e8064bb8b841e6a7ed39bb5dd439f5',
 
+    
     postgresKey: 'micalinda10',
 }

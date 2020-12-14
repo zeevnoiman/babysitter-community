@@ -19,19 +19,18 @@ const BabySitter = {
         age,
         email,
         gender,
-        country,
         city,
-        neighborhood,
         location,
         street,
-        start_hour,
-        finish_hour,
         bio,
         photo,
         phone,
         languages,
         rate,
+        stars = 0,
+        howManyReviews = 0,
         user_id,
+       schedules
     }){
         const st = db.postgis;
 
@@ -54,13 +53,17 @@ const BabySitter = {
                 stars,
                 howManyReviews,
                 user_id
-            });
+            }, ['id']);
 
             const insertedBabysitterId = insertedBabysitters[0];
- 
-            const insertedSchedules = await trx('babysitter_schedule').insert({
-                
-            })
+
+            const schedulesSerialized = schedules.map(schedule => {
+                return{
+                    ...schedule,
+                    insertedBabysitterId
+                }
+            });
+            await trx('babysitter_schedule').insert(schedulesSerialized);
 
             trx.commit();
 
