@@ -1,1 +1,0 @@
-export default apiGeoKey = '7468e9313284439ba144a9f081377e2a';
