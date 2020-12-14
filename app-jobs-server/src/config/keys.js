@@ -5,6 +5,5 @@ module.exports = {
 
     apiGeoKey: '72e8064bb8b841e6a7ed39bb5dd439f5',
 
-    
     postgresKey: 'micalinda10',
 }
