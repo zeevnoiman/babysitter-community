@@ -2,6 +2,7 @@ const axios = require('axios');
 const BabySitter = require('../models/BabySitter');
 const User = require('../models/User');
 const authConfig = require('../config/keys');
+const convertTimeToMin = require('../models/utils/convertTimeToMin');
 
 module.exports = {
 
@@ -40,35 +41,45 @@ module.exports = {
              filename = req.file.filename;
         } 
 
-        console.log(languages);
-        const user = await User.findOne({id : user_id});
+        //get user who is opening babysitter profile
+        const user = await User.findById({id : user_id});
         
         
+        //location pre proccesing
         var api_url = 'https://api.opencagedata.com/geocode/v1/json'
 
         const fullAddress = `${street},${city},${country}`;
         var addressEncoded = encodeURIComponent(fullAddress);
-
         var request_url = api_url
           + '?'
           + 'q=' + addressEncoded
           + '&key=' + authConfig.apiGeoKey;
 
-
         const apiResponse = await axios.get(request_url);
           
         const pos = apiResponse.data.results.map(res => res.geometry);
           
-        console.log(pos);
-    
         const location = {
             lat : pos[0].lat,
             lon : pos[0].lng
         };
 
+        //languages pre processing
         const languagesArray = languages.split(',').map(language => language.trim());
         
-        console.log(languagesArray);
+        //schedules pre processing
+        const schedulesParsed = JSON.parse(schedules);
+        const schedulesSerialized = schedulesParsed.map(schedule => {
+            const from = convertTimeToMin(schedule.from);
+            const to = convertTimeToMin(schedule.to);
+
+            return{
+                ...schedule,
+                from,
+                to
+            }
+        });
+
         const babysitter = {
             name : user.name,
             age,
@@ -82,13 +93,10 @@ module.exports = {
             phone,
             languages : languagesArray,
             rate,
-            start_hour,
-            finish_hour,
             user_id,
-            schedules
+            schedules : schedulesSerialized
         }
 
-        console.log(babysitter);
         const newBabysitter = await BabySitter.create(babysitter);
         
         return res.send({'babysitter': newBabysitter});
