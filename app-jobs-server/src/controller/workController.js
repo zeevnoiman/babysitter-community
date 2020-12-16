@@ -1,3 +1,4 @@
+const converTimeToMin = require('../models/utils/convertTimeToMin');
 const Work = require('../models/Work');
 const User = require('../models/User');
 const BabySitter = require('../models/BabySitter');
@@ -65,37 +66,41 @@ const sendPushNotification = async (user, nanny) => {
     });
   };
 
-
-
 module.exports = {
     async store(req, res){
         const { babysitter_id } = req.params;
         const {user_id} = req.headers;
         const {serviceDescription ,date_hour_start_string, date_hour_finish_string, defined_value_to_pay,  } = req.body;
         
+        //pre processing of time
         //format of date_hour_*_string : yyyy-MM-dd HH:mm:ss
         console.log(date_hour_start_string)
-        const date_hour_start = parseISO(date_hour_start_string);
-        const date_hour_finish= parseISO(date_hour_finish_string);
+        const date_hour_start = new Date(date_hour_start_string);
+        const date_hour_finish = new Date(date_hour_finish_string);
 
-        const babysitter = await BabySitter.findById(babysitter_id);
-
-        if(!babysitter){
-            return res.status(400).json({msg : 'employee not found'})
-        }
-
-        const newWork = {
-            serviceDescription,
-            date_hour_start,
-            date_hour_finish,
-            family : user_id,
-            nanny : babysitter_id,
-            defined_value_to_pay,
-        }
-
-        const work = await Work.create(newWork);
+        const day = date_hour_start.getDate();
+        const month = date_hour_start.getMonth() + 1; //js month -> 0 - 11, I want -> 1 - 12
+        const year = date_hour_start.getFullYear();
+        const month_day = `${month}${day}`;
         
-        res.json(work);
+        const startHour = date_hour_start.getHours();
+        const startMin = date_hour_start.getMinutes();
+        const startTime = `${startHour}:${startMin}`;
+        const startTimeInMin = converTimeToMin(startTime);
+
+        const finishHour = date_hour_finish.getHours();
+        const finishMin = date_hour_finish.getMinutes();
+        const finishTime = `${finishHour}:${finishMin}`;
+        const finishTimeInMin = converTimeToMin(finishTime);
+
+        const schedule_id = await BabySitter.getSchedule(babysitter_id, year, month_day, startTimeInMin, finishTimeInMin);
+
+        if(schedule_id){
+            const work_id = await Work.addWork(serviceDescription, startTimeInMin, finishTimeInMin, defined_value_to_pay, schedule_id, user_id);
+            res.send({work : work_id})
+        }
+
+        res.send('No open schedule for this babysitter in that time');
     },
 
     async index(req, res){

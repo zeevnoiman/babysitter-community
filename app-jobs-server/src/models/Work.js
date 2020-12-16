@@ -1,36 +1,31 @@
-const {Schema, model} = require("mongoose");
+const db = require('../database/connection');
 
 
-// Create Schema
-const WorkSchema = new Schema({
-  serviceDescription: {
-    type: String,
-  },
-  family: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  nanny: {
-    type: Schema.Types.ObjectId,
-    ref: 'BabySitter',
-    required: true
-  },
-  date_hour_start: Date,
-  date_hour_finish: Date,
-  finished:{
-      type: Boolean,
-      default: false,
-  },
-  reviewed:{
-    type: Boolean,
-    default: false,
-  }, 
-  defined_value_to_pay: Number,
-},
-  {
-    timestamps: true
-  });
+const Work = {
+  addWork : async function(
+    serviceDescription, startTimeInMin, finishTimeInMin, defined_value_to_pay, schedule_id, user_id, finished = false, reviewed = false
+    ){
+      try{
+        const insertedWorks = await db('work')
+          .insert({
+            serviceDescription,
+            from : startTimeInMin,
+            to : finishTimeInMin,
+            defined_value_to_pay,
+            babysitter_schedule_id : schedule_id,
+            user_id,
+            finished,
+            reviewed
+          }, 'id');
 
+        return insertedWorks[0];
 
-module.exports = model("Work", WorkSchema);
+      } catch(err){
+        return false
+      }
+
+    }
+
+}
+
+module.exports = Work;

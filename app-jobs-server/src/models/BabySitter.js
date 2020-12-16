@@ -1,4 +1,3 @@
-
 const db = require('../database/connection');
 
 
@@ -74,6 +73,24 @@ const BabySitter = {
                 await trx.rollback();
                 console.log(err);
                 return false
+        }
+    },
+
+    getSchedule : async function(babysitter_id, year, month_day, from, to){
+        try{
+
+            const scheduleId = 
+                await db('babysitter_schedule')
+                .select('id')
+                .where('babysitter_id', babysitter_id)
+                .andWhere('year', year)
+                .andWhere('month_day', month_day)
+                .andWhere('from', '<=', from)
+                .andWhere('to', '>=', to);
+
+            return scheduleId;
+        } catch(err){
+            return false
         }
     }
 }
