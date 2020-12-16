@@ -7,7 +7,7 @@ const BabySitter = {
         const babysitters = 
         await db('babysitter')
           .select('*')
-          .where('id', '=', id);
+          .where('user_id', '=', id);
       if(babysitters.length > 0){
         return babysitters[0];            
       }

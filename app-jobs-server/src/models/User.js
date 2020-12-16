@@ -6,7 +6,6 @@ const User = {
   create : async function ({name, email, password, role}) {
     password = await hashText(password);
 
-    console.log(name, email, password, role);
     const insertedUsers = await db('user').insert({
       name,
       email,
@@ -39,6 +38,45 @@ const User = {
       return users[0];            
     }
     return false
+  },
+
+  addLikedBabysitter : async function(user_id, babysitter_id){
+    try{
+      await db('liked_babysitters')
+      .insert({
+        user_id,
+        babysitter_id
+      })
+      return true
+    } catch(err){
+      return false
+    }
+  },
+
+  showAllLikedBabysitters : async function(user_id){
+    try{
+      const likedBabysitters = 
+        await db('liked_babysitters')
+        .select('babysitter.*')
+        .innerJoin('babysitter', 'liked_babysitter.babysitter_id', '=', 'babysitter.id')
+        .where('liked_babysitters.user_id', '=', user_id);
+      return likedBabysitters;
+    } catch(err){
+        return false;
+    }
+  },
+
+  deleteLikedBabysitter : async function(user_id, babysitter_id){
+    try{
+      await db('liked_babysitters')
+      .where('user_id', '=', user_id)
+      .andWhere('babysitter_id', '=', babysitter_id)
+      .del();
+
+      return true;
+    } catch(err){
+      return false;
+    }
   }
 }
 

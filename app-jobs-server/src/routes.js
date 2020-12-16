@@ -17,7 +17,7 @@ const upload = multer(uploadConfig);
 routes.get('/', (req, res)=>{
     return res.send('Hello world');
 })
-routes.get('/babysitter/:user_id', auth ,babysitter.index);
+routes.get('/babysitter', auth ,babysitter.index);
 routes.post('/babysitter', auth, upload.single('photo'), babysitter.store);
 routes.post('/valorate', auth, reviewController.store);
 routes.put('/like/:babysitter_id', auth, likeController.store);

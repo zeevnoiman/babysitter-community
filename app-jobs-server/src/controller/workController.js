@@ -7,45 +7,45 @@ const { zonedTimeToUtc, format } = require('date-fns-tz');
 var cron = require('node-cron');
 const axios = require('axios');
 
-cron.schedule('0 * * * *', async () => {
-    const allWorks = await Work.find({finished : false});
-    console.log(allWorks);
+// cron.schedule('0 * * * *', async () => {
+//     const allWorks = await Work.find({finished : false});
+//     console.log(allWorks);
     
-    const pastWorks = allWorks.filter(work => isBefore(work.date_hour_finish, new Date()))
+//     const pastWorks = allWorks.filter(work => isBefore(work.date_hour_finish, new Date()))
 
-    //console.log(pastWorks);
-    const pastWorksIds = pastWorks.map(work => work._id);
-    await Work.updateMany({
-        _id:{ $in: pastWorksIds}
-    },{
-        $set:{ finished : true}
-    }
-    )
-    const userAndNannysIds = pastWorks.map(work => ({'user': work.family,'babysitter': work.nanny}));
-    const userIds = pastWorks.map(work => work.family);
+//     //console.log(pastWorks);
+//     const pastWorksIds = pastWorks.map(work => work._id);
+//     await Work.updateMany({
+//         _id:{ $in: pastWorksIds}
+//     },{
+//         $set:{ finished : true}
+//     }
+//     )
+//     const userAndNannysIds = pastWorks.map(work => ({'user': work.family,'babysitter': work.nanny}));
+//     const userIds = pastWorks.map(work => work.family);
     
-    const Users = await User.find({
-        _id: { $in: userIds }
-    });
-    console.log(userAndNannysIds);
+//     const Users = await User.find({
+//         _id: { $in: userIds }
+//     });
+//     console.log(userAndNannysIds);
 
-    Users.map(user => {
-        if(user['expoPushToken']){
-            console.log(user.name);
+//     Users.map(user => {
+//         if(user['expoPushToken']){
+//             console.log(user.name);
             
-            userAndNannysIds.map(async ids => {
-                //console.log(user._id, ids.user);
+//             userAndNannysIds.map(async ids => {
+//                 //console.log(user._id, ids.user);
                 
-                if(String(user._id) == String(ids.user)){
-                    const babysitter = await BabySitter.findOne({'_id': ids.babysitter})
-                    console.log(`**********running a task every hour sending to ${user.name}`);
-                    sendPushNotification(user, babysitter )
-                }
-            })
-        }
-    }
-    )
-});
+//                 if(String(user._id) == String(ids.user)){
+//                     const babysitter = await BabySitter.findOne({'_id': ids.babysitter})
+//                     console.log(`**********running a task every hour sending to ${user.name}`);
+//                     sendPushNotification(user, babysitter )
+//                 }
+//             })
+//         }
+//     }
+//     )
+// });
 
 const sendPushNotification = async (user, nanny) => {
     const message = {
@@ -73,6 +73,7 @@ module.exports = {
         const {user_id} = req.headers;
         const {serviceDescription ,date_hour_start_string, date_hour_finish_string, defined_value_to_pay,  } = req.body;
         
+        //format of date_hour_*_string : yyyy-MM-dd HH:mm:ss
         console.log(date_hour_start_string)
         const date_hour_start = parseISO(date_hour_start_string);
         const date_hour_finish= parseISO(date_hour_finish_string);
