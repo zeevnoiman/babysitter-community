@@ -39,7 +39,7 @@ const axios = require('axios');
 //                 //console.log(user._id, ids.user);
                 
 //                 if(String(user._id) == String(ids.user)){
-//                     const babysitter = await BabySitter.findOne({'_id': ids.babysitter})
+//                     const babysitter = await BabySitter.findOne(ids.babysitter)
 //                     console.log(`**********running a task every hour sending to ${user.name}`);
 //                     sendPushNotification(user, babysitter )
 //                 }

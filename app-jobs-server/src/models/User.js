@@ -18,7 +18,7 @@ const User = {
     return insertedUserId;
   },
 
-  findOne : async function ({email}) {
+  findOne : async function (email) {
     const users = 
       await db('user')
         .select('*')

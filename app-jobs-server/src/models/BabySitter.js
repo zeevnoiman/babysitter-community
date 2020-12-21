@@ -2,7 +2,7 @@ const db = require('../database/connection');
 
 
 const BabySitter = {
-    findOne : async function({id}){
+    findOne : async function(id){
         const st = db.postgis;
         const babysitters = 
         await db('babysitter')
@@ -107,6 +107,21 @@ const BabySitter = {
             console.log(err);
             return false;
         }
+    },
+
+    updateAfterReview : async function(id, howManyReviews, stars){
+        try{
+            await db('babysitter')
+            .where('id', id)
+            .update({
+                howManyReviews : howManyReviews,
+                stars : stars
+            })
+            return true
+          } catch(err){
+            console.log(err);
+            return false
+          }
     }
 }
 

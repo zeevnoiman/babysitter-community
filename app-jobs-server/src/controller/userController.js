@@ -26,9 +26,9 @@ module.exports = {
         } = req.body;
 
         try {
-            if (await User.findOne({
+            if (await User.findOne(
                     email
-                })) {
+                )) {
                 // Email/user already exists
                 return res.status(400).send({
                     error: `The email ${email} is already in use.`
@@ -59,9 +59,9 @@ module.exports = {
             password
         } = req.body;
         
-        const user = await User.findOne({
+        const user = await User.findOne(
             email
-        });
+        );
 
         if (!user) {
             // Email/user doesn't exist

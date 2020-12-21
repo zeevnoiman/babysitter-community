@@ -43,9 +43,10 @@ module.exports = (req, res, next) => {
                 error: 'Token invalid'
             });
         }
-
-        req.userId = decoded.id;
-        return next();
+        else{
+            req.userId = decoded.id;
+            return next();
+        }
     });
 
 };

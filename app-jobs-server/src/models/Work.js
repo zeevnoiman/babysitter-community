@@ -45,11 +45,31 @@ const Work = {
     },
 
     updateFinished : async function(id){
-      await db('work')
-      .where('id', id)
-      .update({
-        finished : true
-      })
+      try{
+        await db('work')
+        .where('id', id)
+        .update({
+          finished : true
+        })
+        return true
+      } catch(err){
+        console.log(err);
+        return false
+      }
+    },
+
+    updateReviewed : async function(id){
+      try{
+        await db('work')
+        .where('id', id)
+        .update({
+          reviewed : true
+        })
+        return true
+      } catch(err){
+        console.log(err);
+        return false
+      }
     }
 
 }
