@@ -19,20 +19,6 @@ module.exports = {
 
     },
 
-    async filter(req, res){
-        const{criteria} = req.body;
-        const babysitter = await BabySitter.find({
-            $or:[
-                {name: {$eq: criteria}},
-                {city: {$eq: criteria}},
-                {neighborhood: {$eq: criteria}},
-                {start_hour: {$eq: criteria}},
-                {finish_hour: {$eq: criteria}},
-            ]});
-        console.log(babysitter);
-        return res.send(babysitter);
-    },
-
     async store(req, res) {
         const {age, gender, country, city, street, bio, phone, languages, rate, user_id, schedules} = req.body;
         var filename = '';
@@ -63,9 +49,6 @@ module.exports = {
             lon : pos[0].lng
         };
 
-        //languages pre processing
-        const languagesArray = languages.split(',').map(language => language.trim());
-        
         //schedules pre processing
         const schedulesParsed = JSON.parse(schedules);
         const schedulesSerialized = schedulesParsed.map(schedule => {
@@ -90,7 +73,7 @@ module.exports = {
             bio,
             photo: filename,
             phone,
-            languages : languagesArray,
+            languages,
             rate,
             user_id,
             schedules : schedulesSerialized

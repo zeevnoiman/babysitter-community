@@ -8,24 +8,28 @@ module.exports = {
             latitude,
             longitude,
         } = req.query;
-
         
-        const babySitters = await BabySitter.find({
-            location: {
-                $near: {
-                    $geometry: {
-                        type: 'Point',
-                        coordinates: [longitude, latitude],
-                    },
-                    $maxDistance: 10000,
-                },
-            }
-        });
-        //console.log(babySitters);
+        const babySitters = await BabySitter.getWithinRadius(latitude, longitude);
         
         res.json({
             babySitters
         });
 
     },
+
+    
+    async filter(req, res){
+        const{criteria} = req.body;
+        const babysitter = await BabySitter.find({
+            $or:[
+                {name: {$eq: criteria}},
+                {city: {$eq: criteria}},
+                {neighborhood: {$eq: criteria}},
+                {start_hour: {$eq: criteria}},
+                {finish_hour: {$eq: criteria}},
+            ]});
+        console.log(babysitter);
+        return res.send(babysitter);
+    },
+
 }

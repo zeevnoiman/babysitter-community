@@ -3,9 +3,10 @@ const db = require('../database/connection');
 
 const BabySitter = {
     findOne : async function({id}){
+        const st = db.postgis;
         const babysitters = 
         await db('babysitter')
-          .select('*')
+          .select('*', st.x("location").as("longitude"), st.y("location").as("latitude"))
           .where('user_id', '=', id);
       if(babysitters.length > 0){
         return babysitters[0];            
@@ -91,6 +92,20 @@ const BabySitter = {
             return scheduleId[0].id;
         } catch(err){
             return false
+        }
+    },
+
+    getWithinRadius :async function(latitude, longitude){
+        const st = db.postgis;
+        try{
+            const babysitters = await db("babysitter")
+            .select('babysitter.*', st.distance("location", st.geography(st.makePoint(longitude, latitude))).as("distanceAway"))
+            .where(st.dwithin("location", st.geography(st.makePoint(longitude, latitude)), 50000));
+
+            return babysitters;
+        } catch(err){
+            console.log(err);
+            return false;
         }
     }
 }
