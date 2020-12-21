@@ -88,7 +88,7 @@ const BabySitter = {
                 .andWhere('from', '<=', from)
                 .andWhere('to', '>=', to);
 
-            return scheduleId;
+            return scheduleId[0].id;
         } catch(err){
             return false
         }

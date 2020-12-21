@@ -71,11 +71,9 @@ module.exports = {
     async store(req, res){
         const { babysitter_id } = req.params;
         const {user_id} = req.headers;
-        const {serviceDescription ,date_hour_start_string, date_hour_finish_string, defined_value_to_pay,  } = req.body;
-        
+        const {serviceDescription ,date_hour_start_string, date_hour_finish_string, defined_value_to_pay  } = req.body;
         //pre processing of time
         //format of date_hour_*_string : yyyy-MM-dd HH:mm:ss
-        console.log(date_hour_start_string)
         const date_hour_start = new Date(date_hour_start_string);
         const date_hour_finish = new Date(date_hour_finish_string);
 
@@ -95,13 +93,14 @@ module.exports = {
         const finishTimeInMin = converTimeToMin(finishTime);
 
         const schedule_id = await BabySitter.getSchedule(babysitter_id, year, month_day, startTimeInMin, finishTimeInMin);
-
+        console.log(schedule_id)
         if(schedule_id){
             const work_id = await Work.addWork(serviceDescription, startTimeInMin, finishTimeInMin, defined_value_to_pay, schedule_id, user_id);
             res.send({work : work_id})
         }
-
-        res.send('No open schedule for this babysitter in that time');
+        else{
+            res.send('No open schedule for this babysitter in that time');
+        }
     },
 
     async index(req, res){
@@ -119,7 +118,7 @@ module.exports = {
             var dateHourStartReadable = `${day}/${month}/${year} ${from}`; 
             var dateHourFinishReadable = `${day}/${month}/${year} ${to}`;
                 
-            const newWork =  {...work._doc, dateHourStartReadable, dateHourFinishReadable}
+            const newWork =  {...work, dateHourStartReadable, dateHourFinishReadable}
             console.log(newWork);
             return newWork           
         })
