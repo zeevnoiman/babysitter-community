@@ -1,4 +1,5 @@
 const db = require('../database/connection');
+const { where } = require('./Review');
 
 
 const Work = {
@@ -24,6 +25,30 @@ const Work = {
         return false
       }
 
+    },
+
+    find : async function(id){
+      const works = await db('work')
+      .select('work.*, babysitter_schedule.year, babysitter_schedule.month_day')
+      .innerJoin('babysitter_schedule', 'work.babysitter_schedule_id', 'babysitter_schedule.id')
+      .whereIn('work.babysitter_id', function(){
+        this.select('babysitter.id')
+        .from('user')
+        .innerJoin('babysitter', 'user.id', '=', 'babysitter.user_id')
+        .where('user.id', id)
+      })
+      .orWhere('work.user_id', id)
+
+      return works;
+      
+    },
+
+    updateFinished : async function(id){
+      await db('work')
+      .where('id', id)
+      .update({
+        finished : true
+      })
     }
 
 }

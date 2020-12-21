@@ -4,7 +4,7 @@ module.exports = {
     async store(req, res){
         const {user_id} = req.headers;
         const {babysitter_id} = req.params;
-        
+
         const response = await User.addLikedBabysitter(user_id, babysitter_id );
 
         console.log(response);
@@ -14,11 +14,11 @@ module.exports = {
 
     async show(req, res){
         const {user_id} = req.headers;
-
+        
         const likedBabysitters = await User.showAllLikedBabysitters(user_id);
-
+        console.log(likedBabysitters);
         if(likedBabysitters)
-            res.send({likedBabysitters});
+            res.json({likedBabysitters});
         else
             res.send('error in getting liked babysitters');
     },

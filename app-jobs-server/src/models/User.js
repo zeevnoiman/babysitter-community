@@ -49,6 +49,7 @@ const User = {
       })
       return true
     } catch(err){
+      console.log(err);
       return false
     }
   },
@@ -57,11 +58,12 @@ const User = {
     try{
       const likedBabysitters = 
         await db('liked_babysitters')
-        .select('babysitter.*')
-        .innerJoin('babysitter', 'liked_babysitter.babysitter_id', '=', 'babysitter.id')
-        .where('liked_babysitters.user_id', '=', user_id);
+        .select('liked_babysitters.*' , 'babysitter.*')
+        .innerJoin('babysitter', 'liked_babysitters.babysitter_id', '=', 'babysitter.id')
+        .where('liked_babysitters.user_id', user_id);
       return likedBabysitters;
     } catch(err){
+      console.log(err);
         return false;
     }
   },

@@ -20,8 +20,8 @@ routes.get('/', (req, res)=>{
 routes.get('/babysitter', auth ,babysitter.index);
 routes.post('/babysitter', auth, upload.single('photo'), babysitter.store);
 routes.post('/valorate', auth, reviewController.store);
-routes.put('/like/:babysitter_id', auth, likeController.store);
-routes.delete('/like/:babysitter_id', auth, likeController.delete);
+routes.post('/like/:babysitter_id', auth, likeController.store);
+routes.post('/dislike/:babysitter_id', auth, likeController.delete);
 routes.get('/like', auth, likeController.show);
 routes.get('/reviews/:babysitterId', auth, reviewController.index);
 routes.get('/user', auth ,user.index);

@@ -1,4 +1,5 @@
 const converTimeToMin = require('../models/utils/convertTimeToMin');
+const convertMinToTime = require('../models/utils/convertMinToTime');
 const Work = require('../models/Work');
 const User = require('../models/User');
 const BabySitter = require('../models/BabySitter');
@@ -81,7 +82,7 @@ module.exports = {
         const day = date_hour_start.getDate();
         const month = date_hour_start.getMonth() + 1; //js month -> 0 - 11, I want -> 1 - 12
         const year = date_hour_start.getFullYear();
-        const month_day = `${month}${day}`;
+        const month_day = `${month}_${day}`;
         
         const startHour = date_hour_start.getHours();
         const startMin = date_hour_start.getMinutes();
@@ -106,23 +107,18 @@ module.exports = {
     async index(req, res){
         const {user_id} = req.headers;
 
-        const works = await Work.find({
-            $or:[    
-                {family: {$eq: user_id}},
-                {nanny: {$eq: user_id}},
-            ]
-        });
+        const works = await Work.find( user_id );
 
         console.log(works);
         
         const newWorks = works.map((work) => {
-            var dateHourStartReadable = ''; 
-            var dateHourFinishReadable = '';
-            if(isDate(work.date_hour_start)){ 
-                dateHourStartReadable = format(work.date_hour_start, 'dd/MM/yyyy HH:mm:ss');
-                dateHourFinishReadable = format(work.date_hour_finish, 'dd/MM/yyyy HH:mm:ss');
-            }    
-        
+            const from = convertMinToTime(work.from);
+            const to = convertMinToTime(work.to);
+            const [month, day] = work.month_day.split('_');
+            const year = work.year;
+            var dateHourStartReadable = `${day}/${month}/${year} ${from}`; 
+            var dateHourFinishReadable = `${day}/${month}/${year} ${to}`;
+                
             const newWork =  {...work._doc, dateHourStartReadable, dateHourFinishReadable}
             console.log(newWork);
             return newWork           
@@ -137,11 +133,8 @@ module.exports = {
         const {work_id} = req.headers;
         const {finished} = req.query;
 
-        const work = await Work.find({_id : work_id});
+        const work = await Work.updateFinished(work_id);
 
-        work.finished = finished;
-
-        work.save();
         
         res.json(work);
     }

@@ -4,7 +4,7 @@ exports.up = function(knex) {
         table.increments('id').primary();
         
         table.integer('year').notNullable();
-        table.integer('month_day').notNullable();
+        table.string('month_day').notNullable();
         table.integer('from').notNullable();
         table.integer('to').notNullable();
         
