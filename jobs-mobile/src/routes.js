@@ -3,6 +3,7 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 
 import Map from './pages/Map';
+import Splash from './pages/Splash';
 import SavedNannyProfile from './pages/SavedNannyProfile';
 import Welcome from './pages/Welcome';
 import Login from './pages/Login';
@@ -16,6 +17,13 @@ import NannyReviews from './pages/NannyReviews';
 
 const Routes = createAppContainer(
     createStackNavigator({
+        SplashScreen: {
+            screen: Splash,
+            navigationOptions: {
+                title: 'Super Nanny',
+                headerShown: false
+            }
+        },
         Welcome: {
             screen: Welcome,
             navigationOptions: {
