@@ -5,7 +5,6 @@ const Work = require('../models/Work');
 module.exports = {
 
     async store(req, res){
-        console.log(req.headers);
         
         const {babysitterid} = req.headers;
         const {workid} = req.headers;
@@ -32,12 +31,15 @@ module.exports = {
         const actualStars = babysitter.stars;
         console.log(actualStars);
         console.log(stars);
+        console.log(howManyReviews);
+        console.log(newHowManyReviews);
+
         
         const newStars = ((actualStars * howManyReviews) + stars) / newHowManyReviews
         console.log(newStars);
         
  
-        const response = await Babysitter.UpdateAfterReview(babysitterid, newHowManyReviews, newStars);
+        const response = await BabySitter.updateAfterReview(babysitterid, newHowManyReviews, newStars);
         
         res.json(review);
     },

@@ -28,7 +28,9 @@ module.exports = {
 
         //get user who is opening babysitter profile
         const user = await User.findById({id : user_id});
-        
+        if(user.role != 'Nanny'){
+            res.send('Only users with Nanny role can create babysitter profile')
+        }
         
         //location pre proccesing
         var api_url = 'https://api.opencagedata.com/geocode/v1/json'
