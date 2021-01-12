@@ -1,24 +1,16 @@
 import React from 'react';
-import {createAppContainer} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
 
-import Splash from '../pages/Splash';
-import Welcome from '../pages/Welcome';
-import Login from '../pages/Login';
-import Signin from '../pages/Signin';
+import EditNannyProfile from '../pages/EditNannyProfile';
+
+const BabysitterStack = createStackNavigator();
+
+const BabysitterRoutes = () => {
+    <BabysitterStack.Navigator>
+        <BabysitterStack.Screen name='EditNannyProfile' component={EditNannyProfile} />
+    </BabysitterStack.Navigator>
+}
 
 
-const AuthRoutes = createAppContainer(
-    createStackNavigator({
-        EditNannyProfile: {
-            screen: EditNannyProfile,
-            navigationOptions: {
-                title: 'Profile',
-            },
-        },
-    })
-)
-
-
-export default AuthRoutes;
+export default BabysitterRoutes;

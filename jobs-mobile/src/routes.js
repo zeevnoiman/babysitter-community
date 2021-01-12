@@ -3,8 +3,7 @@ import React, { useContext } from "react";
 import userContext from "./contexts";
 
 import AuthRoutes from "./routes/AuthRoutes";
-import BabysitterRoutes from "./routes/BabysitterRoutes";
-import FamilyRoutes from "./routes/FamilyRoutes";
+import AppRoutes from "./routes/AppRoutes";
 
 import Splash from './pages/Splash';
 
@@ -14,8 +13,8 @@ const Routes = function(){
   if(loading){
       return <Splash/>
   };
-  
-  return signed ? <FamilyRoutes /> : <AuthRoutes />;
+
+  return signed ? <AppRoutes /> : <AuthRoutes />;
 };
 
 export default Routes;
