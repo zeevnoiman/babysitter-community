@@ -1,12 +1,13 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
 import 'intl';
 import 'intl/locale-data/jsonp/he-IL'
 
 import Routes from './src/routes';
 import { useFonts } from '@use-expo/font';
 import {AppLoading} from 'expo';
-import UserProvider from './src/context';
+import UserProvider from './src/contexts/UserContext';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,9 +23,11 @@ export default function App() {
   }
   else{
     return (
-      <UserProvider>
-        <Routes/>
-      </UserProvider>
+      <NavigationContainer>
+        <UserProvider>
+          <Routes/>
+        </UserProvider>
+      </NavigationContainer>
     );
   }
 }

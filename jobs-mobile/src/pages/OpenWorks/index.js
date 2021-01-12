@@ -8,7 +8,7 @@ import { zonedTimeToUtc, format } from 'date-fns-tz';
 import anonimusImage from '../../assets/anonimo.png';
 import backgroundPattern from '../../assets/backgroundPattern.png';
 import api from '../../services/api';
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 import styles from './styles';
 
 

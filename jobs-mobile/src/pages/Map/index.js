@@ -17,7 +17,7 @@ import api from '../../services/api';
 import styles from './styles';
 import apiGeoKey from '../../config/keys';
 import anonimusImage from '../../assets/anonimo.png';
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 
 function Map({navigation}) {
 

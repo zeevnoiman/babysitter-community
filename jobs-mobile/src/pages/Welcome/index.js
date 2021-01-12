@@ -4,7 +4,7 @@ import api from '../../services/api'
 
 import styles from './styles';
 import background from '../../assets/background.png';
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 
 export default function Welcome({navigation}){
 

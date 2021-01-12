@@ -9,7 +9,7 @@ import StarRating from 'react-native-star-rating';
 import anonimusImage from '../../assets/anonimo.png';
 import backgroundPattern from '../../assets/backgroundPattern.png';
 import api from '../../services/api';
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 import styles from './styles';
 
 export default function NannyReviews({navigation}){

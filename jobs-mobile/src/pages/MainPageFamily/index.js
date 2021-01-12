@@ -3,7 +3,7 @@ import { Text, TouchableOpacity, View, Vibration, AsyncStorage } from 'react-nat
 import { Notifications } from 'expo';
 
 import styles from './styles';
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 
 
 export default function MainPageFamily({navigation}){

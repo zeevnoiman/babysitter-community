@@ -5,7 +5,7 @@ import {MaterialIcons, Ionicons, FontAwesome,
 import StarRating from 'react-native-star-rating';
 
 import api from '../../services/api'
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 import styles from './styles';
 import anonimusImage from '../../assets/anonimo.png';
 import backgroundPattern from '../../assets/backgroundPattern.png';

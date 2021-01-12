@@ -6,7 +6,7 @@ import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 
 import styles from './styles';
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 
 
 export default function Signin({navigation}){

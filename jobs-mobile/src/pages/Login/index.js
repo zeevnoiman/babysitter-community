@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, AsyncStorage} from 'react-nati
 import api from '../../services/api';
 
 import styles from './styles'
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
 
 export default function Login({navigation}){
 
