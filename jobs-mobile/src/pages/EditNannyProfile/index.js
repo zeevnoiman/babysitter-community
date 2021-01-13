@@ -19,7 +19,7 @@ import { userContext } from '../../context';
 
 export default function EditNannyProfile({navigation}){
     
-    const {user, token} = useContext(userContext);
+    const {user} = useContext(userContext);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [perfilImage, setPerfilImage] = useState('');
@@ -125,7 +125,7 @@ export default function EditNannyProfile({navigation}){
         data.append('bio', profissionalBio);
         data.append('rate', rate);
         data.append('languages', languagesString);
-        data.append('user_id', user._id);
+        data.append('user_id', user.id);
         if(perfilImage.length > 0){
             data.append('photo', {
                 uri: perfilImage,
@@ -135,11 +135,7 @@ export default function EditNannyProfile({navigation}){
         }
 
         try {
-            const response = await api.post('/babysitter', data, {
-                headers:{
-                    authorization : `Bearer ${token}`
-                }
-            })
+            const response = await api.post('/babysitter', data)
 
             console.log(response.data);
             
@@ -150,7 +146,6 @@ export default function EditNannyProfile({navigation}){
             console.log(error);
             
         }
-        
     }
 
     return(

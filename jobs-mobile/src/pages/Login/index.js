@@ -8,7 +8,7 @@ import { userContext } from '../../contexts/UserContext';
 
 export default function Login({navigation}){
 
-    const {setUser, setToken, loadWorks} = useContext(userContext);
+    const {login} = useContext(userContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -18,47 +18,10 @@ export default function Login({navigation}){
     async function handlePressLogin(){
         try{
             setMessage('');
-        const res = await api.post('/login',
-         {
-            email,
-            password,
-         }
-        );
-        // if(res.data.user.role != role){
-        //     setMessage(`You are not registered as ${role}, please enter with your correct user`);
-        //     return;
-        // }
-        await AsyncStorage.removeItem('User');
-        await AsyncStorage.removeItem('Token');
-        await AsyncStorage.setItem('User', JSON.stringify(res.data.user));
-        await AsyncStorage.setItem('Token', JSON.stringify(res.data.token));
-        if(role === 'Family'){
-            setUser(res.data.user);
-            setToken(res.data.token);
-            
-            //navigation.navigate('Map')
-            //navigation.navigate('LikedNannies')
-            navigation.navigate('MainPageFamily')
-        }
-        else{
-            console.log(res.data.user._id);
-            
-        const workerResponse = await api.get(`/babysitter/${res.data.user._id}`,
-         {
-             headers:{
-                 authorization: `Bearer ${res.data.token}`
-             }
-         }
-         );
-         console.log(workerResponse.data);
-         
-         navigation.navigate('SavedNannyProfile', {
-             'worker': workerResponse.data.babysitter,
-         })
-        }
+            login(email, password, role);
         }
         catch(error){
-            setMessage('Password and email not matching, try again');
+            setMessage(error);
         }
     }
 
