@@ -18,6 +18,7 @@ import * as Yup from 'yup';
 import styles from './styles';
 import anonimusImage from '../../assets/anonimo.png';
 import { userContext } from '../../contexts/UserContext';
+import { babysitterContext } from '../../contexts/BabysitterContext';
 
 const DatePickerField = ({ ...props }) => {
     
@@ -64,6 +65,8 @@ const DatePickerField = ({ ...props }) => {
 
 function SavedNannyProfileToFamilyView({worker, navigation}){
 
+    
+    const worker = navigation.getParam('worker');
     const {user, addLikedBabysitter, deleteLikedBabysitter, addWork} = useContext(userContext);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -79,7 +82,7 @@ function SavedNannyProfileToFamilyView({worker, navigation}){
         console.log(user);
         
         user.likedBabysitters.map(babysitter => {
-            if(babysitter === worker._id){
+            if(babysitter === worker.id){
                 setIsLiked(true)
             }
         })
@@ -95,7 +98,7 @@ function SavedNannyProfileToFamilyView({worker, navigation}){
     function sendMail(){
         const message = "Hi, I sow you on Super Nanny, I would like to talk to you about a service, are you interested? thank you!" 
         MailComposer.composeAsync({
-            subject: 'Super Nanny, somebody need you!',
+            subject: 'Super Nanny, somebody needs you!',
             recipients: [worker.email],
             body: message,
         })
@@ -145,7 +148,7 @@ function SavedNannyProfileToFamilyView({worker, navigation}){
             date_hour_finish_string,
             defined_value_to_pay : values.rate
         }
-        const response = await addWork(work, worker._id)
+        const response = await addWork(work, worker.id)
         console.log(response);
         setScheduleMessage(response);
         handleSetModalVisible(false);
@@ -376,19 +379,19 @@ function SavedNannyProfileToFamilyView({worker, navigation}){
     )
 }
 
-function SavedNannyProfileToNannyView({worker}){
+function SavedNannyProfileToNannyView(){
     
     const [starCount, setStarCount] = useState(3.5);
-    
-    console.log(worker);
+    const {babysitter} = useContext(babysitterContext);
+    console.log(babysitter);
     
     return(
     <ScrollView 
     contentContainerStyle = {styles.contentContainer} 
     >
         <View style={styles.imageBox}>  
-       { worker.photo.length > 0 ?
-            <Image style={styles.anonimusImage} source={{uri :`http://10.0.0.18:3333/static/${worker.photo}` }}/>
+       { babysitter.photo.length > 0 ?
+            <Image style={styles.anonimusImage} source={{uri :`http://10.0.0.18:3333/static/${babysitter.photo}` }}/>
             :
             <Image style={styles.anonimusImage} source={anonimusImage}/>
             }
@@ -404,26 +407,26 @@ function SavedNannyProfileToNannyView({worker}){
         </View>
         <View style={styles.rateBox}>
             <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
-                <Text style={styles.ratePrice}>{worker.rate}/h</Text>    
+                <Text style={styles.ratePrice}>{babysitter.rate}/h</Text>    
             </View>
-        <Text style={styles.name}>{worker.name}</Text>
+        <Text style={styles.name}>{babysitter.name}</Text>
         <View style={styles.ageBox}>
-            <Text style={styles.yearsOld}> {worker.age} Years Old</Text>
+            <Text style={styles.yearsOld}> {babysitter.age} Years Old</Text>
         </View>
         
         <View style={styles.addressBox}>
             <FontAwesome name='home' size={30} style={{color: '#759d81'}}></FontAwesome>
-            <Text style={styles.text}>{worker.street}, {worker.neighborhood}, {worker.city}</Text>
+            <Text style={styles.text}>{babysitter.street}, {babysitter.neighborhood}, {babysitter.city}</Text>
         </View>
         <View style={styles.profissonalBox}>
             <MaterialIcons name='work' size={30} style={{color: '#759d81'}}></MaterialIcons>
             <Text style={styles.text}>
-                {worker.bio}
+                {babysitter.bio}
             </Text>
         </View>
         <View style={styles.languagesBox}>
         <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
-        {worker.languagesArray.map((language, index) => (
+        {babysitter.languagesArray.map((language, index) => (
             <Text style={styles.text} key={index}>{language}</Text>
         ))}
         </View>    
@@ -436,14 +439,13 @@ function SavedNannyProfileToNannyView({worker}){
 
 export default function SavedNannyProfile({navigation}){
     
-    const {token, user} = useContext(userContext);
-    const worker = navigation.getParam('worker'); 
-    
+    const {user} = useContext(userContext);
+   
     return(
         user.role == 'Family' ?
-        <SavedNannyProfileToFamilyView worker={worker} navigation={navigation} />
+        <SavedNannyProfileToFamilyView navigation={navigation} />
         :
-        <SavedNannyProfileToNannyView worker={worker}/>
+        <SavedNannyProfileToNannyView/>
         
     )
 }

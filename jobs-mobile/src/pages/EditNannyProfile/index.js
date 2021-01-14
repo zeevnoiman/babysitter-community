@@ -14,12 +14,14 @@ import { MultipleSelectPicker } from 'react-native-multi-select-picker'
 import styles from './styles';
 
 import anonimusImage from '../../assets/anonimo.png';
-import { userContext } from '../../context';
+import { userContext } from '../../contexts/UserContext';
+import { babysitterContext } from '../../contexts/BabysitterContext';
 
 
 export default function EditNannyProfile({navigation}){
     
     const {user} = useContext(userContext);
+    const {saveBabysitter} = useContext(babysitterContext);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [perfilImage, setPerfilImage] = useState('');
@@ -129,19 +131,14 @@ export default function EditNannyProfile({navigation}){
         if(perfilImage.length > 0){
             data.append('photo', {
                 uri: perfilImage,
-                name: 'userProfile.jpg',
+                name: 'babysitterProfile.jpg',
                 type: 'image/jpg'
         });
         }
 
         try {
-            const response = await api.post('/babysitter', data)
-
-            console.log(response.data);
-            
-            navigation.navigate('SavedNannyProfile', {
-                'worker': response.data.babysitter
-            })    
+            await saveBabysitter(data);
+            // navigation.navigate('SavedNannyProfile')    
         } catch (error) {
             console.log(error);
             
