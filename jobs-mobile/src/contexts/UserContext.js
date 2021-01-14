@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import {AsyncStorage, Platform} from 'react-native';
-import { Notifications } from 'expo';
+import { Notifications } from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import api from '../services/api';
@@ -15,18 +15,18 @@ const UserProvider = ({children}) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        async function tryGetUser(){
-            console.log('try to get user');
-            
-            const user = await AsyncStorage.getItem('User');
-            const token = await AsyncStorage.getItem('Token');
+        async function tryGetUser(){ 
+            console.log("try to get user");
+            // await AsyncStorage.removeItem('BS:User');
+            // await AsyncStorage.removeItem('BS:Token');
+            const user = await AsyncStorage.getItem('BS:User');
+            const token = await AsyncStorage.getItem('BS:Token');
             if(!user || !token){
                 setLoading(false);
                 return false;
             }
-
-            api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`; 
-            const {data : user_from_api} = await api.get('user',{
+            api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+            const {data : user_from_api} = await api.get('/user',{
                 headers:{
                     user_id: JSON.parse(user).id
                 }
@@ -37,33 +37,35 @@ const UserProvider = ({children}) => {
         };
         
         tryGetUser();
-    })
+    }, [])
 
     const registerForPushNotificationsAsync = async () => {
+        let token;
+        console.log('register function');
         if (Constants.isDevice) {
-          const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-          let finalStatus = existingStatus;
-          if (existingStatus !== 'granted') {
-            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-            finalStatus = status;
-          }
-          if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-          }
-          token = await Notifications.getExpoPushTokenAsync();
-          console.log(token);
-          setExpoPushToken( token );
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            console.log(existingStatus);
+            let finalStatus = existingStatus;
+            if (existingStatus !== 'granted') {
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+            if (finalStatus !== 'granted') {
+                alert('Failed to get push token for push notification!');
+                return;
+            }
+            token = (await Notifications.getExpoPushTokenAsync()).data;
+            console.log(token);
         } else {
           alert('Must use physical device for Push Notifications');
         }
     
         if (Platform.OS === 'android') {
-          Notifications.createChannelAndroidAsync('default', {
+          Notifications.setNotificationChannelAsync('default', {
             name: 'default',
-            sound: true,
-            priority: 'max',
-            vibrate: [0, 250, 250, 250],
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
           });
         }
 
@@ -71,6 +73,7 @@ const UserProvider = ({children}) => {
     }
 
     const signin = async ({email, name, password, role}) => {
+        console.log('signin');
         const response =await api.post('/signin',
             {
                email,
@@ -79,18 +82,22 @@ const UserProvider = ({children}) => {
                role,
                expoPushToken
             });
-        await AsyncStorage.removeItem('User');
-        await AsyncStorage.removeItem('Token');
-        await AsyncStorage.setItem('User', JSON.stringify({
-            "id": response.data.id,
-            "name": name,
-            "email": email,
-            "role": role,
-            "expoPushToken": expoPushToken,
-          }));
-        await AsyncStorage.setItem('Token', JSON.stringify(response.data.token));
-        api.defaults.headers.Authorization = `Bearer ${JSON.stringify(res.data.token)}`;
-        setUser(response.data.user);
+        console.log(response.data);
+        const createdUser = {
+            email, 
+            name, 
+            password,
+            role,
+            id : response.data.id,
+            expoPushToken
+        }
+        console.log(createdUser);
+        await AsyncStorage.removeItem('BS:User');
+        await AsyncStorage.removeItem('BS:Token');
+        await AsyncStorage.setItem('BS:User', JSON.stringify(createdUser));
+        await AsyncStorage.setItem('BS:Token',JSON.stringify(response.data.token));
+        api.defaults.headers.Authorization = `Bearer ${JSON.stringify(response.data.token)}`;
+        setUser(createdUser);
         setToken(response.data.token);
                   
     }
@@ -107,10 +114,10 @@ const UserProvider = ({children}) => {
         if(res.data.user.role != role){
             throw(`You are not registered as ${role}, please enter with your correct user`);
         }
-        await AsyncStorage.removeItem('User');
-        await AsyncStorage.removeItem('Token');
-        await AsyncStorage.setItem('User', JSON.stringify(res.data.user));
-        await AsyncStorage.setItem('Token', JSON.stringify(res.data.token));
+        await AsyncStorage.removeItem('BS:User');
+        await AsyncStorage.removeItem('BS:Token');
+        await AsyncStorage.setItem('BS:User', JSON.stringify(res.data.user));
+        await AsyncStorage.setItem('BS:Token', JSON.stringify(res.data.token));
         api.defaults.headers.Authorization = `Bearer ${JSON.stringify(res.data.token)}`; 
         setToken(res.data.token);
         setUser(res.data.user);

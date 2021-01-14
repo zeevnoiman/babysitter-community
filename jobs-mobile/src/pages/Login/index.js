@@ -6,21 +6,25 @@ import api from '../../services/api';
 import styles from './styles'
 import { userContext } from '../../contexts/UserContext';
 
-export default function Login({navigation}){
+export default function Login({route, navigation}){
 
     const {login} = useContext(userContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
 
-    const role = navigation.getParam('role');
+    const {role} = route.params;
 
     async function handlePressLogin(){
         try{
             setMessage('');
+            if(!email || !password){
+                throw 'Please fill with email and password'
+            }
             login(email, password, role);
         }
         catch(error){
+            console.log(error);
             setMessage(error);
         }
     }

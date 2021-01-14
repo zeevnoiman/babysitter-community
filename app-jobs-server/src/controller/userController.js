@@ -36,7 +36,7 @@ module.exports = {
             }
             const userId = await User.create(req.body);
 
-            return res.send({
+            return res.json({
                 ...userId,
                 token: generateToken({
                     id: userId
@@ -97,7 +97,7 @@ module.exports = {
         
         user.password = undefined;
 
-        res.json(user);
+        res.send(user);
 
     },
 };

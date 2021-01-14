@@ -63,7 +63,7 @@ const DatePickerField = ({ ...props }) => {
     );
 };
 
-function SavedNannyProfileToFamilyView({worker, navigation}){
+function SavedNannyProfileToFamilyView({navigation}){
 
     
     const worker = navigation.getParam('worker');

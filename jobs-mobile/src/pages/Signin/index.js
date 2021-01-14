@@ -1,12 +1,11 @@
 import React, {useState, useContext} from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 
-import api from '../../services/api';
 import styles from './styles';
 import { userContext } from '../../contexts/UserContext';
 
 
-export default function Signin({navigation}){
+export default function Signin({route, navigation}){
     
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
@@ -17,14 +16,18 @@ export default function Signin({navigation}){
     const {registerForPushNotificationsAsync, signin} = useContext(userContext);
 
     
-    const role = navigation.getParam('role');
+    const {role} = route.params;
     
     async function handlePressSignIn(){
         try {
-            await registerForPushNotificationsAsync();
+            setMessage('');
+            if(!email || !name || !password){
+                throw 'Please, fill all the signin form'
+            }
+            // await registerForPushNotificationsAsync();
             await signin({email, name, password, role})
         } catch (error) {
-            console.log(error);
+            setMessage(error)
         }
     }
 

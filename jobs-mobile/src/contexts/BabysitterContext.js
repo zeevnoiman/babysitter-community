@@ -4,27 +4,37 @@ import { Notifications } from 'expo';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
 import api from '../services/api';
-import { userContext } from "./UserContext";
 
 export const babysitterContext = createContext();
 
 const BabysitterProvider = ({children}) => {
-    const {user} = useContext(userContext)
     const [babysitter, setBabysitter] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [babysitterLoading, setbabysitterLoading] = useState(true);
     
-    useEffect(async () => {
-        const res = await api.get(`/babysitter/${user.id}`);
-        if(res){
+    const tryToGetBabysitter = async(user) => {
+        console.log("try to get babysitter");
+        const res = await api.get('/babysitter',{
+            headers:
+            {
+                user_id : user.id
+            }
+        });
+        console.log(res);
+        if(res.data){
             setBabysitter(res.data)
         }
-        setTimeout(2000);
-        setLoading(false);
-    })
+        setbabysitterLoading(false);
+    }
     
-    const saveBabysitter = (data) => {
+    const saveBabysitter = async (data) => {
+        console.log(data.user_id);
         const response = await api.post('/babysitter', data)
-        const res = await api.get(`/babysitter/${user.id}`);
+        const res = await api.get('/babysitter',{
+            headers:
+            {
+                user_id : data.user_id
+            }
+        });
         if(res){
             setBabysitter(res.data)
         }
@@ -32,6 +42,9 @@ const BabysitterProvider = ({children}) => {
     return (
         <babysitterContext.Provider value={
            {
+            babysitterLoading,
+            babysitter,
+            tryToGetBabysitter,
             saveBabysitter
             }
         }>

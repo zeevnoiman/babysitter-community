@@ -12,7 +12,7 @@ import SavedNannyProfile from '../pages/SavedNannyProfile';
 
 const FamilyStack = createStackNavigator();
 
-const FamilyRoutes = () => {
+const FamilyRoutes = () => (
     <FamilyStack.Navigator>
         <FamilyStack.Screen name='Map' component={Map} />
         <FamilyStack.Screen name='LikedNannies' component={LikedNannies} />
@@ -22,7 +22,7 @@ const FamilyRoutes = () => {
         <FamilyStack.Screen name='NannyReviews' component={NannyReviews} />
         <FamilyStack.Screen name='SavedNannyProfile' component={SavedNannyProfile} />
     </FamilyStack.Navigator>
-}
+)
 
 
 export default FamilyRoutes;

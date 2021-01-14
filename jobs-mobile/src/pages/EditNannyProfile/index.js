@@ -3,7 +3,7 @@ import { View, Text, TextInput,
         TouchableOpacity, Image,
         CheckBox, ScrollView,
         KeyboardAvoidingView, Platform,
-        Modal, YellowBox
+        Modal, LogBox
        } from 'react-native';
 import {Entypo, FontAwesome, 
     EvilIcons} from '@expo/vector-icons'
@@ -38,7 +38,7 @@ export default function EditNannyProfile({navigation}){
     const [selectedItems, setSelectedItems] = useState([]);
     const [isShownPicker, setIsShownPicker] = useState(false);
 
-    YellowBox.ignoreWarnings([
+    LogBox.ignoreLogs([
         'VirtualizedLists should never be nested', // TODO: Remove when fixed
     ])
 

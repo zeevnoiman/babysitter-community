@@ -1,17 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import {Text} from 'react-native';
 import { babysitterContext } from '../../contexts/BabysitterContext';
 import { userContext } from '../../contexts/UserContext';
 
 
 import SavedNannyProfile from '../SavedNannyProfile';
-import EditNannyProfile  from '../EditNannyProfile ';
+import EditNannyProfile  from '../EditNannyProfile';
 
 
 const MainPageBabysitter = () =>{
-    const {babysitter, loading} = useContext(babysitterContext);
+    const {babysitterLoading, babysitter, tryToGetBabysitter} = useContext(babysitterContext);
     const {user} = useContext(userContext);
 
-    if(loading){
+    useEffect( () => {
+        tryToGetBabysitter(user)
+    })
+    
+    if(babysitterLoading){
         return(
             <Text>Hello {user.name}</Text>
         )

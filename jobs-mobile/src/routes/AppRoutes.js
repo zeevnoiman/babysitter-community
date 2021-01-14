@@ -9,3 +9,5 @@ const AppRoutes = () => {
 
     return user.role == 'Family' ? <FamilyRoutes/> : <BabysitterRoutes/>
 }
+
+export default AppRoutes;

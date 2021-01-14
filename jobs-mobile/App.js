@@ -1,12 +1,11 @@
 import React from 'react';
-import {StatusBar} from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import 'intl';
 import 'intl/locale-data/jsonp/he-IL'
+import { useFonts } from 'expo-font';
 
 import Routes from './src/routes';
-import { useFonts } from '@use-expo/font';
-import {AppLoading} from 'expo';
+import Splash from './src/pages/Splash';
 import UserProvider from './src/contexts/UserContext';
 
 export default function App() {
@@ -19,17 +18,14 @@ export default function App() {
   });
 
   if(!fontsLoaded){
-    return <AppLoading/>
+    return <Splash/>
   }
-  else{
-    return (
-      <NavigationContainer>
-        <UserProvider>
-          <Routes/>
-        </UserProvider>
-      </NavigationContainer>
-    );
-  }
+  return (
+    <NavigationContainer>
+      <UserProvider>
+        <Routes/>
+      </UserProvider>
+    </NavigationContainer>
+  );
+  
 }
-
-
