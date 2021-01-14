@@ -3,7 +3,6 @@
     "name": "jobs-mobile",
     "slug": "jobs-mobile",
     "privacy": "public",
-    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
