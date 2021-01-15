@@ -16,7 +16,7 @@ import styles from './styles';
 import anonimusImage from '../../assets/anonimo.png';
 import { userContext } from '../../contexts/UserContext';
 import { babysitterContext } from '../../contexts/BabysitterContext';
-
+import ScheduleForm from './ScheduleForm';
 
 export default function EditNannyProfile({navigation}){
     
@@ -37,7 +37,19 @@ export default function EditNannyProfile({navigation}){
     const [rate, setRate] = useState('');
     const [selectedItems, setSelectedItems] = useState([]);
     const [isShownPicker, setIsShownPicker] = useState(false);
-
+    const [selectedYear, setSelectedYear] = useState(false);
+    const [finishHour, setSelectedFinishHour] = useState(false);
+    const [startHour, setSelectedStartHour] = useState(false);
+    const [month_day, setMonthDay] = useState(false);
+    const [scheduledItems, setScheduledItems] = useState([
+      {
+        year: 2021,
+        month_day: '',
+        from: '',
+        to: ''
+      }
+    ]);
+    
     LogBox.ignoreLogs([
         'VirtualizedLists should never be nested', // TODO: Remove when fixed
     ])
@@ -50,6 +62,27 @@ export default function EditNannyProfile({navigation}){
         'Russian',
     ]
 
+    function addSchedule(){
+      const newScheduledItems =[...scheduledItems, {
+        year: 2021,
+        month_day: '',
+        from: '',
+        to: ''
+      }];
+  
+      setScheduledItems(newScheduledItems);
+    };
+
+    function setScheduleItemValue(position, field, value){
+      const dataScheduledItems = scheduledItems.map((scheduledItem, index) => {
+        if(index === position){
+          return {...scheduledItem, [field]: value}
+        }
+        return scheduledItem;
+      });
+  
+      setScheduledItems(dataScheduledItems)
+    }
     function handleMaleRadioButton(value){
         setMaleIsSelected(value);
         setFemaleIsSelected(!value);
@@ -326,7 +359,16 @@ export default function EditNannyProfile({navigation}){
                 : null
             }
         </View>
-
+        <View>
+          <TouchableOpacity>Add schedule</TouchableOpacity>
+          {
+            scheduledItems.map((schedule, index) => {
+              return(
+                <ScheduleForm position={index} callbackFunction={setScheduleItemValue} />
+              )
+            })
+          }
+        </View>
             <View style={styles.verticalBox}>
              <Text style={styles.rateText}>Your rate per hour in shekels</Text>   
             <TextInput

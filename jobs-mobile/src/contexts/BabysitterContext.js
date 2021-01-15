@@ -1,8 +1,4 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import {AsyncStorage, Platform} from 'react-native';
-import { Notifications } from 'expo';
-import * as Permissions from 'expo-permissions';
-import Constants from 'expo-constants';
 import api from '../services/api';
 
 export const babysitterContext = createContext();
