@@ -63,10 +63,10 @@ const DatePickerField = ({ ...props }) => {
     );
 };
 
-function SavedNannyProfileToFamilyView({navigation}){
+function SavedNannyProfileToFamilyView({route, navigation}){
 
     
-    const worker = navigation.getParam('worker');
+    const {worker} = route.params;
     const {user, addLikedBabysitter, deleteLikedBabysitter, addWork} = useContext(userContext);
 
     const [isLiked, setIsLiked] = useState(false);
@@ -177,7 +177,7 @@ function SavedNannyProfileToFamilyView({navigation}){
     >
         <View style={styles.imageBox}>  
        { worker.photo.length > 0 ?
-            <Image style={styles.anonimusImage} source={{uri : `http://10.0.0.18:3333/static/${worker.photo}`}}/>
+            <Image style={styles.anonimusImage} source={{uri : `http://10.0.0.6:3333/static/${worker.photo}`}}/>
             :
             <Image style={styles.anonimusImage} source={anonimusImage}/>
             }
@@ -208,7 +208,7 @@ function SavedNannyProfileToFamilyView({navigation}){
         
         <View style={styles.addressBox}>
             <FontAwesome name='home' size={30} style={{color: '#759d81'}}></FontAwesome>
-            <Text style={styles.text}>{worker.street}, {worker.neighborhood}, {worker.city}</Text>
+            <Text style={styles.text}>{worker.street}, {worker.city}</Text>
         </View>
         <View style={styles.profissonalBox}>
             <MaterialIcons name='work' size={30} style={{color: '#759d81'}}></MaterialIcons>
@@ -379,9 +379,8 @@ function SavedNannyProfileToFamilyView({navigation}){
     )
 }
 
-function SavedNannyProfileToNannyView(){
+function SavedNannyProfileToNannyView({navigation}){
     
-    const [starCount, setStarCount] = useState(3.5);
     const {babysitter} = useContext(babysitterContext);
     console.log(babysitter);
     
@@ -391,20 +390,25 @@ function SavedNannyProfileToNannyView(){
     >
         <View style={styles.imageBox}>  
        { babysitter.photo.length > 0 ?
-            <Image style={styles.anonimusImage} source={{uri :`http://10.0.0.18:3333/static/${babysitter.photo}` }}/>
+            <Image style={styles.anonimusImage} source={{uri :`http://10.0.0.6:3333/static/${babysitter.photo}` }}/>
             :
             <Image style={styles.anonimusImage} source={anonimusImage}/>
             }
             <StarRating
-                disabled={false}
+                disabled={true}
                 containerStyle={styles.starsContainer}
                 starSize={25}
                 maxStars={5}
-                rating={starCount}
+                rating={babysitter.stars}
                 fullStarColor={'#fff000'}
-                selectedStar={(rating) => setStarCount(rating)}
             />
         </View>
+        <TouchableOpacity 
+        style={styles.editProfileButton}
+        onPress={() => navigation.navigate('EditNannyProfile')}>
+            <Feather name="edit-3" size={16} color="black" />
+            <Text style={styles.text}>Edit Profile</Text>
+        </TouchableOpacity>
         <View style={styles.rateBox}>
             <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
                 <Text style={styles.ratePrice}>{babysitter.rate}/h</Text>    
@@ -416,7 +420,7 @@ function SavedNannyProfileToNannyView(){
         
         <View style={styles.addressBox}>
             <FontAwesome name='home' size={30} style={{color: '#759d81'}}></FontAwesome>
-            <Text style={styles.text}>{babysitter.street}, {babysitter.neighborhood}, {babysitter.city}</Text>
+            <Text style={styles.text}>{babysitter.street}, {babysitter.city}</Text>
         </View>
         <View style={styles.profissonalBox}>
             <MaterialIcons name='work' size={30} style={{color: '#759d81'}}></MaterialIcons>
@@ -425,10 +429,8 @@ function SavedNannyProfileToNannyView(){
             </Text>
         </View>
         <View style={styles.languagesBox}>
-        <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
-        {babysitter.languagesArray.map((language, index) => (
-            <Text style={styles.text} key={index}>{language}</Text>
-        ))}
+            <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
+            <Text style={styles.text}>{babysitter.languages}</Text>
         </View>    
     </ScrollView>
     )
@@ -437,15 +439,15 @@ function SavedNannyProfileToNannyView(){
 
 
 
-export default function SavedNannyProfile({navigation}){
+export default function SavedNannyProfile({route, navigation}){
     
     const {user} = useContext(userContext);
    
     return(
         user.role == 'Family' ?
-        <SavedNannyProfileToFamilyView navigation={navigation} />
+        <SavedNannyProfileToFamilyView route={route} navigation={navigation} />
         :
-        <SavedNannyProfileToNannyView/>
+        <SavedNannyProfileToNannyView navigation={navigation}/>
         
     )
 }

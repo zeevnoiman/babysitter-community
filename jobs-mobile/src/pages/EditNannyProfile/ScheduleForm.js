@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react'
 import {View, TextInput, Text } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import styles from './styles';
 
 const ScheduleForm = ({position, callbackFunction}) => {
 
     const [year, setYear] = useState(new Date().getFullYear().toString())
     const [day, setDay] = useState(new Date().getDate().toString());
-    const [month, setMonth] = useState('')
+    const [month, setMonth] = useState('01')
     const [startHour, setStartHour] = useState('')
     const [finishHour, setFinishHour] = useState('')
     const [months, setMonths] = useState([
@@ -54,72 +55,75 @@ const ScheduleForm = ({position, callbackFunction}) => {
     },[month, day])
 
     function selectYear(selectedYear){
-        if(Number(selectedYear) < Number(year) ){
-            return;
-        }
         setYear(selectedYear);
         callbackFunction(position, 'year', selectedYear)
     }
 
     function selectDay(selectedDay){
-        if(selectedDay < 32 && selectedDay > 0){
-            setDay(selectedDay)
-        }
-        return;
+        setDay(selectedDay)
     }
 
     return(
-<View>
-    <Text>Select year</Text>
-    <TextInput
-    value={year} 
-    keyboardType='numeric'
-    onChangeText={(value) => selectYear(value)}
-    ></TextInput>
-    <Text>Select day and month</Text>
-    <TextInput
-    value={day}
-    keyboardType='numeric'
-    onChangeText={(value) => selectDay(value) }
-    ></TextInput>
-    <Text>/</Text>
-    <Picker
-        selectedValue= ''
-        style={{height: 50, width: 100}}
-        onValueChange={(itemValue, itemposition) =>
-          setMonth(itemValue)
-        }>
-        {
-            months.map(month => {
-                <Picker.Item key={month.value} label={month.label} value={month.value} />
-            })
-        }
-    </Picker>
+<View style={position > 0 && styles.scheduleFormItem}>
+    <Text>Date</Text>
+    <View style={styles.verticalBox}>
+        <TextInput
+        style={styles.rateInput }
+        value={year} 
+        keyboardType='numeric'
+        onChangeText={(value) => selectYear(value)}
+        ></TextInput>
+        <TextInput
+        style={[styles.rateInput, {width:30}] }
+        value={day}
+        keyboardType='numeric'
+        onChangeText={(value) => selectDay(value) }
+        ></TextInput>
+        <Text style={{lineHeight:50}}>/</Text>
+        <Picker
+            selectedValue= {month}
+            style={[styles.rateInput,{width: 150}]}
+            onValueChange={(itemValue, itemposition) =>
+              setMonth(itemValue)
+            }>       
+            {
+                months.map(month => {
+                    return(
+                        <Picker.Item key={month.value} label={month.label} value={month.value} />
+                    )
+                })
+            }
+        </Picker>
+    </View>
     <Text>Start hour</Text>
     <Picker
-        selectedValue= ''
-        style={{height: 50, width: 100}}
+        selectedValue= {startHour}
+        style={{height: 50, width: 150}}
         onValueChange={(itemValue, itemposition) =>
           {setStartHour(itemValue)
             callbackFunction(position, 'from', itemValue) }
         }>
         {
             possibleHours.map(hour => {
-                <Picker.Item key={hour} label={hour} value={hour} />
+                return(
+                    <Picker.Item key={hour} label={hour} value={hour} />
+                )
             })
         }
     </Picker>
     <Text>Finish hour</Text>
     <Picker
-        selectedValue= ''
-        style={{height: 50, width: 100}}
+        selectedValue= {finishHour}
+        style={{height: 50, width: 150}}
         onValueChange={(itemValue, itemposition) =>
           {setFinishHour(itemValue)
            callbackFunction(position, 'to', itemValue) }
         }>
         {
             possibleHours.map(hour => {
-                <Picker.Item key={hour} label={hour} value={hour} />
+                return(
+                    <Picker.Item key={hour} label={hour} value={hour} />
+                )
             })
         }
     </Picker>

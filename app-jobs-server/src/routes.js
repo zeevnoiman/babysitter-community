@@ -19,6 +19,7 @@ routes.get('/', (req, res)=>{
 })
 routes.get('/babysitter', auth ,babysitter.index);
 routes.post('/babysitter', auth, upload.single('photo'), babysitter.store);
+routes.post('/babysitter/:babysitter_id', auth, upload.single('photo'), babysitter.update);
 routes.post('/valorate', auth, reviewController.store);
 routes.post('/like/:babysitter_id', auth, likeController.store);
 routes.post('/dislike/:babysitter_id', auth, likeController.delete);

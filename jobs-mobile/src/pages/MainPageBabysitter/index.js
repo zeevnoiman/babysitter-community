@@ -8,13 +8,13 @@ import SavedNannyProfile from '../SavedNannyProfile';
 import EditNannyProfile  from '../EditNannyProfile';
 
 
-const MainPageBabysitter = () =>{
+const MainPageBabysitter = ({navigation}) =>{
     const {babysitterLoading, babysitter, tryToGetBabysitter} = useContext(babysitterContext);
     const {user} = useContext(userContext);
 
     useEffect( () => {
         tryToGetBabysitter(user)
-    })
+    }, [])
     
     if(babysitterLoading){
         return(
@@ -22,7 +22,7 @@ const MainPageBabysitter = () =>{
         )
     }
     return(
-        babysitter ? <SavedNannyProfile/> : <EditNannyProfile/>
+        babysitter ? <SavedNannyProfile navigation={navigation}/> : <EditNannyProfile navigation={navigation}/>
     )
 }
 

@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import { View, Text, TextInput,
         TouchableOpacity, Image,
         CheckBox, ScrollView,
@@ -21,7 +21,7 @@ import ScheduleForm from './ScheduleForm';
 export default function EditNannyProfile({navigation}){
     
     const {user} = useContext(userContext);
-    const {saveBabysitter} = useContext(babysitterContext);
+    const {saveBabysitter, babysitter} = useContext(babysitterContext);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [perfilImage, setPerfilImage] = useState('');
@@ -43,10 +43,10 @@ export default function EditNannyProfile({navigation}){
     const [month_day, setMonthDay] = useState(false);
     const [scheduledItems, setScheduledItems] = useState([
       {
-        year: 2021,
-        month_day: '',
-        from: '',
-        to: ''
+        year: new Date().getFullYear().toString(),
+        month_day: '01' + new Date().getDate().toString(),
+        from: '01:00',
+        to: '01:00'
       }
     ]);
     
@@ -62,12 +62,36 @@ export default function EditNannyProfile({navigation}){
         'Russian',
     ]
 
+    useEffect(() => {
+      console.log('esit nanny profile - babysitter:', babysitter);
+      if(babysitter){
+        if(babysitter.photo.length > 0){
+          setPerfilImage(`http://10.0.0.6:3333/static/${babysitter.photo}`);
+        }
+        setAge(String(babysitter.age));
+        setPhone(babysitter.phone)
+        setCountry('Israel');
+        setCity(babysitter.city);
+        setStreet(babysitter.street);
+        setProfissionalBio(babysitter.bio);
+        setRate(String(babysitter.rate))
+        
+        setSelectedItems(babysitter.languages.split(',').map(word => word.trim()))
+
+        if(babysitter.gender == 'female'){
+          handleFemaleRadioButton(true);
+        } else{
+          handleMaleRadioButton(true);
+        }
+      }
+    }, [])
+
     function addSchedule(){
       const newScheduledItems =[...scheduledItems, {
-        year: 2021,
-        month_day: '',
-        from: '',
-        to: ''
+        year: new Date().getFullYear().toString(),
+        month_day: '01' + new Date().getDate().toString(),
+        from: '01:00',
+        to: '01:00'
       }];
   
       setScheduledItems(newScheduledItems);
@@ -80,7 +104,8 @@ export default function EditNannyProfile({navigation}){
         }
         return scheduledItem;
       });
-  
+
+      console.log(dataScheduledItems);
       setScheduledItems(dataScheduledItems)
     }
     function handleMaleRadioButton(value){
@@ -144,7 +169,6 @@ export default function EditNannyProfile({navigation}){
 
     }
     async function handleSaveButton(){
-
         var languagesString = (selectedItems.map(item => item.label)).toString();
         
         var gender = femaleIsSelected ? 'female' : 'male';
@@ -155,12 +179,12 @@ export default function EditNannyProfile({navigation}){
         data.append('phone', phone);
         data.append('country', country);
         data.append('city', city);
-        data.append('neighborhood', neighborhood);
         data.append('street', street);
         data.append('bio', profissionalBio);
         data.append('rate', rate);
         data.append('languages', languagesString);
         data.append('user_id', user.id);
+        data.append('schedules', JSON.stringify(scheduledItems) )
         if(perfilImage.length > 0){
             data.append('photo', {
                 uri: perfilImage,
@@ -169,12 +193,13 @@ export default function EditNannyProfile({navigation}){
         });
         }
 
+      
+        console.log(data, user.id);
         try {
             await saveBabysitter(data);
             // navigation.navigate('SavedNannyProfile')    
         } catch (error) {
-            console.log(error);
-            
+            console.log(error); 
         }
     }
 
@@ -302,16 +327,6 @@ export default function EditNannyProfile({navigation}){
              value={city}
              onChangeText={text => setCity(text)}
              ref={(input) => { globalThis.City = input; }}
-             onSubmitEditing={() => globalThis.Neighbourhood.focus()}
-            ></TextInput>
-            <TextInput
-             style={styles.phoneInput}
-             placeholder='Neighbourhood'
-             placeholderTextColor='#333'
-             returnKeyType='next'
-             value={neighborhood}
-             onChangeText={text => setNeighborhood(text)}
-             ref={(input) => { globalThis.Neighbourhood = input; }}
              onSubmitEditing={() => globalThis.Street.focus()}
             ></TextInput>
             <TextInput
@@ -354,17 +369,25 @@ export default function EditNannyProfile({navigation}){
                 style={{width: 150, marginTop: 10}}
                 rowStyle={styles.rowStyle}
                 labelStyle={{fontFamily: 'Montserrat'}}
-                checkboxStyle={{ height: 20, width: 20, marginRight: 10, color: '#008577' }}
+                checkboxStyle={{ height: 20, width: 20, marginRight: 10, tintColor: '#008577' }}
             />
                 : null
             }
         </View>
-        <View>
-          <TouchableOpacity>Add schedule</TouchableOpacity>
+        <View 
+        style={{marginTop: 20, width: '100%'}}>
+          <Text style={styles.title}>Schedule</Text>
+          <Text style={styles.subtitle}>You can change this after set up</Text>
+          <TouchableOpacity 
+          style={styles.addScheduleButton}
+          onPress={addSchedule}
+          >
+            <FontAwesome name="plus" size={16} color='#008577' />
+          </TouchableOpacity>
           {
             scheduledItems.map((schedule, index) => {
               return(
-                <ScheduleForm position={index} callbackFunction={setScheduleItemValue} />
+                <ScheduleForm key={index} position={index} callbackFunction={setScheduleItemValue} />
               )
             })
           }

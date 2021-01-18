@@ -55,7 +55,7 @@ export default function NannyReviews({navigation}){
             <View style={styles.perfil}>
                 <View style={styles.avatarContainer}>
                     { nanny.photo.length > 0 ?
-                    <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.18:3333/static/${nanny.photo}`}}/> 
+                    <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.6:3333/static/${nanny.photo}`}}/> 
                     :
                     <Image style={styles.imageBabysitter} source={anonimusImage}/>
                     }

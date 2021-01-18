@@ -15,20 +15,34 @@ const BabysitterProvider = ({children}) => {
                 user_id : user.id
             }
         });
-        console.log(res);
+        console.log(res.data);
         if(res.data){
             setBabysitter(res.data)
         }
         setbabysitterLoading(false);
     }
     
-    const saveBabysitter = async (data) => {
-        console.log(data.user_id);
+    const saveBabysitter = async (data, user_id) => {
+        console.log(user_id);
         const response = await api.post('/babysitter', data)
         const res = await api.get('/babysitter',{
             headers:
             {
-                user_id : data.user_id
+                user_id: user_id
+            }
+        });
+        if(res){
+            setBabysitter(res.data)
+        }
+    }
+
+    const updateBabysitter = async (data, user_id, babysitter_id) => {
+        console.log(user_id);
+        const response = await api.post(`/babysitter/${babysitter_id}`, data)
+        const res = await api.get('/babysitter',{
+            headers:
+            {
+                user_id: user_id
             }
         });
         if(res){
@@ -41,7 +55,8 @@ const BabysitterProvider = ({children}) => {
             babysitterLoading,
             babysitter,
             tryToGetBabysitter,
-            saveBabysitter
+            saveBabysitter,
+            updateBabysitter
             }
         }>
             {children}

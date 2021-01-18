@@ -146,6 +146,31 @@ const styles = StyleSheet.create({
     pickerButtonText:{
         fontFamily: 'Montserrat'
     },
+    addScheduleButton:{
+        marginTop: 10,
+        height: 40,
+        width: 40,
+        position:'absolute',
+        right:10,
+        top:0,
+        justifyContent:'center',
+        alignItems:'center',
+        borderColor: '#999',
+        borderWidth: 0.5,
+        borderRadius: 50
+    },
+    subtitle:{
+        fontFamily: 'Montserrat',
+        fontSize: 12,
+        height: 40,
+        color: '#333'
+    },
+    scheduleFormItem:{
+        borderTopColor: '#8c0046',
+        borderTopWidth: 1,
+        marginTop: 10,
+        paddingTop: 10
+    },
     saveButton:{
         backgroundColor: '#be4def',
         borderRadius: 8,

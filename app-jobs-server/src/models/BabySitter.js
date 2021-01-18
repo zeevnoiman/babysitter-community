@@ -77,6 +77,62 @@ const BabySitter = {
         }
     },
 
+    update : async function({
+        name,
+        age,
+        email,
+        gender,
+        city,
+        location,
+        street,
+        bio,
+        photo,
+        phone,
+        languages,
+        rate,
+       schedules
+    }, babysitter_id){
+        const st = db.postgis;
+        const trx = await db.transaction();
+        
+        try{
+
+            const insertedBabysitters = await trx('babysitter')
+            .where('babysitter_id', babysitter_id)
+            .update({
+                name,
+                age,
+                gender,
+                email,
+                city,
+                street,
+                location : st.setSRID(st.makePoint(location.lon, location.lat), 4326),
+                bio,
+                photo,
+                phone,
+                languages,
+                rate,
+            }, 'id');
+
+            const schedulesSerialized = schedules.map(schedule => {
+                return{
+                    ...schedule,
+                    babysitter_id : babysitter_id
+                }
+            });
+
+            await trx('babysitter_schedule').insert(schedulesSerialized);
+
+            trx.commit();
+
+            return updatedBabysitterId;
+
+        } catch(err){
+                await trx.rollback();
+                console.log(err);
+                return false
+        }
+    },
     getSchedule : async function(babysitter_id, year, month_day, from, to){
         try{
 

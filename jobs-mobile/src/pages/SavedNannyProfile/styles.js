@@ -91,6 +91,12 @@ const styles = StyleSheet.create({
         top: 5,
         right: 10
     },
+    editProfileButton:{
+        padding: 10,
+        flexDirection: 'row',
+        alignItems:'stretch'
+
+    },
     name:{
         marginTop: 10,
         fontFamily: 'mama', 
