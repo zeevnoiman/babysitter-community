@@ -78,9 +78,7 @@ const BabySitter = {
     },
 
     update : async function({
-        name,
         age,
-        email,
         gender,
         city,
         location,
@@ -97,13 +95,11 @@ const BabySitter = {
         
         try{
 
-            const insertedBabysitters = await trx('babysitter')
-            .where('babysitter_id', babysitter_id)
+            const updatedBabysitters = await trx('babysitter')
+            .where('id', babysitter_id)
             .update({
-                name,
                 age,
                 gender,
-                email,
                 city,
                 street,
                 location : st.setSRID(st.makePoint(location.lon, location.lat), 4326),
@@ -114,18 +110,23 @@ const BabySitter = {
                 rate,
             }, 'id');
 
-            const schedulesSerialized = schedules.map(schedule => {
+            const schedulesSerialized = schedules
+            .filter(schedule => schedule)
+            .map(schedule => {
                 return{
                     ...schedule,
                     babysitter_id : babysitter_id
                 }
-            });
-
-            await trx('babysitter_schedule').insert(schedulesSerialized);
+            })
+            
+            console.log(schedulesSerialized);
+            if(schedulesSerialized.length > 0){
+                await trx('babysitter_schedule').insert(schedulesSerialized);
+            }
 
             trx.commit();
 
-            return updatedBabysitterId;
+            return updatedBabysitters[0];
 
         } catch(err){
                 await trx.rollback();

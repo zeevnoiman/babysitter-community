@@ -45,8 +45,11 @@ const BabysitterProvider = ({children}) => {
                 user_id: user_id
             }
         });
-        if(res){
+        if(res.data){
             setBabysitter(res.data)
+            return true;
+        } else{
+            return false
         }
     }
     return (

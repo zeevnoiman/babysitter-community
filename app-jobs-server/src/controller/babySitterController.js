@@ -87,14 +87,14 @@ module.exports = {
         return res.send({'babysitter': newBabysitter});
     },
 
-    async update(){
+    async update(req, res){
         const {age, gender, country, city, street, bio, phone, languages, rate, user_id, schedules} = req.body;
         const {babysitter_id} = req.params
         var filename = '';
         if(req.file){
              filename = req.file.filename;
         } 
-        
+
         //location pre proccesing
         var api_url = 'https://api.opencagedata.com/geocode/v1/json'
 
@@ -120,7 +120,9 @@ module.exports = {
         const schedulesSerialized = schedulesParsed.map(schedule => {
             const from = convertTimeToMin(schedule.from);
             const to = convertTimeToMin(schedule.to);
-
+            if(from == to){
+                return false;
+            }
             return{
                 ...schedule,
                 from,
@@ -129,19 +131,20 @@ module.exports = {
         });
 
         const babysitter = {
-            name : user.name,
             age,
-            email : user.email,
             gender,
             city,
             location,
             street,
             bio,
-            photo: filename,
             phone,
             languages,
             rate,
             schedules : schedulesSerialized
+        }
+
+        if(filename.length > 0){
+            babysitter.photo = filename;
         }
 
         const updatedBabysitter = await BabySitter.update(babysitter, babysitter_id);

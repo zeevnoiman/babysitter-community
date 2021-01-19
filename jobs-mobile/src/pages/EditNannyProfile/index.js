@@ -21,10 +21,11 @@ import ScheduleForm from './ScheduleForm';
 export default function EditNannyProfile({navigation}){
     
     const {user} = useContext(userContext);
-    const {saveBabysitter, babysitter} = useContext(babysitterContext);
+    const {saveBabysitter, updateBabysitter, babysitter} = useContext(babysitterContext);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [perfilImage, setPerfilImage] = useState('');
+    const [imageUploaded, setImageUploaded] = useState(false);
     const [age, setAge] = useState('');
     const [maleIsSelected, setMaleIsSelected] = useState();
     const [femaleIsSelected, setFemaleIsSelected] = useState(true);
@@ -136,6 +137,7 @@ export default function EditNannyProfile({navigation}){
               console.log(result.uri);
                 
               setPerfilImage(result.uri);
+              setImageUploaded(true);
               setModalVisible(false);
             }
          }
@@ -159,6 +161,7 @@ export default function EditNannyProfile({navigation}){
                     console.log(result.uri);
                     
                   setPerfilImage(result.uri);
+                  setImageUploaded(true)
                   setModalVisible(false);
                 }
         }
@@ -185,7 +188,7 @@ export default function EditNannyProfile({navigation}){
         data.append('languages', languagesString);
         data.append('user_id', user.id);
         data.append('schedules', JSON.stringify(scheduledItems) )
-        if(perfilImage.length > 0){
+        if(perfilImage.length > 0 && imageUploaded){
             data.append('photo', {
                 uri: perfilImage,
                 name: 'babysitterProfile.jpg',
@@ -194,10 +197,19 @@ export default function EditNannyProfile({navigation}){
         }
 
       
-        console.log(data, user.id);
         try {
+          if(babysitter){ //screen in edit mode
+            let res = await updateBabysitter(data, user.id, babysitter.id)
+            if(res){
+              navigation.navigate('SavedNannyProfile')    
+            } else{
+              throw 'Error on update'
+            }
+          }
+          else{//screen in creation mode
             await saveBabysitter(data);
-            // navigation.navigate('SavedNannyProfile')    
+
+          }
         } catch (error) {
             console.log(error); 
         }
