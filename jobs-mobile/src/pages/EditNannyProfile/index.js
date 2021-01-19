@@ -64,7 +64,7 @@ export default function EditNannyProfile({navigation}){
     ]
 
     useEffect(() => {
-      console.log('esit nanny profile - babysitter:', babysitter);
+      console.log('edit nanny profile - babysitter:', babysitter);
       if(babysitter){
         if(babysitter.photo.length > 0){
           setPerfilImage(`http://10.0.0.6:3333/static/${babysitter.photo}`);
@@ -76,9 +76,10 @@ export default function EditNannyProfile({navigation}){
         setStreet(babysitter.street);
         setProfissionalBio(babysitter.bio);
         setRate(String(babysitter.rate))
+        console.log('edit hook - languages before : ', selectedItems);
+        setSelectedItems(babysitter.languages.split(',').filter(word => word.length > 0))
+        console.log('edit hook - languages after: ', selectedItems);
         
-        setSelectedItems(babysitter.languages.split(',').map(word => word.trim()))
-
         if(babysitter.gender == 'female'){
           handleFemaleRadioButton(true);
         } else{
@@ -172,8 +173,9 @@ export default function EditNannyProfile({navigation}){
 
     }
     async function handleSaveButton(){
+      console.log('handle function - selected languages',selectedItems);
         var languagesString = (selectedItems.map(item => item.label)).toString();
-        
+        console.log(languagesString);
         var gender = femaleIsSelected ? 'female' : 'male';
 
         var data = new FormData();

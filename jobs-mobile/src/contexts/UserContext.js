@@ -122,6 +122,13 @@ const UserProvider = ({children}) => {
         setToken(res.data.token);
         setUser(res.data.user);
     }
+
+    const logOut = async () =>  {
+        await AsyncStorage.removeItem('BS:User');
+        await AsyncStorage.removeItem('BS:Token');
+        setToken(null);
+        setUser(null);
+    }
     
 
     const addLikedBabysitter = async  (babysitter) => {
@@ -183,6 +190,7 @@ const UserProvider = ({children}) => {
             registerForPushNotificationsAsync,
             signin,
             login,
+            logOut,
             addLikedBabysitter,
             deleteLikedBabysitter,
             expoPushToken,

@@ -406,7 +406,7 @@ function SavedNannyProfileToNannyView({navigation}){
         <TouchableOpacity 
         style={styles.editProfileButton}
         onPress={() => navigation.navigate('EditNannyProfile')}>
-            <Feather name="edit-3" size={16} color="black" />
+            <Feather style={{lineHeight : 37, marginRight : 5}} name="edit-3" size={16} color="black" />
             <Text style={styles.text}>Edit Profile</Text>
         </TouchableOpacity>
         <View style={styles.rateBox}>
