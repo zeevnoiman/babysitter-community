@@ -156,7 +156,7 @@ const BabySitter = {
         const st = db.postgis;
         try{
             const babysitters = await db("babysitter")
-            .select('babysitter.*', st.distance("location", st.geography(st.makePoint(longitude, latitude))).as("distanceAway"))
+            .select('babysitter.*', st.x("location").as("longitude"), st.y("location").as("latitude"), st.distance("location", st.geography(st.makePoint(longitude, latitude))).as("distanceAway"))
             .where(st.dwithin("location", st.geography(st.makePoint(longitude, latitude)), 50000));
 
             return babysitters;

@@ -83,7 +83,7 @@ module.exports = {
         res.json({
             ...user,
             token: generateToken({
-                id: user._id
+                id: user.id
             })
         });
     },

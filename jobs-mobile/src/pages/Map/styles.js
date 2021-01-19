@@ -6,6 +6,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#dbd1d0'
     },
+    loadingContainer:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '80%',
+        alignSelf: 'center'
+    },
+    waitText:{
+        fontFamily: 'Montserrat',
+        color: '#333',
+        marginTop: 20,
+        fontSize: 32
+    },
     map: {
         // flex: 1,
         height: '60%',

@@ -1,5 +1,6 @@
 const axios = require('axios');
 const BabySitter = require('../models/BabySitter');
+const User = require('../models/User');
 
 module.exports = {
     async index(req, res) {
@@ -10,7 +11,18 @@ module.exports = {
         } = req.query;
         
         const babySitters = await BabySitter.getWithinRadius(latitude, longitude);
+        const likedBabysitters = await User.showAllLikedBabysitters(req.userId);
         
+        for(var i = 0; i < babySitters.length; i++){
+            babySitters[i].isLiked = false
+            for(var j = 0; j < likedBabysitters.length; j++){
+                if(babySitters[i].id == likedBabysitters[j].babysitter_id){
+                    babySitters[i].isLiked = true
+                    break;
+                }
+            }
+        }
+
         res.json({
             babySitters
         });

@@ -9,7 +9,7 @@ import {
     requestPermissionsAsync,
     getCurrentPositionAsync
 } from 'expo-location';
-import {MaterialIcons, Ionicons, FontAwesome} from '@expo/vector-icons';
+import {MaterialIcons, Ionicons, FontAwesome, FontAwesome5} from '@expo/vector-icons';
 import axios from 'axios';
 import StarRating from 'react-native-star-rating';
 
@@ -18,10 +18,12 @@ import styles from './styles';
 import apiGeoKey from '../../config/keys';
 import anonimusImage from '../../assets/anonimo.png';
 import { userContext } from '../../contexts/UserContext';
+import { familyContext } from '../../contexts/FamilyContext';
 
 function Map({navigation}) {
 
-    const {user, addLikedBabysitter, deleteLikedBabysitter, expoPushToken} = useContext(userContext);
+    const {user} = useContext(userContext);
+    const {searchBabysitters,  addLikedBabysitter, deleteLikedBabysitter} = useContext(familyContext);
 
     const [babysitters, setBabysitters] = useState([]);
     const [currentRegion, setCurrentRegion] = useState(null);
@@ -32,76 +34,23 @@ function Map({navigation}) {
     const [rotateEnabled, setRotateEnabled] = useState(true);
     const [screenWidth, setscreenWidth] = useState();
 
-    function setLikedBabysitters(babysitters){
-        console.log(user)
-        const babysittersWithLike = babysitters.map(myBabysitter => {
-            for(var i = 0; i <  user.likedBabysitters.length; i++){
-               
-                if(user.likedBabysitters[i] === myBabysitter._id){
-                    myBabysitter.isLiked = true;
-                    break;
-                } else{
-                    myBabysitter.isLiked = false
-                }
-            };
-            return myBabysitter;
-        });
-        
-        setDistanceFromUser(babysittersWithLike)
-        //setBabysitters(babysittersWithLike)
-    }
-   
-     function setDistanceFromUser(babysitters){
-        const babysittersWithDistance = babysitters.map(async babysitter => {
-            const lat1 = babysitter.location.coordinates[1];
-            const lon1 = babysitter.location.coordinates[0];
-            const lat2 = currentRegion.latitude;
-            const lon2 = currentRegion.longitude;
-            
-            const response = await api.get('/distance',{
-                params:{
-                    lat1,
-                    lat2,
-                    lon1,
-                    lon2,
-                }
-            });
-            babysitter.distanceFromUser = response.data.distance.toString().substring(0, 4);
-            console.log(babysitter);
-            
-            return babysitter;
-        })
-        
-        Promise.all(babysittersWithDistance).then(babysitters =>  setBabysitters(babysitters))
-    }
-    
-    function handleSetIsLiked(isLiked, babysitter){
-        babysitter.isLiked = isLiked;
-        if(isLiked){
-            addLikedBabysitter(babysitter);
-        }else{
-            deleteLikedBabysitter(babysitter);
-        }
-    }
-    
     var previousRegion = {};
     useEffect(() => {
         const screenWidth = Math.round(Dimensions.get('window').width);
-        console.log(screenWidth);
-        
         setscreenWidth(screenWidth-10);
         loadInitialPosition();
     }, []);
 
+    
     async function loadInitialPosition() {
         const {
             granted
         } = await requestPermissionsAsync();
         if (granted) {
+            console.log('load initial position function');
             const { coords } = await getCurrentPositionAsync({
                 enableHighAccuracy: true,
             });
-            console.log('load initial position function');
 
             const { latitude, longitude } = coords;
 
@@ -111,8 +60,7 @@ function Map({navigation}) {
                 latitudeDelta: 0.04,
                 longitudeDelta: 0.04,
             });
-
-            loadBabysitters();
+            loadBabysitters()
         }
     }
 
@@ -124,24 +72,71 @@ function Map({navigation}) {
         }
         const {latitude, longitude} = currentRegion;
         
-        const response = await api.get('/search',{
-            params: {
-                latitude,
-                longitude,
-            }
-        } );
-        const babySitters = response.data.babySitters;
-        
+        const babySitters = await searchBabysitters(latitude, longitude);
+
+        setBabysitters(babySitters);
         // if (babySitters.length > 0){
         //     babySitters.map((babysitter, index) => {
         //         if(babysitter.photo.length > 0){
-        //             babysitter.photo = `http://10.0.0.18:3333/static/${babysitter.photo}`;
+        //             babysitter.photo = `http://10.0.0.6:3333/static/${babysitter.photo}`;
         //         }
         //     })    
         // }
-        setLikedBabysitters(babySitters)
+        // setLikedBabysitters(babySitters)
     }
 
+    // function setLikedBabysitters(babysitters){
+    //     console.log(user)
+    //     const babysittersWithLike = babysitters.map(myBabysitter => {
+    //         for(var i = 0; i <  user.likedBabysitters.length; i++){
+               
+    //             if(user.likedBabysitters[i] === myBabysitter._id){
+    //                 myBabysitter.isLiked = true;
+    //                 break;
+    //             } else{
+    //                 myBabysitter.isLiked = false
+    //             }
+    //         };
+    //         return myBabysitter;
+    //     });
+        
+    //     setDistanceFromUser(babysittersWithLike)
+    //     //setBabysitters(babysittersWithLike)
+    // }
+   
+    //  function setDistanceFromUser(babysitters){
+    //     const babysittersWithDistance = babysitters.map(async babysitter => {
+    //         const lat1 = babysitter.location.coordinates[1];
+    //         const lon1 = babysitter.location.coordinates[0];
+    //         const lat2 = currentRegion.latitude;
+    //         const lon2 = currentRegion.longitude;
+            
+    //         const response = await api.get('/distance',{
+    //             params:{
+    //                 lat1,
+    //                 lat2,
+    //                 lon1,
+    //                 lon2,
+    //             }
+    //         });
+    //         babysitter.distanceFromUser = response.data.distance.toString().substring(0, 4);
+    //         console.log(babysitter);
+            
+    //         return babysitter;
+    //     })
+        
+    //     Promise.all(babysittersWithDistance).then(babysitters =>  setBabysitters(babysitters))
+    // }
+
+    function handleSetIsLiked(isLiked, babysitter){
+        babysitter.isLiked = isLiked;
+        if(isLiked){
+            addLikedBabysitter(babysitter.id, user.id);
+        }else{
+            deleteLikedBabysitter(babysitter.id, user.id);
+        }
+    }
+    
     function handleRegionChanged(region){
         
         console.log('region changed:');
@@ -174,20 +169,19 @@ function Map({navigation}) {
             longitude: pos[0].lng,
             latitudeDelta: 0.04,
             longitudeDelta: 0.04});
-
-        loadBabysitters();
         setLocation('');
     }
 
-    function handlePressMapView(e) {
-        console.log(e.nativeEvent.coordinate);
-//        setCurrentRegion(e.nativeEvent.coordinate);
-
-    }
-    
     console.log('before return');
     if (!currentRegion) {
-        return null;
+        return(
+        <View style={styles.loadingContainer}>
+            <FontAwesome5 name="search-location" size={118} color="#f20079" />
+            <Text style={styles.waitText}>
+                Please wait, we are getting your location to load a beautiful map :)
+            </Text>
+        </View>
+        ) 
     }
     return(
     <View style = {styles.container}>
@@ -204,9 +198,9 @@ function Map({navigation}) {
       {
       babysitters.map(babysitter => (
            babysitter &&
-          <Marker key= {babysitter._id} coordinate={{ latitude: babysitter.location.coordinates[1], longitude: babysitter.location.coordinates[0] }}>
+          <Marker key= {babysitter.id} coordinate={{ latitude: babysitter.latitude, longitude: babysitter.longitude }}>
              { babysitter.photo.length > 1 ?
-             <Image style={styles.avatar} source={{uri : `http://10.0.0.18:3333/static/${babysitter.photo}`}}/>
+             <Image style={styles.avatar} source={{uri : `http://10.0.0.6:3333/static/${babysitter.photo}`}}/>
              :
              <Image style={styles.avatar} source={anonimusImage}/>
              }
@@ -259,7 +253,7 @@ function Map({navigation}) {
                 babysitters.map(babysitter => (
                 babysitter &&
                 <TouchableOpacity 
-                    key= {babysitter._id} 
+                    key= {babysitter.id} 
                     onPress={() => navigation.navigate('SavedNannyProfile', {'worker' : babysitter})}
                     style={[styles.babysitterItem, {width: screenWidth}]}>
                     <StarRating
@@ -272,7 +266,7 @@ function Map({navigation}) {
                     />
                     <View>
                         { babysitter.photo.length > 0 ?
-                        <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.18:3333/static/${babysitter.photo}`}}/> 
+                        <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.6:3333/static/${babysitter.photo}`}}/> 
                         :
                         <Image style={styles.imageBabysitter} source={anonimusImage}/>
                     }
@@ -290,7 +284,7 @@ function Map({navigation}) {
                             <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
                             <Text style={styles.ratePrice}>{babysitter.rate}/h</Text>    
                         </View>
-                        <Text style={ styles.distanceFromUser}>{babysitter.distanceFromUser} km from you</Text>
+                        <Text style={ styles.distanceFromUser}>{babysitter.distanceAway} m from you</Text>
                         
                     </View>
                 </TouchableOpacity> 

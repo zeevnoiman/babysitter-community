@@ -30,7 +30,7 @@ routes.post('/signin', user.signinUser);
 routes.post('/login', user.loginUser);
 routes.get('/work', auth, work.index);
 routes.post('/work/:babysitter_id', auth, work.store);
-routes.get('/search', searchController.index);
+routes.get('/search', auth, searchController.index);
 routes.get('/distance', distanceController.distance);
 
 module.exports = routes;

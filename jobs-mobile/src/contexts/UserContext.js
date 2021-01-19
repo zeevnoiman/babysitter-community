@@ -129,54 +129,6 @@ const UserProvider = ({children}) => {
         setToken(null);
         setUser(null);
     }
-    
-
-    const addLikedBabysitter = async  (babysitter) => {
-
-        console.log(babysitter);
-        
-        const newLikedBabysitters = [...user.likedBabysitters, babysitter.id];
-         
-        setUser({...user, likedBabysitters : newLikedBabysitters});
-
-        console.log(token);
-        
-        try{
-        const res = await api.put(`/like/${babysitter.id}`, babysitter,
-        {
-            headers:{
-                'Access-Control-Allow-Origin' : '*',
-                user_id : user.id,
-            }
-        });
-        console.log(res.data);
-        
-        }
-        catch(err){
-            console.log(err);
-        }
-    }
-
-    const deleteLikedBabysitter = async  (babysitter) => {
-        const newLikedBabysitters = 
-        user.likedBabysitters.filter(babysitterToverify =>
-                                     babysitterToverify != babysitter.id)
-                       
-        setUser({...user, likedBabysitters : newLikedBabysitters});
-                       
-        try{
-        const res = await api.delete(`/like/${babysitter.id}`,{
-            headers:{
-                user_id: user.id,
-            }
-        });
-        console.log(res.data);
-        return 'Babysitter desliked'
-        }
-        catch(err){
-            console.log(err);
-        }
-    }
 
     return (
         <userContext.Provider value={
@@ -191,8 +143,6 @@ const UserProvider = ({children}) => {
             signin,
             login,
             logOut,
-            addLikedBabysitter,
-            deleteLikedBabysitter,
             expoPushToken,
             setExpoPushToken
             }
