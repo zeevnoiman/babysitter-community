@@ -8,6 +8,7 @@ import StarRating from 'react-native-star-rating';
 
 import anonimusImage from '../../assets/anonimo.png';
 import backgroundPattern from '../../assets/backgroundPattern.png';
+import {staticAddress} from '../../services/api';
 import api from '../../services/api';
 import { userContext } from '../../contexts/UserContext';
 import styles from './styles';
@@ -55,7 +56,7 @@ export default function NannyReviews({navigation}){
             <View style={styles.perfil}>
                 <View style={styles.avatarContainer}>
                     { nanny.photo.length > 0 ?
-                    <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.6:3333/static/${nanny.photo}`}}/> 
+                    <Image style={styles.imageBabysitter} source={{uri : `${staticAddress}${nanny.photo}`}}/> 
                     :
                     <Image style={styles.imageBabysitter} source={anonimusImage}/>
                     }

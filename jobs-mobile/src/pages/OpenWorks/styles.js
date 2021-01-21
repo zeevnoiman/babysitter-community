@@ -6,6 +6,19 @@ const styles = StyleSheet.create({
     container:{
         flex: 1
     },
+    loadingContainer:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '80%',
+        alignSelf: 'center'
+    },
+    waitText:{
+        fontFamily: 'Montserrat',
+        color: '#333',
+        marginTop: 20,
+        fontSize: 32
+    },
     subtitle:{
         width:'100%',
         justifyContent: 'space-between',

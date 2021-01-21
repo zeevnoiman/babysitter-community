@@ -2,42 +2,40 @@ import React, {useState, useContext, useEffect} from 'react';
 import {Text, View, Image, FlatList, TouchableOpacity, ImageBackground, Dimensions} from 'react-native';
 import {MaterialIcons, Ionicons, FontAwesome, 
     FontAwesome5} from '@expo/vector-icons';
-import {isBefore, getDate, getDay, formatRelative, parseISO} from 'date-fns'
+import {isBefore, getDate, isAfter} from 'date-fns'
 import { zonedTimeToUtc, format } from 'date-fns-tz';
 
 import anonimusImage from '../../assets/anonimo.png';
 import backgroundPattern from '../../assets/backgroundPattern.png';
-import api from '../../services/api';
+import {staticAddress} from '../../services/api';
 import { userContext } from '../../contexts/UserContext';
+import { workContext } from '../../contexts/WorkContext';
+import { familyContext } from '../../contexts/FamilyContext';
 import styles from './styles';
 
 
 export default function OpenWorks({navigation}){
 
-    const {loadWorks, works, token} = useContext(userContext);
-    const [newWorks, setNewWorks] = useState([]);
-    var day = []
+    const {user} = useContext(userContext);
+    const {likedBabysitters} = useContext(familyContext);
+    const {works, loadWorks} = useContext(workContext);
+
     useEffect(() => {
         loadWorks();
-    }, []);
-
-    useEffect(() => {
-        const newWorks = works.map(async work => {
-        const response = await api.get(`/babysitter/${work.nanny}`,{
-            headers:{
-                authorization : `Bearer ${token}`
-            }
-        });
-
-       // console.log(response.data);
-        
-        work.nannyProfile = response.data;
-        return work;
-    });
-
-    Promise.all(newWorks).then(newWorks =>  setNewWorks(newWorks))
-
-    }, [works])
+    }, [likedBabysitters])
+    
+    var day = []
+    
+    if(works.length < 1) {
+        return(
+            <View style={styles.loadingContainer}>
+            <FontAwesome name="calendar" size={118} color="#f20079" />
+            <Text style={styles.waitText}>
+                There are no future works in your calendary :(
+            </Text>
+        </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -45,7 +43,7 @@ export default function OpenWorks({navigation}){
             
         <FlatList
         style={styles.worksList}
-        data={newWorks.sort((a, b) => { 
+        data={works.sort((a, b) => { 
                 if(isBefore(a.dateHourStartDateFormat, b.dateHourStartDateFormat)){
                     return -1;
                 }
@@ -53,7 +51,7 @@ export default function OpenWorks({navigation}){
                     return 1;
                 }
             })}
-        keyExtractor={ work => String(work._id)}
+        keyExtractor={ work => String(work.id)}
         showsVerticalScrollIndicator={false}
         renderItem={({item : work, index}) => {
             day = [...day, getDate(work.dateHourStartDateFormat)];
@@ -72,15 +70,15 @@ export default function OpenWorks({navigation}){
                     }
                     <View style={[styles.babysitterItem]} >
                             <View style={styles.avatarContainer}>
-                                { work.nannyProfile.photo.length > 0 ?
-                                <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.18:3333/static/${work.nannyProfile.photo}`}}/> 
+                                { work.photo.length > 0 ?
+                                <Image style={styles.imageBabysitter} source={{uri : `${staticAddress}${work.photo}`}}/> 
                                 :
                                 <Image style={styles.imageBabysitter} source={anonimusImage}/>
                             }
                             </View>
                             <View style={styles.babysitterInfo}>
-                                <TouchableOpacity onPress={() => navigation.navigate('SavedNannyProfile', {'worker' : work.nannyProfile})}>
-                                    <Text style={styles.infoText}>{work.nannyProfile.name}</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate('SavedNannyProfile', {'worker' : {...work, dateHourStartDateFormat: '', dateHourFinishDateFormat: '' }})}>
+                                    <Text style={styles.infoText}>{work.name}</Text>
                                 </TouchableOpacity>
                                 <View style={styles.dateRow}>
                                 <Text style={styles.ageText}>From:</Text>

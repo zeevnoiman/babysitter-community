@@ -12,8 +12,7 @@ import {
 import {MaterialIcons, Ionicons, FontAwesome, FontAwesome5} from '@expo/vector-icons';
 import axios from 'axios';
 import StarRating from 'react-native-star-rating';
-
-import api from '../../services/api';
+import {staticAddress} from '../../services/api';
 import styles from './styles';
 import apiGeoKey from '../../config/keys';
 import anonimusImage from '../../assets/anonimo.png';
@@ -31,7 +30,7 @@ function Map({navigation}) {
     const [pitchEnabled, setPitchEnabled] = useState(true);
     const [scroolEnabled, setScroolEnabled] = useState(true);
     const [zoomEnabled, setZoomEnabled] = useState(false);
-    const [rotateEnabled, setRotateEnabled] = useState(true);
+    const [rotateEnabled, setRotateEnabled] = useState(false);
     const [screenWidth, setscreenWidth] = useState();
 
     var previousRegion = {};
@@ -73,60 +72,8 @@ function Map({navigation}) {
         const {latitude, longitude} = currentRegion;
         
         const babySitters = await searchBabysitters(latitude, longitude);
-
         setBabysitters(babySitters);
-        // if (babySitters.length > 0){
-        //     babySitters.map((babysitter, index) => {
-        //         if(babysitter.photo.length > 0){
-        //             babysitter.photo = `http://10.0.0.6:3333/static/${babysitter.photo}`;
-        //         }
-        //     })    
-        // }
-        // setLikedBabysitters(babySitters)
     }
-
-    // function setLikedBabysitters(babysitters){
-    //     console.log(user)
-    //     const babysittersWithLike = babysitters.map(myBabysitter => {
-    //         for(var i = 0; i <  user.likedBabysitters.length; i++){
-               
-    //             if(user.likedBabysitters[i] === myBabysitter._id){
-    //                 myBabysitter.isLiked = true;
-    //                 break;
-    //             } else{
-    //                 myBabysitter.isLiked = false
-    //             }
-    //         };
-    //         return myBabysitter;
-    //     });
-        
-    //     setDistanceFromUser(babysittersWithLike)
-    //     //setBabysitters(babysittersWithLike)
-    // }
-   
-    //  function setDistanceFromUser(babysitters){
-    //     const babysittersWithDistance = babysitters.map(async babysitter => {
-    //         const lat1 = babysitter.location.coordinates[1];
-    //         const lon1 = babysitter.location.coordinates[0];
-    //         const lat2 = currentRegion.latitude;
-    //         const lon2 = currentRegion.longitude;
-            
-    //         const response = await api.get('/distance',{
-    //             params:{
-    //                 lat1,
-    //                 lat2,
-    //                 lon1,
-    //                 lon2,
-    //             }
-    //         });
-    //         babysitter.distanceFromUser = response.data.distance.toString().substring(0, 4);
-    //         console.log(babysitter);
-            
-    //         return babysitter;
-    //     })
-        
-    //     Promise.all(babysittersWithDistance).then(babysitters =>  setBabysitters(babysitters))
-    // }
 
     function handleSetIsLiked(isLiked, babysitter){
         babysitter.isLiked = isLiked;
@@ -200,7 +147,7 @@ function Map({navigation}) {
            babysitter &&
           <Marker key= {babysitter.id} coordinate={{ latitude: babysitter.latitude, longitude: babysitter.longitude }}>
              { babysitter.photo.length > 1 ?
-             <Image style={styles.avatar} source={{uri : `http://10.0.0.6:3333/static/${babysitter.photo}`}}/>
+             <Image style={styles.avatar} source={{uri : `${staticAddress}${babysitter.photo}`}}/>
              :
              <Image style={styles.avatar} source={anonimusImage}/>
              }
@@ -266,7 +213,7 @@ function Map({navigation}) {
                     />
                     <View>
                         { babysitter.photo.length > 0 ?
-                        <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.6:3333/static/${babysitter.photo}`}}/> 
+                        <Image style={styles.imageBabysitter} source={{uri : `${staticAddress}${babysitter.photo}`}}/> 
                         :
                         <Image style={styles.imageBabysitter} source={anonimusImage}/>
                     }
@@ -274,7 +221,7 @@ function Map({navigation}) {
                             {babysitter.isLiked ?
                             <Ionicons name='md-heart' size={25} style={{color: '#f20079'}}></Ionicons>
                             :
-                            <Ionicons name='md-heart-empty' size={25} style={{color: '#515151'}}></Ionicons>}
+                            <Ionicons name='md-heart-outline' size={25} style={{color: '#515151'}}></Ionicons>}
                         </TouchableOpacity>
                     </View>
                     <View style={styles.babysitterInfo}>
@@ -284,7 +231,7 @@ function Map({navigation}) {
                             <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
                             <Text style={styles.ratePrice}>{babysitter.rate}/h</Text>    
                         </View>
-                        <Text style={ styles.distanceFromUser}>{babysitter.distanceAway} m from you</Text>
+                        <Text style={ styles.distanceFromUser}>{Math.round(babysitter.distanceAway)} meters from you</Text>
                         
                     </View>
                 </TouchableOpacity> 

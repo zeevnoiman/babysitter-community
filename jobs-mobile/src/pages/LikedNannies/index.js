@@ -3,43 +3,30 @@ import {Text, View, Image, FlatList, TouchableOpacity,TouchableHighlight, ImageB
 import {MaterialIcons, Ionicons, FontAwesome, 
     FontAwesome5} from '@expo/vector-icons';
 import StarRating from 'react-native-star-rating';
-
+import {staticAddress} from '../../services/api';
 import api from '../../services/api'
 import { userContext } from '../../contexts/UserContext';
+import { familyContext } from '../../contexts/FamilyContext';
 import styles from './styles';
 import anonimusImage from '../../assets/anonimo.png';
 import backgroundPattern from '../../assets/backgroundPattern.png';
 
 export default function LikedNannies({navigation}){
 
-    const {user, token, deleteLikedBabysitter} = useContext(userContext);
-    const [babysitters, setBabysitters] = useState([]);
-    
-    
+    const {user} = useContext(userContext);
+    const {deleteLikedBabysitter, getLikedBabysitters, likedBabysitters : babysitters} = useContext(familyContext);
+      
     useEffect(() => {
-        loadBabysitters();
+        getLikedBabysitters(user.id);
     }, [])
 
-    async function loadBabysitters(){
-        const response = await api.get('/like', {
-            headers:{
-                Authorization: `Bearer ${token}`,
-                user_id: user._id
-            }
-        });
-        console.log(response.data);
-        
-        setBabysitters(response.data.likedBabysitters);
-    }
-
     async function handleDeleteLiked(babysitter){
-        console.log('handle delete', babysitter);
+        console.log('handle delete', babysitter.id, user.id);
         
-        const res = await deleteLikedBabysitter(babysitter);
+        const res = await deleteLikedBabysitter(babysitter.id, user.id);
         if(res){
             console.log(res);
-            
-            loadBabysitters();
+            getLikedBabysitters(user.id);
         }
     }
     return(
@@ -67,7 +54,7 @@ export default function LikedNannies({navigation}){
                         />
                         <View >
                             { babysitter.photo.length > 0 ?
-                            <Image style={styles.imageBabysitter} source={{uri : `http://10.0.0.18:3333/static/${babysitter.photo}`}}/> 
+                            <Image style={styles.imageBabysitter} source={{uri : `${staticAddress}${babysitter.photo}`}}/> 
                             :
                             <Image style={styles.imageBabysitter} source={anonimusImage}/>
                         }

@@ -18,6 +18,7 @@ routes.get('/', (req, res)=>{
     return res.send('Hello world');
 })
 routes.get('/babysitter', auth ,babysitter.index);
+routes.get('/schedules/:babysitter_id', auth ,babysitter.getSchedule);
 routes.post('/babysitter', auth, upload.single('photo'), babysitter.store);
 routes.post('/babysitter/:babysitter_id', auth, upload.single('photo'), babysitter.update);
 routes.post('/valorate', auth, reviewController.store);

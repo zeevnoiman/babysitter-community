@@ -3,6 +3,7 @@ const BabySitter = require('../models/BabySitter');
 const User = require('../models/User');
 const authConfig = require('../config/keys');
 const convertTimeToMin = require('../models/utils/convertTimeToMin');
+const convertMinToTime = require('../models/utils/convertMinToTime');
 
 module.exports = {
 
@@ -150,6 +151,29 @@ module.exports = {
         const updatedBabysitter = await BabySitter.update(babysitter, babysitter_id);
         
         return res.send({'babysitter': updatedBabysitter});
+    },
+
+    async getSchedule(req, res){
+        const {babysitter_id} = req.params;
+        
+        const schedules = await BabySitter.getSchedule(Number(babysitter_id));
+
+        if(schedules){
+            const schedulesSerialized = schedules.map((schedule) => {
+                const from = convertMinToTime(schedule.from);
+                const to = convertMinToTime(schedule.to);
+                const [month, day] = schedule.month_day.split('_');
+                const year = schedule.year;
+                var dateHourStartReadable = `${day}/${month}/${year} ${from}`; 
+                var dateHourFinishReadable = `${day}/${month}/${year} ${to}`;
+                    
+                const newSchedule =  {...schedule, dateHourStartReadable, dateHourFinishReadable}
+                return newSchedule           
+            })
+            res.send(schedulesSerialized)
+        } else{
+            res.status(400).send('Error getting schedules')
+        }
     }
 
 };

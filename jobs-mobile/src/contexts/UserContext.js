@@ -25,15 +25,19 @@ const UserProvider = ({children}) => {
                 setLoading(false);
                 return false;
             }
-            api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-            const {data : user_from_api} = await api.get('/user',{
-                headers:{
-                    user_id: JSON.parse(user).id
-                }
-            });
-            setUser(user_from_api);
-            setToken(token);                                                 
-            setLoading(false);
+            try{
+                api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+                const {data : user_from_api} = await api.get('/user',{
+                    headers:{
+                        user_id: JSON.parse(user).id
+                    }
+                });
+                setUser(user_from_api);
+                setToken(token);                                                 
+                setLoading(false);
+            } catch(err){
+                console.log(err);
+            }
         };
         
         tryGetUser();

@@ -5,7 +5,6 @@ import { View, Text,
         Modal, TextInput, Alert
        } from 'react-native';
 import {MaterialIcons, FontAwesome, Ionicons, Feather, EvilIcons} from '@expo/vector-icons'
-import api from '../../services/api';
 import StarRating from 'react-native-star-rating';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Formik, useField, useFormikContext} from 'formik'
@@ -15,10 +14,13 @@ import { zonedTimeToUtc, format } from 'date-fns-tz';
 import * as MailComposer from 'expo-mail-composer';
 import * as Yup from 'yup';
 
+import {staticAddress} from '../../services/api';
 import styles from './styles';
 import anonimusImage from '../../assets/anonimo.png';
 import { userContext } from '../../contexts/UserContext';
+import { familyContext } from '../../contexts/FamilyContext';
 import { babysitterContext } from '../../contexts/BabysitterContext';
+import { workContext } from '../../contexts/WorkContext';
 
 const DatePickerField = ({ ...props }) => {
     
@@ -67,7 +69,9 @@ function SavedNannyProfileToFamilyView({route, navigation}){
 
     
     const {worker} = route.params;
-    const {user, addLikedBabysitter, deleteLikedBabysitter, addWork} = useContext(userContext);
+    const {user} = useContext(userContext);
+    const {addLikedBabysitter, deleteLikedBabysitter} = useContext(familyContext);
+    const {addWork} = useContext(workContext);
 
     const [isLiked, setIsLiked] = useState(false);
     const [starCount, setStarCount] = useState(3.5);
@@ -78,16 +82,7 @@ function SavedNannyProfileToFamilyView({route, navigation}){
     const [showFinishHour, setShowFinishHour] = useState(false);
     const [scheduleMessage, setScheduleMessage] = useState('');
 
-    useEffect(() => {
-        console.log(user);
-        
-        user.likedBabysitters.map(babysitter => {
-            if(babysitter === worker.id){
-                setIsLiked(true)
-            }
-        })
-    }, [user])
-   
+
     useEffect(() => {
         if(modalVisible == false){
             if(scheduleMessage != ''){
@@ -95,6 +90,7 @@ function SavedNannyProfileToFamilyView({route, navigation}){
             }
         }
     }, [modalVisible])
+    
     function sendMail(){
         const message = "Hi, I sow you on Super Nanny, I would like to talk to you about a service, are you interested? thank you!" 
         MailComposer.composeAsync({
@@ -114,11 +110,12 @@ function SavedNannyProfileToFamilyView({route, navigation}){
     }
 
     function handleSetIsLiked(isLiked){
-        setIsLiked(isLiked);
+        console.log(isLiked);
+        worker.isLiked = isLiked;
         if(isLiked){
-            addLikedBabysitter(worker);
+            addLikedBabysitter(worker.id, user.id);
         }else{
-            deleteLikedBabysitter(worker);
+            deleteLikedBabysitter(worker.id, user.id);
         }
     }
      function handleSetModalVisible(flag){
@@ -148,7 +145,8 @@ function SavedNannyProfileToFamilyView({route, navigation}){
             date_hour_finish_string,
             defined_value_to_pay : values.rate
         }
-        const response = await addWork(work, worker.id)
+        const response = await addWork(work, worker.id, user.id)
+        
         console.log(response);
         setScheduleMessage(response);
         handleSetModalVisible(false);
@@ -177,7 +175,7 @@ function SavedNannyProfileToFamilyView({route, navigation}){
     >
         <View style={styles.imageBox}>  
        { worker.photo.length > 0 ?
-            <Image style={styles.anonimusImage} source={{uri : `http://10.0.0.6:3333/static/${worker.photo}`}}/>
+            <Image style={styles.anonimusImage} source={{uri : `${staticAddress}${worker.photo}`}}/>
             :
             <Image style={styles.anonimusImage} source={anonimusImage}/>
             }
@@ -190,11 +188,11 @@ function SavedNannyProfileToFamilyView({route, navigation}){
                 fullStarColor={'#fff000'}
                 selectedStar={() => navigation.navigate('NannyReviews',{'nanny': worker})}
             />
-            <TouchableOpacity style={styles.likeButton} onPress={() => handleSetIsLiked(!isLiked)}>
-                {isLiked ?
+            <TouchableOpacity style={styles.likeButton} onPress={() => handleSetIsLiked(!worker.isLiked)}>
+                {worker.isLiked ?
                 <Ionicons name='md-heart' size={35} style={{color: '#f20079'}}></Ionicons>
                 :
-                <Ionicons name='md-heart-empty' size={35} style={{color: '#515151'}}></Ionicons>}
+                <Ionicons name='md-heart-outline' size={35} style={{color: '#515151'}}></Ionicons>}
             </TouchableOpacity>
         </View>
         <View style={styles.rateBox}>
@@ -218,9 +216,8 @@ function SavedNannyProfileToFamilyView({route, navigation}){
         </View>
         <View style={styles.languagesBox}>
         <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
-        {worker.languagesArray.map((language, index) => (
-            <Text style={styles.text} key={index}>{language}</Text>
-        ))}
+        <Text style={styles.text}>{worker.languages}</Text>
+        
         </View>    
         <View style={styles.actions}>
             <TouchableOpacity style={styles.action} onPress={sendWhatsapp}>
@@ -390,7 +387,7 @@ function SavedNannyProfileToNannyView({navigation}){
     >
         <View style={styles.imageBox}>  
        { babysitter.photo.length > 0 ?
-            <Image style={styles.anonimusImage} source={{uri :`http://10.0.0.6:3333/static/${babysitter.photo}` }}/>
+            <Image style={styles.anonimusImage} source={{uri :`${staticAddress}${babysitter.photo}` }}/>
             :
             <Image style={styles.anonimusImage} source={anonimusImage}/>
             }

@@ -134,9 +134,8 @@ const BabySitter = {
                 return false
         }
     },
-    getSchedule : async function(babysitter_id, year, month_day, from, to){
+    getSpecificSchedule : async function(babysitter_id, year, month_day, from, to){
         try{
-
             const scheduleId = 
                 await db('babysitter_schedule')
                 .select('id')
@@ -145,9 +144,10 @@ const BabySitter = {
                 .andWhere('month_day', month_day)
                 .andWhere('from', '<=', from)
                 .andWhere('to', '>=', to);
-
+            console.log(scheduleId);    
             return scheduleId[0].id;
         } catch(err){
+            console.log(err);
             return false
         }
     },
@@ -157,7 +157,7 @@ const BabySitter = {
         try{
             const babysitters = await db("babysitter")
             .select('babysitter.*', st.x("location").as("longitude"), st.y("location").as("latitude"), st.distance("location", st.geography(st.makePoint(longitude, latitude))).as("distanceAway"))
-            .where(st.dwithin("location", st.geography(st.makePoint(longitude, latitude)), 50000));
+            .where(st.dwithin("location", st.geography(st.makePoint(longitude, latitude)), 10000));
 
             return babysitters;
         } catch(err){
@@ -175,6 +175,18 @@ const BabySitter = {
                 stars : stars
             })
             return true
+          } catch(err){
+            console.log(err);
+            return false
+          }
+    },
+
+    getSchedule : async function(babysitter_id){
+        try{
+            const schedules = await db('babysitter_schedule')
+                .select('*')
+                .where('babysitter_id', babysitter_id)
+            return schedules
           } catch(err){
             console.log(err);
             return false

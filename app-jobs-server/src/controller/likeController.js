@@ -2,6 +2,7 @@ const User = require('../models/User');
 
 module.exports = {
     async store(req, res){
+        console.log(req.headers);
         const {user_id} = req.headers;
         const {babysitter_id} = req.params;
 

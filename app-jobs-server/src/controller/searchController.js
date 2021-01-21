@@ -4,14 +4,14 @@ const User = require('../models/User');
 
 module.exports = {
     async index(req, res) {
-
         const {
             latitude,
             longitude,
         } = req.query;
         
+        console.log(req.userId);
         const babySitters = await BabySitter.getWithinRadius(latitude, longitude);
-        const likedBabysitters = await User.showAllLikedBabysitters(req.userId);
+        const likedBabysitters = await User.showAllLikedBabysitters(Number(req.userId.id));
         
         for(var i = 0; i < babySitters.length; i++){
             babySitters[i].isLiked = false

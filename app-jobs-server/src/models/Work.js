@@ -30,8 +30,9 @@ const Work = {
 
     find : async function(id){
       const works = await db('work')
-      .select(['work.*', 'babysitter_schedule.year', 'babysitter_schedule.month_day'])
+      .select(['work.*', 'babysitter_schedule.year', 'babysitter_schedule.month_day', 'babysitter.*', 'babysitter.id as babysitter_id'])
       .innerJoin('babysitter_schedule', 'work.babysitter_schedule_id', 'babysitter_schedule.id')
+      .innerJoin('babysitter', 'babysitter_schedule.babysitter_id', 'babysitter.id')
       .whereIn('babysitter_schedule.babysitter_id', function(){
         this.select('babysitter.id')
         .from('user')

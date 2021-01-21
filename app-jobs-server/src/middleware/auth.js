@@ -44,6 +44,7 @@ module.exports = (req, res, next) => {
             });
         }
         else{
+            console.log(decoded);
             req.userId = decoded.id;
             return next();
         }

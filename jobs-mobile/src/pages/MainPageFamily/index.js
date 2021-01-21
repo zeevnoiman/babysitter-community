@@ -1,6 +1,6 @@
 import React, {useContext, useEffect} from 'react';
 import { Text, TouchableOpacity, View, Vibration, AsyncStorage } from 'react-native';
-import { Notifications } from 'expo';
+import { Notifications } from 'expo-notifications';
 
 import styles from './styles';
 import { userContext } from '../../contexts/UserContext';
@@ -9,7 +9,6 @@ import { userContext } from '../../contexts/UserContext';
 export default function MainPageFamily({navigation}){
 
     const {user, setUser, setToken} = useContext(userContext);
-    var _notificationSubscription;
     async function handleLogout(){
         setUser({});
         setToken('');
@@ -19,45 +18,26 @@ export default function MainPageFamily({navigation}){
         navigation.navigate('Welcome');
     }
 
-    const _handleNotification = notification => {
-     Vibration.vibrate();
-     console.log(notification);
-     if(notification.origin == 'selected'){
-          navigation.navigate('PastWorks')
-     }
-   }
+//     const _handleNotification = notification => {
+//      Vibration.vibrate();
+//      console.log(notification);
+//      if(notification.origin == 'selected'){
+//           navigation.navigate('PastWorks')
+//      }
+//    }
 
-   useEffect(() => {
-     // Handle notifications that are received or selected while the app
-     // is open. If the app was closed and then opened by tapping the
-     // notification (rather than just tapping the app icon to open it),
-     // this function will fire on the next tick after the app starts
-     // with the notification data.
-     if(!user){
-          tryGetUser();
-     }
-     _notificationSubscription = Notifications.addListener(_handleNotification);
-   }, []);
+//    useEffect(() => {
+//      // Handle notifications that are received or selected while the app
+//      // is open. If the app was closed and then opened by tapping the
+//      // notification (rather than just tapping the app icon to open it),
+//      // this function will fire on the next tick after the app starts
+//      // with the notification data.
+//      if(!user){
+//           tryGetUser();
+//      }
+//      _notificationSubscription = Notifications.addListener(_handleNotification);
+//    }, []);
 
-   async function tryGetUser(){
-     try{
-     console.log('try to get user');
-     
-     const user = await AsyncStorage.getItem('User', (err, user) => {
-                                                          setUser(JSON.parse(user));
-                                                         if(err){
-                                                             console.log(err);
-                                                         }} );
-     await AsyncStorage.getItem('Token', (err, token) => {setToken(JSON.parse(token));
-                                                         if(err){
-                                                             console.log(err);
-                                                         }});
-       }
-     catch(err){
-         console.log('There is no user saved');
-
-     }
-     }
     return(
         <View>
             <Text>This is the main page</Text>

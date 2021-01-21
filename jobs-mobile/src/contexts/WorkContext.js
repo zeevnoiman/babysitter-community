@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import axios from 'axios';
 import api from '../services/api';
 import {parse} from 'date-fns'
@@ -8,21 +8,19 @@ export const workContext = createContext();
 const WorkProvider = ({children}) => {
 
     const [works, setWorks] = useState([]);
-    
+
+    useEffect(() => {
+        loadWorks()
+    }, []);
+
     const loadWorks = async () => {
-        console.log('loadworks function',token);
+        console.log('loadworks function');
         
-        const response = await api.get('/work', {
-            headers:{
-                authorization: `Bearer ${token}`,
-                'Access-Control-Allow-Origin' : '*',
-                user_id : user.id,
-            }
-   
-        });
+        const response = await api.get('/work');
+
         const works = response.data;
 
-        console.log(works);
+        console.log('works from db :', works);
         
         const newWorks = works.map((work) => {
             var dateHourStartDateFormat = new Date(); 
@@ -36,27 +34,26 @@ const WorkProvider = ({children}) => {
             const newWork =  {...work, dateHourStartDateFormat, dateHourFinishDateFormat}
             return newWork           
         })
-        
         setWorks(newWorks);
+        return newWorks;
     };
 
-    async function addWork(work, babysitter_id) {
+    async function addWork(work, babysitter_id, user_id) {
+        console.log(babysitter_id);
         try{
         const response = await api.post(`/work/${babysitter_id}`, work, {
             headers:{
-                authorization: `Bearer ${token}`,
-                'Access-Control-Allow-Origin' : '*',
-                user_id : user._id,
+                user_id : user_id,
             }
         });
         console.log(response.data);
-        setWorks([...works, response.data]);
+        loadWorks();
         return 'Success! The visit was scheduled.';
 
         } catch(err){
             console.log(err)
 
-            return 'Error, try again...';
+            return 'Error, be sure the babysitter has this hour on the schedule...';
         }
 
         
@@ -68,7 +65,6 @@ const WorkProvider = ({children}) => {
         <workContext.Provider value={
            { 
             works,
-            setWorks,
             loadWorks,
             addWork,
             }

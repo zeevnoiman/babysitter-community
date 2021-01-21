@@ -7,7 +7,7 @@ import { View, Text, TextInput,
        } from 'react-native';
 import {Entypo, FontAwesome, 
     EvilIcons} from '@expo/vector-icons'
-import api from '../../services/api';
+import {staticAddress} from '../../services/api';
 import * as ImagePicker from 'expo-image-picker';
 import { MultipleSelectPicker } from 'react-native-multi-select-picker'
  
@@ -67,7 +67,7 @@ export default function EditNannyProfile({navigation}){
       console.log('edit nanny profile - babysitter:', babysitter);
       if(babysitter){
         if(babysitter.photo.length > 0){
-          setPerfilImage(`http://10.0.0.6:3333/static/${babysitter.photo}`);
+          setPerfilImage(`${staticAddress}${babysitter.photo}`);
         }
         setAge(String(babysitter.age));
         setPhone(babysitter.phone)

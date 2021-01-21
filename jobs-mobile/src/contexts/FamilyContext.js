@@ -37,9 +37,8 @@ const FamilyProvider = ({children}) => {
     }
 
     const addLikedBabysitter = async  (babysitter_id, user_id) => { 
-        
         try{
-            const res = await api.post(`/like/${babysitter_id}`,
+            const res = await api.post(`/like/${babysitter_id}`,{},
             {
                 headers:{
                     user_id : user_id,
@@ -56,15 +55,15 @@ const FamilyProvider = ({children}) => {
     }
 
     const deleteLikedBabysitter = async  (babysitter_id, user_id) => {
+        console.log(babysitter_id, user_id)
         try{
-        const res = await api.post(`/dislike/${babysitter_id}`,{
+        const res = await api.post(`/dislike/${babysitter_id}`,{}, {
             headers:{
                 user_id: user_id,
             }
         });
         await getLikedBabysitters(user_id);
-        console.log(res.data);
-        return 'Babysitter disliked'
+        return res.data
         }
         catch(err){
             console.log(err);
