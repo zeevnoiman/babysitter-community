@@ -14,7 +14,6 @@ const Routes = function(){
        <Splash />
       );
   };
-  console.log('signed',signed);
   return signed ? <AppRoutes /> : <AuthRoutes />;
 };
 

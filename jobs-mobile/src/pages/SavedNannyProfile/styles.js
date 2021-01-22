@@ -1,75 +1,13 @@
-// import {StyleSheet} from 'react-native';
-
-
-// const styles = StyleSheet.create({
-//     form:{
-//         alignItems: 'center',
-//         backgroundColor: '#ffe1f0',
-//         height: '100%',
-//         width: '100%'
-//     },
-//     avatar: {
-//         width: 150,
-//         height: 150,
-//         borderRadius: 50,
-//         borderWidth: 3,
-//         marginTop: 20,
-//     },
-//     photoBox: {
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         marginBottom: 5,
-//         paddingBottom: 20,
-//     },
-//     detailsBox:{
-//         alignItems: 'center',
-//     },
-//     phoneBox:{
-//         flexDirection: 'row',
-//     },
-//     name:{
-//         marginTop: 10,
-//         fontSize: 26,
-//         color: '#f20079',
-//         fontFamily: 'Montserrat',
-//     },
-//     text:{
-//         fontSize: 16,
-//         margin: 3,
-//         color: '#535353',
-//         fontFamily: 'Montserrat',
-//     },
-//     contactBox: {
-//         padding: 24,
-//     },
-//         actions:{
-//             marginTop: 16,
-//             flexDirection: 'row',
-//             justifyContent: 'center',
-//             alignContent: 'center'
-//         },
-    
-//         action:{
-//             backgroundColor: '#be4def',
-//             borderRadius: 8,
-//             height: 50,
-//             width: 50,
-//             justifyContent: 'center',
-//             alignItems: 'center',
-//             marginRight: 30        
-//         },
-    
-//     })
-
-//     export default styles;
 
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
-    
+    container:{
+        flex: 1
+    },
     contentContainer:{
-          alignItems: 'center',
-          paddingBottom: 50      
+        alignItems: 'center',
+        paddingBottom: 50      
     },
     imageBox:{
         width: '100%',
@@ -313,6 +251,15 @@ const styles = StyleSheet.create({
     validationMessage:{
         color: '#971300'
     },
+    schedulesCard:{
+        position:'absolute',
+        top: 0,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderColor: 'black',
+        borderWidth: 1
+
+    }
   
 })
 

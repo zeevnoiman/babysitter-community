@@ -1,4 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import {parse} from 'date-fns'
 import api from '../services/api';
 
 export const babysitterContext = createContext();
@@ -52,6 +53,27 @@ const BabysitterProvider = ({children}) => {
             return false
         }
     }
+
+    const getSchedules = async (babysitter_id) => {
+
+        const response = await api.get(`/schedules/${babysitter_id}`)
+        const schedules = response.data;
+        const newSchedules = schedules.map((schedule) => {
+            var dateHourStartDateFormat = new Date(); 
+            var dateHourFinishDateFormat = new Date();
+            if(schedule.dateHourStartReadable.length > 0 ){ 
+                
+                dateHourStartDateFormat = parse(schedule.dateHourStartReadable, 'dd/MM/yyyy HH:mm:ss', new Date());
+                dateHourFinishDateFormat = parse(schedule.dateHourFinishReadable, 'dd/MM/yyyy HH:mm:ss', new Date());
+            }    
+            
+            const newSchedule =  {...schedule, dateHourStartDateFormat, dateHourFinishDateFormat}
+            return newSchedule           
+        })
+        console.log('-----schedules-----')
+        console.log(newSchedules);
+        return newSchedules
+    }
     return (
         <babysitterContext.Provider value={
            {
@@ -59,7 +81,8 @@ const BabysitterProvider = ({children}) => {
             babysitter,
             tryToGetBabysitter,
             saveBabysitter,
-            updateBabysitter
+            updateBabysitter,
+            getSchedules
             }
         }>
             {children}

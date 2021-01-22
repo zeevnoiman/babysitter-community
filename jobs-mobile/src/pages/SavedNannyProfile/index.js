@@ -65,6 +65,42 @@ const DatePickerField = ({ ...props }) => {
     );
 };
 
+function SchedulesCard(){
+
+    const {babysitter, getSchedules} = useContext(babysitterContext);
+
+    const [schedules, setSchedules] =  useState([]);
+
+    useEffect(() => {
+        async function getSchedulesAsync(){
+            const newSchedules = await getSchedules(babysitter.id);
+            setSchedules(newSchedules);
+        }
+        getSchedulesAsync()
+    }, [])
+
+    if(!schedules){
+        return(
+            <Text>This babysitter has not planned schedules</Text>
+        )
+    }
+    return(
+        <View styles={styles.schedulesCard}>
+            {
+                schedules.map(schedule => (
+                    <View key={schedule.id}>
+                        <Text>{schedule.dateHourStartReadable.substring(0, 10)}</Text>
+                        <View style={styles.verticalBox}>
+                            <Text>{schedule.dateHourStartReadable.substring(11)}</Text>
+                            <Text>{schedule.dateHourFinishReadable.substring(11)}</Text>
+                        </View>
+                    </View>
+                ))
+            }
+        </View>
+    )
+}
+
 function SavedNannyProfileToFamilyView({route, navigation}){
 
     
@@ -382,54 +418,57 @@ function SavedNannyProfileToNannyView({navigation}){
     console.log(babysitter);
     
     return(
-    <ScrollView 
-    contentContainerStyle = {styles.contentContainer} 
-    >
-        <View style={styles.imageBox}>  
-       { babysitter.photo.length > 0 ?
-            <Image style={styles.anonimusImage} source={{uri :`${staticAddress}${babysitter.photo}` }}/>
-            :
-            <Image style={styles.anonimusImage} source={anonimusImage}/>
-            }
-            <StarRating
-                disabled={true}
-                containerStyle={styles.starsContainer}
-                starSize={25}
-                maxStars={5}
-                rating={babysitter.stars}
-                fullStarColor={'#fff000'}
-            />
-        </View>
-        <TouchableOpacity 
-        style={styles.editProfileButton}
-        onPress={() => navigation.navigate('EditNannyProfile')}>
-            <Feather style={{lineHeight : 37, marginRight : 5}} name="edit-3" size={16} color="black" />
-            <Text style={styles.text}>Edit Profile</Text>
-        </TouchableOpacity>
-        <View style={styles.rateBox}>
-            <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
-                <Text style={styles.ratePrice}>{babysitter.rate}/h</Text>    
+    <View style={styles.container}>
+        <ScrollView 
+        contentContainerStyle = {styles.contentContainer} 
+        >
+            <View style={styles.imageBox}>  
+        { babysitter.photo.length > 0 ?
+                <Image style={styles.anonimusImage} source={{uri :`${staticAddress}${babysitter.photo}` }}/>
+                :
+                <Image style={styles.anonimusImage} source={anonimusImage}/>
+                }
+                <StarRating
+                    disabled={true}
+                    containerStyle={styles.starsContainer}
+                    starSize={25}
+                    maxStars={5}
+                    rating={babysitter.stars}
+                    fullStarColor={'#fff000'}
+                />
             </View>
-        <Text style={styles.name}>{babysitter.name}</Text>
-        <View style={styles.ageBox}>
-            <Text style={styles.yearsOld}> {babysitter.age} Years Old</Text>
-        </View>
-        
-        <View style={styles.addressBox}>
-            <FontAwesome name='home' size={30} style={{color: '#759d81'}}></FontAwesome>
-            <Text style={styles.text}>{babysitter.street}, {babysitter.city}</Text>
-        </View>
-        <View style={styles.profissonalBox}>
-            <MaterialIcons name='work' size={30} style={{color: '#759d81'}}></MaterialIcons>
-            <Text style={styles.text}>
-                {babysitter.bio}
-            </Text>
-        </View>
-        <View style={styles.languagesBox}>
-            <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
-            <Text style={styles.text}>{babysitter.languages}</Text>
-        </View>    
-    </ScrollView>
+            <TouchableOpacity 
+            style={styles.editProfileButton}
+            onPress={() => navigation.navigate('EditNannyProfile')}>
+                <Feather style={{lineHeight : 37, marginRight : 5}} name="edit-3" size={16} color="black" />
+                <Text style={styles.text}>Edit Profile</Text>
+            </TouchableOpacity>
+            <View style={styles.rateBox}>
+                <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
+                    <Text style={styles.ratePrice}>{babysitter.rate}/h</Text>    
+                </View>
+            <Text style={styles.name}>{babysitter.name}</Text>
+            <View style={styles.ageBox}>
+                <Text style={styles.yearsOld}> {babysitter.age} Years Old</Text>
+            </View>
+            
+            <View style={styles.addressBox}>
+                <FontAwesome name='home' size={30} style={{color: '#759d81'}}></FontAwesome>
+                <Text style={styles.text}>{babysitter.street}, {babysitter.city}</Text>
+            </View>
+            <View style={styles.profissonalBox}>
+                <MaterialIcons name='work' size={30} style={{color: '#759d81'}}></MaterialIcons>
+                <Text style={styles.text}>
+                    {babysitter.bio}
+                </Text>
+            </View>
+            <View style={styles.languagesBox}>
+                <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
+                <Text style={styles.text}>{babysitter.languages}</Text>
+            </View>    
+        </ScrollView>
+        <SchedulesCard />
+    </View>
     )
 }
 

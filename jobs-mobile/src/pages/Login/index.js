@@ -16,12 +16,13 @@ export default function Login({route, navigation}){
     const {role} = route.params;
 
     async function handlePressLogin(){
+        console.log('login pressed');
         try{
             setMessage('');
             if(!email || !password){
                 throw 'Please fill with email and password'
             }
-            login(email, password, role);
+            await login(email, password, role);
         }
         catch(error){
             console.log(error);

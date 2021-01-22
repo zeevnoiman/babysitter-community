@@ -90,7 +90,6 @@ const UserProvider = ({children}) => {
         const createdUser = {
             email, 
             name, 
-            password,
             role,
             id : response.data.id,
             expoPushToken
@@ -107,7 +106,6 @@ const UserProvider = ({children}) => {
     }
 
     const login = async (email, password, role) => {
-        console.log('sending login request');        
         const res = await api.post('/login',
             {
                 email,
@@ -121,7 +119,7 @@ const UserProvider = ({children}) => {
         console.log(res.data);
         await AsyncStorage.removeItem('BS:User');
         await AsyncStorage.removeItem('BS:Token');
-        await AsyncStorage.setItem('BS:User', JSON.stringify(res.data.user));
+        await AsyncStorage.setItem('BS:User', JSON.stringify(res.data));
         await AsyncStorage.setItem('BS:Token', JSON.stringify(res.data.token));
         api.defaults.headers.Authorization = `Bearer ${JSON.stringify(res.data.token)}`; 
         setToken(res.data.token);
