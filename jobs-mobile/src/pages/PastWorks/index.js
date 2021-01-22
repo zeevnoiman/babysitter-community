@@ -14,7 +14,7 @@ import { userContext } from '../../contexts/UserContext';
 import styles from './styles';
 import { workContext } from '../../contexts/WorkContext';
 
-export default function OpenWorks({navigation}){
+export default function PastWorks({navigation}){
 
     const {user} = useContext(userContext);
     const {loadWorks, addReview, works} = useContext(workContext);

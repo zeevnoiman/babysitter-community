@@ -8,14 +8,9 @@ import { userContext } from '../../contexts/UserContext';
 
 export default function MainPageFamily({navigation}){
 
-    const {user, setUser, setToken} = useContext(userContext);
+    const {user, logOut} = useContext(userContext);
     async function handleLogout(){
-        setUser({});
-        setToken('');
-        await AsyncStorage.removeItem('User');
-        await AsyncStorage.removeItem('Token');
-
-        navigation.navigate('Welcome');
+       logOut()
     }
 
 //     const _handleNotification = notification => {
@@ -47,11 +42,8 @@ export default function MainPageFamily({navigation}){
             <TouchableOpacity onPress={() => navigation.navigate('LikedNannies')}>
                  <Text>Go to my favorites</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('OpenWorks')}>
-                 <Text>My futures Nannies visits</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('PastWorks')}>
-                 <Text>My History</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('Works')}>
+                 <Text>All my works</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('LikedNannies')}>
                  <Text>Search Nannies</Text>

@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Map from '../pages/Map';
 import LikedNannies from '../pages/LikedNannies';
 import MainPageFamily from '../pages/MainPageFamily';
+import Works from '../pages/Works';
 import OpenWorks from '../pages/OpenWorks';
 import PastWorks from '../pages/PastWorks';
 import NannyReviews from '../pages/NannyReviews';
@@ -21,6 +22,7 @@ const FamilyRoutes = () => (
                 <FamilyStack.Screen name='MainPageFamily' component={MainPageFamily} />
                 <FamilyStack.Screen name='Map' component={Map} />
                 <FamilyStack.Screen name='LikedNannies' component={LikedNannies} />
+                <FamilyStack.Screen name='Works' component={Works} />
                 <FamilyStack.Screen name='OpenWorks' component={OpenWorks} />
                 <FamilyStack.Screen name='PastWorks' component={PastWorks} />
                 <FamilyStack.Screen name='NannyReviews' component={NannyReviews} />
