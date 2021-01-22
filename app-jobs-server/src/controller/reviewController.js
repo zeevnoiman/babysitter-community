@@ -6,23 +6,25 @@ module.exports = {
 
     async store(req, res){
         
-        const {babysitterid} = req.headers;
-        const {workid} = req.headers;
+        const {babysitter_id} = req.headers;
+        const {work_id} = req.headers;
 
         const {message, stars} = req.body;
 
+        console.log('store review:');
+        console.log(message, stars);
         const review = await Review.create(
-                                    workid,
+                                    work_id,
                                     message,
                                     stars
                                 );
         if(!review){
-            res.send('A problem ocurred during sending your review :( try again later!')
+            res.status(400).send('A problem ocurred during sending your review :( try again later!')
             return;
         }
-        const work = await Work.updateReviewed(workid);
+        const work = await Work.updateReviewed(work_id);
         
-        const babysitter = await BabySitter.findOne(babysitterid);
+        const babysitter = await BabySitter.findOne(babysitter_id);
         console.log(babysitter);
         
         const howManyReviews = babysitter.howManyReviews;
@@ -39,7 +41,7 @@ module.exports = {
         console.log(newStars);
         
  
-        const response = await BabySitter.updateAfterReview(babysitterid, newHowManyReviews, newStars);
+        const response = await BabySitter.updateAfterReview(babysitter_id, newHowManyReviews, newStars);
         
         res.json(review);
     },

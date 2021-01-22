@@ -32,12 +32,18 @@ function Map({navigation}) {
     const [zoomEnabled, setZoomEnabled] = useState(false);
     const [rotateEnabled, setRotateEnabled] = useState(false);
     const [screenWidth, setscreenWidth] = useState();
+    const [mounted, setMounted] = useState(false);
 
     var previousRegion = {};
     useEffect(() => {
+        setMounted(true)
         const screenWidth = Math.round(Dimensions.get('window').width);
         setscreenWidth(screenWidth-10);
         loadInitialPosition();
+
+        return function cleanup(){
+            setMounted(false)
+        }
     }, []);
 
     
@@ -72,7 +78,9 @@ function Map({navigation}) {
         const {latitude, longitude} = currentRegion;
         
         const babySitters = await searchBabysitters(latitude, longitude);
-        setBabysitters(babySitters);
+        if(mounted){
+            setBabysitters(babySitters);
+        }
     }
 
     function handleSetIsLiked(isLiked, babysitter){

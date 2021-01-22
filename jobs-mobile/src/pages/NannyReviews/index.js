@@ -11,45 +11,32 @@ import backgroundPattern from '../../assets/backgroundPattern.png';
 import {staticAddress} from '../../services/api';
 import api from '../../services/api';
 import { userContext } from '../../contexts/UserContext';
+import { workContext } from '../../contexts/WorkContext';
 import styles from './styles';
 
-export default function NannyReviews({navigation}){
+export default function NannyReviews({route}){
 
-    const {token} = useContext(userContext);
+    const {user} = useContext(userContext);
+    const {loadReviews} = useContext(workContext);
     const [reviews, setReviews] = useState([]);
     
-    const nanny = navigation.getParam('nanny');    
+    const {nanny} = route.params;    
     var day = []
 
     useEffect(() => {
-        loadReviews();
+        async function loadInitialReviews(){
+            const reviews = await loadReviews(nanny.id);
+            console.log(reviews);
+            setReviews(reviews);
+        }
+        loadInitialReviews()
     }, []);
-
-    const loadReviews = async () => {
-        console.log('load reviews function',token);
-        const response = await api.get(`/reviews/${nanny._id}`, {
-            headers:{
-                authorization: `Bearer ${token}`,
-            }   
-        });
-        const reviews = response.data;
-        const newReviews = reviews.map(async review => {
-            const response = await api.get('/user',{
-                headers:{
-                    authorization : `Bearer ${token}`,
-                    user_id: review.userId
-                }
-            });
-    
-           console.log(response.data);
-            
-            review.userName = response.data.name;
-            return review;
-        });
-        Promise.all(newReviews).then(newReviews =>  setReviews(newReviews))
-    };
-
-   
+     
+    if(reviews.length < 1){
+        return(
+            <Text>There are no reviews to show...</Text>
+        )
+    }
     return (
         <View style={styles.container}>
             <ImageBackground source={backgroundPattern} style={{height: '100%', width: '100%', position: 'absolute'}}></ImageBackground>
@@ -61,7 +48,7 @@ export default function NannyReviews({navigation}){
                     <Image style={styles.imageBabysitter} source={anonimusImage}/>
                     }
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate('SavedNannyProfile', {'worker' : work.nannyProfile})}>
+                <TouchableOpacity onPress={() => navigation.navigate('SavedNannyProfile', {'worker' : nanny})}>
                     <Text style={styles.titleText}>{nanny.name}</Text>
                 </TouchableOpacity>
             </View>
@@ -69,7 +56,7 @@ export default function NannyReviews({navigation}){
             <FlatList
             style={styles.worksList}
             data={reviews}
-            keyExtractor={ review => String(review._id)}
+            keyExtractor={ review => String(review.id)}
             showsVerticalScrollIndicator={false}
             renderItem={({item : review, index}) => {
             
@@ -78,14 +65,14 @@ export default function NannyReviews({navigation}){
                        <View style={styles.babysitterInfo}>
                             <View style={styles.babysitterItem} >    
                                 <View style={styles.subtitle}>
-                                    <Text  style={styles.subtitleText}>{review.userName}</Text>
+                                    <Text  style={styles.subtitleText}>{review.user_name}</Text>
                                 </View>
                                 <StarRating
                                     disabled={true}
                                     containerStyle={styles.starsContainer}
                                     starSize={25}
                                     maxStars={5}
-                                    rating={review.stars}
+                                    rating={review.review_stars}
                                     fullStarColor={'#fff000'}
                                 />
                                 <Text style={styles.infoText}>{review.message}</Text>

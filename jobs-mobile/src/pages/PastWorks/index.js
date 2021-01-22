@@ -17,9 +17,8 @@ import { workContext } from '../../contexts/WorkContext';
 export default function OpenWorks({navigation}){
 
     const {user} = useContext(userContext);
-    const {loadWorks, works} = useContext(workContext);
+    const {loadWorks, addReview, works} = useContext(workContext);
     
-    const [newWorks, setNewWorks] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [starCount, setStarCount] = useState(0);
     const [reviewText, setReviewText] = useState('');
@@ -35,7 +34,7 @@ export default function OpenWorks({navigation}){
                     resultMessage,
                     '',
                     [
-                      {text: 'Take a look', onPress: () => navigation.navigate('NannyReviews',{'nanny': currentWork.nannyProfile})},
+                      {text: 'Take a look', onPress: () => navigation.navigate('NannyReviews',{'nanny': currentWork})},
                       {text: 'OK', onPress: () => console.log('OK Pressed')},
                     ],
                     {cancelable: false},
@@ -52,36 +51,18 @@ export default function OpenWorks({navigation}){
         console.log(currentWork);
         
         try{
-        const response = await api.post('/valorate',{
-            message: reviewText,
-            stars: starCount
-        }, {
-            headers:{
-                authorization: `Bearer ${token}`,
-                babysitterId: currentWork.nanny,
-                userId: currentWork.family,
-                workId: currentWork._id
-            }
-        });
-        console.log(response.data);
-        const works = newWorks.map(work => {
-            if(work._id === currentWork._id){
-                work.reviewed = true;
-            }
-            return work;
-        })
-        setNewWorks(works);
-        setResultMessage('Your review was added!');
-    } catch(err){
-        setResultMessage('Error ocurred, try again');
-        console.log(err);
+            await addReview({reviewText, starCount}, currentWork.babysitter_id, currentWork.id)    
+            setResultMessage('Your review was added!');
+        } catch(err){
+            setResultMessage('Error ocurred, try again');
+            console.log(err);
         
-    } finally{
+        } finally{
         setReviewRequiredShow(false);
         setReviewText('');
         setStarCount(0);   
         setModalVisible(false);
-    }
+        }
     }
 
     return (
@@ -89,7 +70,7 @@ export default function OpenWorks({navigation}){
             <ImageBackground source={backgroundPattern} style={{height: '100%', width: '100%', position: 'absolute'}}></ImageBackground>        
             <FlatList
             style={styles.worksList}
-            data={newWorks.sort((a, b) => { 
+            data={works.sort((a, b) => { 
                     if(isBefore(b.dateHourStartDateFormat, a.dateHourStartDateFormat)){
                         return -1;
                     }
@@ -116,15 +97,15 @@ export default function OpenWorks({navigation}){
                         }
                         <View style={[styles.babysitterItem]} >
                                 <View style={styles.avatarContainer}>
-                                    { work.nannyProfile.photo.length > 0 ?
-                                    <Image style={styles.imageBabysitter} source={{uri : `${staticAddress}${work.nannyProfile.photo}`}}/> 
+                                    { work.photo.length > 0 ?
+                                    <Image style={styles.imageBabysitter} source={{uri : `${staticAddress}${work.photo}`}}/> 
                                     :
                                     <Image style={styles.imageBabysitter} source={anonimusImage}/>
                                 }
                                 </View>
                                 <View style={styles.babysitterInfo}>
-                                    <TouchableOpacity onPress={() => navigation.navigate('SavedNannyProfile', {'worker' : work.nannyProfile})}>
-                                        <Text style={styles.infoText}>{work.nannyProfile.name}</Text>
+                                    <TouchableOpacity onPress={() => navigation.navigate('SavedNannyProfile', {'worker' :  {...work, dateHourStartDateFormat: '', dateHourFinishDateFormat: '' }})}>
+                                        <Text style={styles.infoText}>{work.name}</Text>
                                     </TouchableOpacity>
                                     <View style={styles.dateRow}>
                                     <Text style={styles.ageText}>From:</Text>
@@ -165,7 +146,7 @@ export default function OpenWorks({navigation}){
             >
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                <Text style={styles.titleModal}>Review to {currentWork.nannyProfile.name} </Text>
+                <Text style={styles.titleModal}>Review to {currentWork.name} </Text>
                 <View style={styles.modalActions}>
                     <Text style={styles.ageText}>Give some stars!</Text>
                     <StarRating

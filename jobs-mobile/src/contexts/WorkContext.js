@@ -55,11 +55,33 @@ const WorkProvider = ({children}) => {
 
             return 'Error, be sure the babysitter has this hour on the schedule...';
         }
-
-        
-
     };
 
+    async function addReview({reviewText, starCount}, babysitter_id, work_id ){
+        try{
+            const response = await api.post('/valorate', 
+            {
+                message: reviewText,
+                stars: starCount
+            }, {
+                headers:{
+                    babysitter_id: babysitter_id,
+                    work_id: work_id
+                }
+            });
+    
+            console.log(response.data);
+            loadWorks();
+        } catch(err){
+            throw new Error({message: err})
+        }
+    }
+
+    async function loadReviews(babysitter_id){
+        const response = await api.get(`/reviews/${babysitter_id}`);
+        const reviews = response.data;
+        return reviews;
+    }
 
     return (
         <workContext.Provider value={
@@ -67,6 +89,8 @@ const WorkProvider = ({children}) => {
             works,
             loadWorks,
             addWork,
+            addReview,
+            loadReviews
             }
         }>
             {children}
