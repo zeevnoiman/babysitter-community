@@ -45,12 +45,12 @@ export default function MainPageFamily({navigation}){
             <TouchableOpacity onPress={() => navigation.navigate('Works')}>
                  <Text>All my works</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('LikedNannies')}>
+            <TouchableOpacity onPress={() => navigation.navigate('SearchBabysitters')}>
                  <Text>Search Nannies</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('LikedNannies')}>
+            {/* <TouchableOpacity onPress={() => navigation.navigate('SearchBabysitters')}>
                  <Text>Create an alert to Nannies search you</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={handleLogout}>
                  <Text>Logout</Text>
             </TouchableOpacity>

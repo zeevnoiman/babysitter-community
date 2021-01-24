@@ -9,6 +9,7 @@ import OpenWorks from '../pages/OpenWorks';
 import PastWorks from '../pages/PastWorks';
 import NannyReviews from '../pages/NannyReviews';
 import SavedNannyProfile from '../pages/SavedNannyProfile';
+import SearchBabysitters from '../pages/SearchBabysitters';
 
 import FamilyProvider from '../contexts/FamilyContext';
 import WorkProvider from '../contexts/WorkContext';
@@ -29,6 +30,7 @@ const FamilyRoutes = () => (
                     <FamilyStack.Screen name='PastWorks' component={PastWorks} />
                     <FamilyStack.Screen name='NannyReviews' component={NannyReviews} />
                     <FamilyStack.Screen name='SavedNannyProfile' component={SavedNannyProfile} />
+                    <FamilyStack.Screen name='SearchBabysitters' component={SearchBabysitters} />
                 </FamilyStack.Navigator>
             </BabysitterProvider>
         </WorkProvider>
