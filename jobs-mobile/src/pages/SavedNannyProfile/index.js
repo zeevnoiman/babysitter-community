@@ -85,10 +85,11 @@ function SchedulesCard(){
         )
     }
     return(
-        <View styles={styles.schedulesCard}>
+        <View style={styles.schedulesCard}>
+            <Text style={styles.titleModal}>Schedules</Text>
             {
                 schedules.map(schedule => (
-                    <View key={schedule.id}>
+                    <View style={styles.scheduleItem} key={schedule.id}>
                         <Text>{schedule.dateHourStartReadable.substring(0, 10)}</Text>
                         <View style={styles.verticalBox}>
                             <Text>{schedule.dateHourStartReadable.substring(11)}</Text>

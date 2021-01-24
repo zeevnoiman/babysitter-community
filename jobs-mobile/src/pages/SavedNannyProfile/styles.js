@@ -253,12 +253,23 @@ const styles = StyleSheet.create({
     },
     schedulesCard:{
         position:'absolute',
-        top: 0,
+        alignSelf: 'center',
+        top: 100,
+        justifyContent: 'center',
+        backgroundColor: '#fefefe',
+        width: '70%',
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: 'black',
         borderWidth: 1
 
+    },
+    scheduleItem: {
+        marginTop: 5,
+        borderColor: '#000',
+        borderWidth: StyleSheet.hairlineWidth,
+        alignItems: 'center',
+        justifyContent: 'center',
     }
   
 })
