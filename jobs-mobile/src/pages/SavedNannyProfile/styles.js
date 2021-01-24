@@ -261,8 +261,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderColor: 'black',
-        borderWidth: 1
-
+        borderWidth: 1,
+        paddingBottom: 20
     },
     titleSchedules:{
         fontFamily: 'Montserrat',
@@ -270,10 +270,15 @@ const styles = StyleSheet.create({
     },
     scheduleItem: {
         marginTop: 5,
-        borderColor: '#000',
-        borderWidth: StyleSheet.hairlineWidth,
+        padding: 3,
+        borderTopColor: '#000',
+        borderTopWidth: StyleSheet.hairlineWidth,
+        width: '80%',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    schedulesHoursBox:{
+        flexDirection: 'row',
     }
   
 })

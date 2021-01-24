@@ -8,7 +8,7 @@ import {MaterialIcons, FontAwesome, Ionicons, Feather, EvilIcons} from '@expo/ve
 import StarRating from 'react-native-star-rating';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Formik, useField, useFormikContext} from 'formik'
-import {isDate, getHours, getMinutes, setHours, setMinutes} from 'date-fns'
+import {isDate, isBefore, getHours, getMinutes, setHours, setMinutes} from 'date-fns'
 import { he } from 'date-fns/locale'
 import { zonedTimeToUtc, format } from 'date-fns-tz';
 import * as MailComposer from 'expo-mail-composer';
@@ -23,6 +23,7 @@ import { userContext } from '../../contexts/UserContext';
 import { familyContext } from '../../contexts/FamilyContext';
 import { babysitterContext } from '../../contexts/BabysitterContext';
 import { workContext } from '../../contexts/WorkContext';
+import { Easing } from 'react-native-reanimated';
 
 const DatePickerField = ({ ...props }) => {
     
@@ -72,7 +73,6 @@ function SchedulesCard(){
     const {babysitter, getSchedules} = useContext(babysitterContext);
 
     const [schedules, setSchedules] =  useState([]);
-    const [opened, setOpened] =  useState(false);
 
     let offset = 0;
     const translateY = new Animated.Value(0);
@@ -113,10 +113,9 @@ function SchedulesCard(){
     
           Animated.timing(translateY, {
             toValue: opened ? -450 : 0,
-            duration: 200,
+            duration: 400,
             useNativeDriver: true,
           }).start(() => {
-            // setOpened(opened)
             offset = opened ? -450 : 0;
             translateY.setOffset(offset);
             translateY.setValue(0);
@@ -124,7 +123,7 @@ function SchedulesCard(){
           
           Animated.timing(rotateValue, {
             toValue: opened ? 1 : 0,
-            duration: 200,
+            duration: 400,
             useNativeDriver: true
           }).start();
         }
@@ -160,14 +159,17 @@ function SchedulesCard(){
                 </Animated.View>
                 <Text style={styles.titleSchedules}>Schedules</Text>
                 {
-                    schedules.map(schedule => (
+                    schedules.map((schedule, index) => (
+                        isBefore(new Date(), schedule.dateHourStartDateFormat) && isBefore(schedule.dateHourStartDateFormat, new Date().setDate(new Date().getDate() + 7)) ?
                         <View style={styles.scheduleItem} key={schedule.id}>
-                            <Text>{schedule.dateHourStartReadable.substring(0, 10)}</Text>
-                            <View style={styles.verticalBox}>
-                                <Text>{schedule.dateHourStartReadable.substring(11)}</Text>
-                                <Text>{schedule.dateHourFinishReadable.substring(11)}</Text>
+                            <Text style={styles.text}>{schedule.dateHourStartReadable.substring(0, 10)}</Text>
+                            <View style={styles.schedulesHoursBox}>
+                                <Text style={[styles.text, {marginRight: 10}]}>{schedule.dateHourStartReadable.substring(11, 16)}</Text>
+                                <FontAwesome style={{marginRight: 10, lineHeight: 36}} name="angle-double-right" size={24} color="#333" />
+                                <Text style={styles.text}>{schedule.dateHourFinishReadable.substring(11, 16)}</Text>
                             </View>
                         </View>
+                        : null
                     ))
                 }
             </Animated.View>

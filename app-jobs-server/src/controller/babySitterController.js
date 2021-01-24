@@ -162,7 +162,8 @@ module.exports = {
             const schedulesSerialized = schedules.map((schedule) => {
                 const from = convertMinToTime(schedule.from);
                 const to = convertMinToTime(schedule.to);
-                const [month, day] = schedule.month_day.split('_');
+                let [month, day] = schedule.month_day.split('_');
+                day = day < 10 ? `0${day}` : day; 
                 const year = schedule.year;
                 var dateHourStartReadable = `${day}/${month}/${year} ${from}`; 
                 var dateHourFinishReadable = `${day}/${month}/${year} ${to}`;
