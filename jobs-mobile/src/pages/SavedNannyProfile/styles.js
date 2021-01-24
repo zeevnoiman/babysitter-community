@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     schedulesCard:{
         position:'absolute',
         alignSelf: 'center',
-        top: 100,
+        top: 500,
         justifyContent: 'center',
         backgroundColor: '#fefefe',
         width: '70%',
@@ -263,6 +263,10 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 1
 
+    },
+    titleSchedules:{
+        fontFamily: 'Montserrat',
+        fontSize: 24,
     },
     scheduleItem: {
         marginTop: 5,

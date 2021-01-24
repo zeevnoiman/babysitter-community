@@ -2,7 +2,7 @@ import React, {useState, useContext, useEffect, Fragment } from 'react';
 import { View, Text,
         TouchableOpacity, Image, 
         ScrollView, Linking,
-        Modal, TextInput, Alert
+        Modal, TextInput, Alert, Animated
        } from 'react-native';
 import {MaterialIcons, FontAwesome, Ionicons, Feather, EvilIcons} from '@expo/vector-icons'
 import StarRating from 'react-native-star-rating';
@@ -13,6 +13,8 @@ import { he } from 'date-fns/locale'
 import { zonedTimeToUtc, format } from 'date-fns-tz';
 import * as MailComposer from 'expo-mail-composer';
 import * as Yup from 'yup';
+import { PanGestureHandler, State } from 'react-native-gesture-handler';
+
 
 import {staticAddress} from '../../services/api';
 import styles from './styles';
@@ -70,6 +72,11 @@ function SchedulesCard(){
     const {babysitter, getSchedules} = useContext(babysitterContext);
 
     const [schedules, setSchedules] =  useState([]);
+    const [opened, setOpened] =  useState(false);
+
+    let offset = 0;
+    const translateY = new Animated.Value(0);
+    const rotateValue = new Animated.Value(0);
 
     useEffect(() => {
         async function getSchedulesAsync(){
@@ -79,26 +86,92 @@ function SchedulesCard(){
         getSchedulesAsync()
     }, [])
 
+    
+    const animatedEvent = Animated.event(
+        [
+          {
+            nativeEvent: {
+              translationY: translateY,
+            },
+          },
+        ],
+        { useNativeDriver: true },
+    );
+
+    function onHandlerStateChanged(event) {
+        if (event.nativeEvent.oldState === State.ACTIVE) {
+          let opened = false
+          const { translationY } = event.nativeEvent;
+          offset += translationY;
+          if (translationY <= -100) {
+            opened = true;
+          } else {
+            translateY.setValue(offset);
+            translateY.setOffset(0);
+            offset = 0;
+          }
+    
+          Animated.timing(translateY, {
+            toValue: opened ? -450 : 0,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => {
+            // setOpened(opened)
+            offset = opened ? -450 : 0;
+            translateY.setOffset(offset);
+            translateY.setValue(0);
+          });
+          
+          Animated.timing(rotateValue, {
+            toValue: opened ? 1 : 0,
+            duration: 200,
+            useNativeDriver: true
+          }).start();
+        }
+      }
+
     if(!schedules){
         return(
             <Text>This babysitter has not planned schedules</Text>
         )
     }
     return(
-        <View style={styles.schedulesCard}>
-            <Text style={styles.titleModal}>Schedules</Text>
-            {
-                schedules.map(schedule => (
-                    <View style={styles.scheduleItem} key={schedule.id}>
-                        <Text>{schedule.dateHourStartReadable.substring(0, 10)}</Text>
-                        <View style={styles.verticalBox}>
-                            <Text>{schedule.dateHourStartReadable.substring(11)}</Text>
-                            <Text>{schedule.dateHourFinishReadable.substring(11)}</Text>
+        <PanGestureHandler
+        onGestureEvent={animatedEvent}
+        onHandlerStateChange={onHandlerStateChanged}
+        >
+            <Animated.View style={[styles.schedulesCard, {
+              transform: [{
+                translateY: translateY.interpolate({
+                  inputRange: [-450, 0],
+                  outputRange: [-450, 0],
+                  extrapolate: 'clamp',
+                }),
+              }],
+            }]}>
+                <Animated.View style={[ {transform: [{
+                     rotate: rotateValue.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: ["0deg", "180deg"] // degree of rotation
+                      })
+                     }] 
+                }]}>
+                    <Feather name="arrow-up" size={24} color="black" />
+                </Animated.View>
+                <Text style={styles.titleSchedules}>Schedules</Text>
+                {
+                    schedules.map(schedule => (
+                        <View style={styles.scheduleItem} key={schedule.id}>
+                            <Text>{schedule.dateHourStartReadable.substring(0, 10)}</Text>
+                            <View style={styles.verticalBox}>
+                                <Text>{schedule.dateHourStartReadable.substring(11)}</Text>
+                                <Text>{schedule.dateHourFinishReadable.substring(11)}</Text>
+                            </View>
                         </View>
-                    </View>
-                ))
-            }
-        </View>
+                    ))
+                }
+            </Animated.View>
+        </PanGestureHandler>
     )
 }
 
