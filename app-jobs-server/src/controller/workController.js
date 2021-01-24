@@ -108,7 +108,7 @@ module.exports = {
     },
 
     async index(req, res){
-        const user_id = req.userId.id;
+        const user_id = req.userId.id || req.userId;
         console.log(user_id);
         const works = await Work.find( user_id );
         const likedBabysitters = await User.showAllLikedBabysitters(user_id);

@@ -68,12 +68,17 @@ const DatePickerField = ({ ...props }) => {
     );
 };
 
-function SchedulesCard(){
+function SchedulesCard({babysitter : nanny}){
 
-    const {babysitter, getSchedules} = useContext(babysitterContext);
-
+    let {babysitter, getSchedules} = useContext(babysitterContext);
     const [schedules, setSchedules] =  useState([]);
 
+    if(nanny){
+        nanny.id = nanny.babysitter_id;
+        babysitter = nanny
+    }
+
+    console.log('babysitter', babysitter);
     let offset = 0;
     const translateY = new Animated.Value(0);
     const rotateValue = new Animated.Value(0);
@@ -84,7 +89,7 @@ function SchedulesCard(){
             setSchedules(newSchedules);
         }
         getSchedulesAsync()
-    }, [])
+    }, [babysitter])
 
     
     const animatedEvent = Animated.event(
@@ -155,7 +160,7 @@ function SchedulesCard(){
                       })
                      }] 
                 }]}>
-                    <Feather name="arrow-up" size={24} color="black" />
+                    <FontAwesome name="angle-double-up" size={24} color="black" />
                 </Animated.View>
                 <Text style={styles.titleSchedules}>Schedules</Text>
                 {
@@ -282,209 +287,214 @@ function SavedNannyProfileToFamilyView({route, navigation}){
     });
 
     return(
-    <ScrollView 
-    contentContainerStyle = {styles.contentContainer} 
-    >
-        <View style={styles.imageBox}>  
-       { worker.photo.length > 0 ?
-            <Image style={styles.anonimusImage} source={{uri : `${staticAddress}${worker.photo}`}}/>
-            :
-            <Image style={styles.anonimusImage} source={anonimusImage}/>
-            }
-            <StarRating
-                disabled={false}
-                containerStyle={styles.starsContainer}
-                starSize={25}
-                maxStars={5}
-                rating={worker.stars}
-                fullStarColor={'#fff000'}
-                selectedStar={() => navigation.navigate('NannyReviews',{'nanny': worker})}
-            />
-            <TouchableOpacity style={styles.likeButton} onPress={() => handleSetIsLiked(!worker.isLiked)}>
-                {worker.isLiked ?
-                <Ionicons name='md-heart' size={35} style={{color: '#f20079'}}></Ionicons>
+    <View style={styles.container}>
+        <ScrollView 
+        contentContainerStyle = {styles.contentContainer} 
+        >
+            <View style={styles.imageBox}>  
+        { worker.photo.length > 0 ?
+                <Image style={styles.anonimusImage} source={{uri : `${staticAddress}${worker.photo}`}}/>
                 :
-                <Ionicons name='md-heart-outline' size={35} style={{color: '#515151'}}></Ionicons>}
-            </TouchableOpacity>
-        </View>
-        <View style={styles.rateBox}>
-            <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
-                <Text style={styles.ratePrice}>{worker.rate}/h</Text>    
-        </View>
-        <Text style={styles.name}>{worker.name}</Text>
-        <View style={styles.ageBox}>
-            <Text style={styles.yearsOld}> {worker.age} Years Old</Text>
-        </View>
-        
-        <View style={styles.addressBox}>
-            <FontAwesome name='home' size={30} style={{color: '#759d81'}}></FontAwesome>
-            <Text style={styles.text}>{worker.street}, {worker.city}</Text>
-        </View>
-        <View style={styles.profissonalBox}>
-            <MaterialIcons name='work' size={30} style={{color: '#759d81'}}></MaterialIcons>
-            <Text style={styles.text}>
-                {worker.bio}
-            </Text>
-        </View>
-        <View style={styles.languagesBox}>
-        <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
-        <Text style={styles.text}>{worker.languages}</Text>
-        
-        </View>    
-        <View style={styles.actions}>
-            <TouchableOpacity style={styles.action} onPress={sendWhatsapp}>
-            <Ionicons name='logo-whatsapp' size={25} style={[{color: '#fff'}]}/>   
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.action} onPress={sendMail}>
-            <MaterialIcons name='email' size={25} style={[{color:'#fff'}]}/>
-            </TouchableOpacity>
-            <TouchableOpacity style={[styles.action, {marginRight: 0}]} onPress={makePhoneCall}>
-            <Feather name='phone-call' size={20}  style={[{color: '#fff'}]}/> 
-            </TouchableOpacity>
-        </View>
-        <View style={styles.scheduleContainer}>
-            <TouchableOpacity style={styles.schedule} onPress={() => handleSetModalVisible(true)}>
-               <Text style={styles.textSchedule}>Schedule</Text>   
-            </TouchableOpacity>    
-        </View>
-
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.titleModal}>Service Details</Text>
-            <Formik 
-            style={styles.modalForm}
-            initialValues={{descriptionInput : '', rate : '', dateStart : new Date(), dateFinish : new Date()}}
-            validationSchema={ScheduleSchema}
-            onSubmit = {values => submitModalForm(values)}
-            >
-                {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
-                    <Fragment>
-                    <TextInput
-                        style={styles.descriptionInput}
-                        placeholder='What kind of service, how many childrens, their ages, slepping or awake children, any personal notes about the visit...'
-                        placeholderTextColor='#333'
-                        multiline={true}
-                        numberOfLines={3}
-                        maxLength={200}
-                        value={values.descriptionInput}
-                        onChangeText={handleChange('descriptionInput')}
-                        ref={(input) => { globalThis.Experiences = input; }}>
-                    </TextInput>
-                    {errors.descriptionInput && touched.descriptionInput ? (
-                        <Text style={styles.validationMessage}>{errors.descriptionInput}</Text>
-                    ) : null}
-                    
-                    <View style={styles.dateTimeInput}>
-                        <Text style={styles.dateText}>Select start date:</Text>
-                        <TouchableOpacity style={styles.dateButton} onPress={() => setShowStartDate(true)}>
-                            {isDate(values.dateStart) && <Text style={styles.dateTextButton}>{format(values.dateStart, 'dd/MM/yyyy HH:mm:ss' )}</Text>} 
-                        </TouchableOpacity>
-                        {errors.dateStart && touched.dateStart ? (
-                            <Text>{errors.dateStart}</Text>
-                        ) : null}
-                        <Text style={styles.dateText}>Select finish date:</Text>
-                        <TouchableOpacity style={styles.dateButton} onPress={() => setShowFinishDate(true)}>
-                        {isDate(values.dateFinish) && <Text style={styles.dateTextButton}>{format(values.dateFinish, 'dd/MM/yyyy HH:mm:ss')}</Text>}
-                        </TouchableOpacity>
-                        {errors.dateFinish && touched.dateFinish ? (
-                            <Text>{errors.dateFinish}</Text>
-                        ) : null}
-                        {showStartDate && (
-                            <DatePickerField
-                              value={values.dateStart}
-                              name="dateStart"
-                              timeZoneOffsetInMinutes={0}
-                              mode='date'
-                              is24Hour={true}
-                              display="default"
-                              state = {setShowStartDate}
-                              nextState = {setShowStartHour}
-                            />
-                          )}
-                          {showStartHour && (
-                            <DatePickerField
-                            value={values.hourStart}
-                              name="dateStart"
-                              timeZoneOffsetInMinutes={0}
-                              mode='time'
-                              is24Hour={true}
-                              display="default"
-                              state = {setShowStartHour}
-                              nextState= { null }
-                            />
-                          )}
-                          {showFinishDate && (
-                            <DatePickerField
-                            value={values.dateFinish}
-                              name="dateFinish"
-                              timeZoneOffsetInMinutes={0}
-                              mode='date'
-                              is24Hour={true}
-                              display="default"
-                              state = {setShowFinishDate}
-                              nextState={setShowFinishHour} 
-                            />
-                          )}
-                          {showFinishHour && (
-                            <DatePickerField
-                            value={values.hourFinish}
-                              name="dateFinish"
-                              timeZoneOffsetInMinutes={0}
-                              mode='time'
-                              is24Hour={true}
-                              display="default"
-                              state = {setShowFinishHour}
-                              nextState={null}
-                            />
-                          )}
-                    </View>
-                    <View style={styles.verticalBox}>
-                        <Text style={styles.rateText}>Value fixed to pay in shekels</Text>   
-                        <TextInput
-                        placeholder='Rate'
-                        placeholderTextColor='#333'
-                        value={values.rate}
-                        onChangeText={handleChange('rate')}
-                        style={styles.rateInput}
-                        >
-                        </TextInput>    
-                        <FontAwesome name='shekel' size={16} style={{marginTop: 20, marginLeft: 10}}></FontAwesome>
-                    </View>
-                    {errors.rate && touched.rate ? (
-                        <Text>{errors.rate}</Text>
-                    ) : null}
-                    <TouchableOpacity
-                      style={styles.modalConfirmButton}
-                      onPress={
-                        handleSubmit}
-                    >
-                      <Text style={styles.confirmText}>Confirm</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                      style={styles.modalCloseButton}
-                      onPress={() => {
-                        setModalVisible(!modalVisible);
-                      }}
-                    >
-                      <EvilIcons name='close' size={20} style={styles.textStyle}></EvilIcons>
-                    </TouchableOpacity>
-                </Fragment>
-                    )}
-            </Formik>
-
+                <Image style={styles.anonimusImage} source={anonimusImage}/>
+                }
+                <StarRating
+                    disabled={false}
+                    containerStyle={styles.starsContainer}
+                    starSize={25}
+                    maxStars={5}
+                    rating={worker.stars}
+                    fullStarColor={'#fff000'}
+                    selectedStar={() => navigation.navigate('NannyReviews',{'nanny': worker})}
+                />
+                <TouchableOpacity style={styles.likeButton} onPress={() => handleSetIsLiked(!worker.isLiked)}>
+                    {worker.isLiked ?
+                    <Ionicons name='md-heart' size={35} style={{color: '#f20079'}}></Ionicons>
+                    :
+                    <Ionicons name='md-heart-outline' size={35} style={{color: '#515151'}}></Ionicons>}
+                </TouchableOpacity>
+            </View>
+            <View style={styles.rateBox}>
+                <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>
+                    <Text style={styles.ratePrice}>{worker.rate}/h</Text>    
+            </View>
+            <Text style={styles.name}>{worker.name}</Text>
+            <View style={styles.ageBox}>
+                <Text style={styles.yearsOld}> {worker.age} Years Old</Text>
+            </View>
             
-          </View>
-        </View>
-      </Modal>
-    </ScrollView>
+            <View style={styles.addressBox}>
+                <FontAwesome name='home' size={30} style={{color: '#759d81'}}></FontAwesome>
+                <Text style={styles.text}>{worker.street}, {worker.city}</Text>
+            </View>
+            <View style={styles.profissonalBox}>
+                <MaterialIcons name='work' size={30} style={{color: '#759d81'}}></MaterialIcons>
+                <Text style={styles.text}>
+                    {worker.bio}
+                </Text>
+            </View>
+            <View style={styles.languagesBox}>
+            <FontAwesome name='language' size={30} style={{color: '#759d81'}}></FontAwesome>
+            <Text style={styles.text}>{worker.languages}</Text>
+            
+            </View>    
+            <View style={styles.actions}>
+                <TouchableOpacity style={styles.action} onPress={sendWhatsapp}>
+                <Ionicons name='logo-whatsapp' size={25} style={[{color: '#fff'}]}/>   
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.action} onPress={sendMail}>
+                <MaterialIcons name='email' size={25} style={[{color:'#fff'}]}/>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.action]} onPress={makePhoneCall}>
+                <Feather name='phone-call' size={20}  style={[{color: '#fff'}]}/> 
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.action, {marginRight: 0}]} onPress={() => handleSetModalVisible(true)}>
+                <FontAwesome name="calendar" size={20} style={[{color: '#fff'}]}/>
+                </TouchableOpacity>
+            </View>
+            {/* <View style={styles.scheduleContainer}>
+                <TouchableOpacity style={styles.schedule} onPress={() => handleSetModalVisible(true)}>
+                <Text style={styles.textSchedule}>Schedule</Text>   
+                </TouchableOpacity>    
+            </View> */}
+            <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+            }}
+        >
+            <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+                <Text style={styles.titleModal}>Service Details</Text>
+                <Formik 
+                style={styles.modalForm}
+                initialValues={{descriptionInput : '', rate : '', dateStart : new Date(), dateFinish : new Date()}}
+                validationSchema={ScheduleSchema}
+                onSubmit = {values => submitModalForm(values)}
+                >
+                    {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
+                        <Fragment>
+                        <TextInput
+                            style={styles.descriptionInput}
+                            placeholder='What kind of service, how many childrens, their ages, slepping or awake children, any personal notes about the visit...'
+                            placeholderTextColor='#333'
+                            multiline={true}
+                            numberOfLines={3}
+                            maxLength={200}
+                            value={values.descriptionInput}
+                            onChangeText={handleChange('descriptionInput')}
+                            ref={(input) => { globalThis.Experiences = input; }}>
+                        </TextInput>
+                        {errors.descriptionInput && touched.descriptionInput ? (
+                            <Text style={styles.validationMessage}>{errors.descriptionInput}</Text>
+                        ) : null}
+                        
+                        <View style={styles.dateTimeInput}>
+                            <Text style={styles.dateText}>Select start date:</Text>
+                            <TouchableOpacity style={styles.dateButton} onPress={() => setShowStartDate(true)}>
+                                {isDate(values.dateStart) && <Text style={styles.dateTextButton}>{format(values.dateStart, 'dd/MM/yyyy HH:mm:ss' )}</Text>} 
+                            </TouchableOpacity>
+                            {errors.dateStart && touched.dateStart ? (
+                                <Text>{errors.dateStart}</Text>
+                            ) : null}
+                            <Text style={styles.dateText}>Select finish date:</Text>
+                            <TouchableOpacity style={styles.dateButton} onPress={() => setShowFinishDate(true)}>
+                            {isDate(values.dateFinish) && <Text style={styles.dateTextButton}>{format(values.dateFinish, 'dd/MM/yyyy HH:mm:ss')}</Text>}
+                            </TouchableOpacity>
+                            {errors.dateFinish && touched.dateFinish ? (
+                                <Text>{errors.dateFinish}</Text>
+                            ) : null}
+                            {showStartDate && (
+                                <DatePickerField
+                                value={values.dateStart}
+                                name="dateStart"
+                                timeZoneOffsetInMinutes={0}
+                                mode='date'
+                                is24Hour={true}
+                                display="default"
+                                state = {setShowStartDate}
+                                nextState = {setShowStartHour}
+                                />
+                            )}
+                            {showStartHour && (
+                                <DatePickerField
+                                value={values.hourStart}
+                                name="dateStart"
+                                timeZoneOffsetInMinutes={0}
+                                mode='time'
+                                is24Hour={true}
+                                display="default"
+                                state = {setShowStartHour}
+                                nextState= { null }
+                                />
+                            )}
+                            {showFinishDate && (
+                                <DatePickerField
+                                value={values.dateFinish}
+                                name="dateFinish"
+                                timeZoneOffsetInMinutes={0}
+                                mode='date'
+                                is24Hour={true}
+                                display="default"
+                                state = {setShowFinishDate}
+                                nextState={setShowFinishHour} 
+                                />
+                            )}
+                            {showFinishHour && (
+                                <DatePickerField
+                                value={values.hourFinish}
+                                name="dateFinish"
+                                timeZoneOffsetInMinutes={0}
+                                mode='time'
+                                is24Hour={true}
+                                display="default"
+                                state = {setShowFinishHour}
+                                nextState={null}
+                                />
+                            )}
+                        </View>
+                        <View style={styles.verticalBox}>
+                            <Text style={styles.rateText}>Value fixed to pay in shekels</Text>   
+                            <TextInput
+                            placeholder='Rate'
+                            placeholderTextColor='#333'
+                            value={values.rate}
+                            onChangeText={handleChange('rate')}
+                            style={styles.rateInput}
+                            >
+                            </TextInput>    
+                            <FontAwesome name='shekel' size={16} style={{marginTop: 20, marginLeft: 10}}></FontAwesome>
+                        </View>
+                        {errors.rate && touched.rate ? (
+                            <Text>{errors.rate}</Text>
+                        ) : null}
+                        <TouchableOpacity
+                        style={styles.modalConfirmButton}
+                        onPress={
+                            handleSubmit}
+                        >
+                        <Text style={styles.confirmText}>Confirm</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                        style={styles.modalCloseButton}
+                        onPress={() => {
+                            setModalVisible(!modalVisible);
+                        }}
+                        >
+                        <EvilIcons name='close' size={20} style={styles.textStyle}></EvilIcons>
+                        </TouchableOpacity>
+                    </Fragment>
+                        )}
+                </Formik>
+
+                
+            </View>
+            </View>
+        </Modal>
+        </ScrollView>
+        <SchedulesCard babysitter={worker} />
+    </View>
     )
 }
 

@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     },
     contentContainer:{
         alignItems: 'center',
-        paddingBottom: 50      
+        paddingBottom: 70      
     },
     imageBox:{
         width: '100%',
@@ -254,15 +254,16 @@ const styles = StyleSheet.create({
     schedulesCard:{
         position:'absolute',
         alignSelf: 'center',
-        top: 500,
+        top: 530,
         justifyContent: 'center',
         backgroundColor: '#fefefe',
-        width: '70%',
+        width: '60%',
         alignItems: 'center',
         justifyContent: 'center',
-        borderColor: 'black',
-        borderWidth: 1,
-        paddingBottom: 20
+        borderColor: '#333',
+        borderWidth: StyleSheet.hairlineWidth,
+        paddingBottom: 20,
+        borderRadius: 8
     },
     titleSchedules:{
         fontFamily: 'Montserrat',

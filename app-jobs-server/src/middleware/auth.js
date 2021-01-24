@@ -26,7 +26,7 @@ module.exports = (req, res, next) => {
     }
 
     const [scheme, token] = parts;
-
+    console.log(token);
     if (!/^Bearer$/i.test(scheme)) {
         console.log('Token mal-formatted');
         
@@ -38,7 +38,6 @@ module.exports = (req, res, next) => {
     jwt.verify(token, authConfig.jwtSecret, (err, decoded) => {
         if (err) {
             console.log('Token invalid');
-        
             return res.status(401).send({
                 error: 'Token invalid'
             });

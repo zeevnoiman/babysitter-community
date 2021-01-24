@@ -78,7 +78,7 @@ const BabysitterProvider = ({children}) => {
         <babysitterContext.Provider value={
            {
             babysitterLoading,
-            babysitter,
+            babysitter: babysitter,
             tryToGetBabysitter,
             saveBabysitter,
             updateBabysitter,
