@@ -26,7 +26,7 @@ const UserProvider = ({children}) => {
                 return false;
             }
             try{
-                api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+                api.defaults.headers.Authorization = `Bearer ${token}`;
                 const {data : user_from_api} = await api.get('/user',{
                     headers:{
                         user_id: JSON.parse(user).id
@@ -99,7 +99,7 @@ const UserProvider = ({children}) => {
         await AsyncStorage.removeItem('BS:Token');
         await AsyncStorage.setItem('BS:User', JSON.stringify(createdUser));
         await AsyncStorage.setItem('BS:Token',JSON.stringify(response.data.token));
-        api.defaults.headers.Authorization = `Bearer ${JSON.stringify(response.data.token)}`;
+        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
         setUser(createdUser);
         setToken(response.data.token);
                   
@@ -116,8 +116,6 @@ const UserProvider = ({children}) => {
         if(res.data.role != role){
             throw(`You are not registered as ${role}, please enter with your correct user`);
         }
-        console.log(api.defaults.headers);
-        api.defaults.headers.Authorization = `Bearer ${JSON.stringify(res.data.token)}`; 
         console.log(api.defaults.headers);
         await AsyncStorage.removeItem('BS:User');
         await AsyncStorage.removeItem('BS:Token');

@@ -23,6 +23,7 @@ const FamilyRoutes = () => (
             <BabysitterProvider>
                 <FamilyStack.Navigator>
                     <FamilyStack.Screen name='MainPageFamily' component={MainPageFamily} />
+                    <FamilyStack.Screen name='SearchBabysitters' component={SearchBabysitters} />
                     <FamilyStack.Screen name='Map' component={Map} />
                     <FamilyStack.Screen name='LikedNannies' component={LikedNannies} />
                     <FamilyStack.Screen name='Works' component={Works} />
@@ -30,7 +31,6 @@ const FamilyRoutes = () => (
                     <FamilyStack.Screen name='PastWorks' component={PastWorks} />
                     <FamilyStack.Screen name='NannyReviews' component={NannyReviews} />
                     <FamilyStack.Screen name='SavedNannyProfile' component={SavedNannyProfile} />
-                    <FamilyStack.Screen name='SearchBabysitters' component={SearchBabysitters} />
                 </FamilyStack.Navigator>
             </BabysitterProvider>
         </WorkProvider>
