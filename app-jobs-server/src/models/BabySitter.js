@@ -134,6 +134,50 @@ const BabySitter = {
                 return false
         }
     },
+
+    getByName :  async function(name){
+        try{
+            const babysitters = 
+                await db('babysitter')
+                .select('*')
+                .where('name', name);
+
+            return babysitters;
+        } catch(err){
+            console.log(err);
+            return err
+        }
+    },
+
+    getByCity :  async function(city){
+        try{
+            const babysitters = 
+                await db('babysitter')
+                .select('*')
+                .where('city', city);
+
+            return babysitters;
+        } catch(err){
+            console.log(err);
+            return err
+        }
+    },
+
+    getByRate :  async function(rate){
+        try{
+            const babysitters = 
+                await db('babysitter')
+                .select('*')
+                .where('rate', '>=', Number(rate[0]))
+                .andWhere('rate', '<=', Number(rate[1]));
+
+            return babysitters;
+        } catch(err){
+            console.log(err);
+            return err
+        }
+    },
+
     getSpecificSchedule : async function(babysitter_id, year, month_day, from, to){
         try{
             const scheduleId = 
@@ -143,9 +187,25 @@ const BabySitter = {
                 .andWhere('year', year)
                 .andWhere('month_day', month_day)
                 .andWhere('from', '<=', from)
-                .andWhere('to', '>=', to);
-            console.log(scheduleId);    
+                .andWhere('to', '>=', to);    
             return scheduleId[0].id;
+        } catch(err){
+            console.log(err);
+            return false
+        }
+    },
+
+    getScheduleInTheTime : async function(year, month_day, from, to){
+        try{
+            const babysitters = 
+                await db('babysitter_schedule')
+                .select('babysitter.*')
+                .innerJoin('babysitter', 'babysitter_schedule.babysitter_id', 'babysitter.id')
+                .where('year', year)
+                .andWhere('month_day', month_day)
+                .andWhere('from', '<=', from)
+                .andWhere('to', '>=', to);   
+            return babysitters;
         } catch(err){
             console.log(err);
             return false

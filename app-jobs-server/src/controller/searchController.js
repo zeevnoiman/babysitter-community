@@ -1,6 +1,7 @@
 const axios = require('axios');
 const BabySitter = require('../models/BabySitter');
 const User = require('../models/User');
+const convertTimeToMin = require('../models/utils/convertTimeToMin');
 
 module.exports = {
     async index(req, res) {
@@ -31,17 +32,63 @@ module.exports = {
 
     
     async filter(req, res){
-        const{criteria} = req.body;
+        const{criterias, babysitter_name, city, schedule, range} = req.query;
 
-        const babysitter = await BabySitter.find({
-            $or:[
-                {name: {$eq: criteria}},
-                {city: {$eq: criteria}},
-                {rate: {$eq: criteria}},
-                {start_hour: {$eq: criteria}},
-            ]});
-        console.log(babysitter);
-        return res.send(babysitter);
+        const criteriasList = criterias.split(',').map(value => value.trim())
+
+        let schedulesParsed
+        let from, to
+        if(schedule){
+            schedulesParsed = JSON.parse(schedule);
+            from = convertTimeToMin(schedulesParsed.from);
+            to = convertTimeToMin(schedulesParsed.to);
+        }
+
+        let rangeParsed;
+        if(range){
+            rangeParsed = range.split(',').map(value => value.trim())
+        }
+
+        const filters = {
+            babysitter_name : async () => (await BabySitter.getByName(babysitter_name)),
+            city : async () => (await BabySitter.getByCity(city)),
+            schedule : async () => (await BabySitter.getScheduleInTheTime(schedulesParsed.year, schedulesParsed.month_day, from, to)),
+            range : async () => (await BabySitter.getByRate(rangeParsed)),
+        }
+        
+        const babysittersPromisses = criteriasList.map(criteria => (
+            filters[criteria]()
+        ))
+
+        const babysittersLists = await Promise.all(babysittersPromisses);
+        const lengthOfArrays = babysittersLists.map(babysitters => babysitters.length)
+        const maxLenght = Math.max(...lengthOfArrays);
+        const maxLenghtIndex = lengthOfArrays.indexOf(maxLenght);
+
+        let commonBabysitters, minCommonBabysitters;
+        minCommonBabysitters = babysittersLists[maxLenghtIndex];
+        for(var i = 0; i < babysittersLists.length; i++){
+            if(i == maxLenghtIndex){
+                continue;
+            }
+            commonBabysitters = babysittersLists[maxLenghtIndex].filter(babysitter => {
+                if(babysittersLists[i].length == 0){
+                    return false
+                }
+                let contains = false
+                for(var j = 0; j < babysittersLists[i].length; j++){
+                    if(babysitter.id == babysittersLists[i][j].id){
+                        contains = true
+                    }
+                }
+                return contains;
+            })
+            if(commonBabysitters.length < minCommonBabysitters.length){
+                minCommonBabysitters = commonBabysitters;
+            }
+        }
+
+        return res.send(minCommonBabysitters);
     },
 
 }
