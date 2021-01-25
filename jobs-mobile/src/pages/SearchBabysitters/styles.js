@@ -8,12 +8,18 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    inputBox:{
+        flexDirection: 'row',
+    },
     searchInput:{
-        height: 50,
+        height: 36,
         backgroundColor: '#fff',
         color: '#333',
-        width: '80%',
-        borderRadius: 25,
+        marginRight: 20,
+        marginBottom: 8,
+        marginTop: 8,
+        width: '40%',
+        borderRadius: 8,
         paddingHorizontal: 20,
         fontSize: 16,
         shadowColor: '#000',
@@ -23,7 +29,17 @@ const styles = StyleSheet.create({
             height: 4
         },
         elevation: 2,
+    },
 
+    sliderLabelContainer:{
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    subtitle:{
+        fontFamily: 'Montserrat',
+        fontSize: 16,
+        marginTop: 8,
+        color: '#333'
     },
 
 })

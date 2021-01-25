@@ -32,13 +32,13 @@ module.exports = {
     
     async filter(req, res){
         const{criteria} = req.body;
+
         const babysitter = await BabySitter.find({
             $or:[
                 {name: {$eq: criteria}},
                 {city: {$eq: criteria}},
-                {neighborhood: {$eq: criteria}},
+                {rate: {$eq: criteria}},
                 {start_hour: {$eq: criteria}},
-                {finish_hour: {$eq: criteria}},
             ]});
         console.log(babysitter);
         return res.send(babysitter);

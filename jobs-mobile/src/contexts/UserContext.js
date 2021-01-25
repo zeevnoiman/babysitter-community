@@ -26,7 +26,7 @@ const UserProvider = ({children}) => {
                 return false;
             }
             try{
-                api.defaults.headers.Authorization = `Bearer ${token}`;
+                api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
                 const {data : user_from_api} = await api.get('/user',{
                     headers:{
                         user_id: JSON.parse(user).id

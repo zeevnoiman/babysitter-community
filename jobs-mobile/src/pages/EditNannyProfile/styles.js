@@ -165,12 +165,6 @@ const styles = StyleSheet.create({
         height: 40,
         color: '#333'
     },
-    scheduleFormItem:{
-        borderTopColor: '#8c0046',
-        borderTopWidth: 1,
-        marginTop: 10,
-        paddingTop: 10
-    },
     saveButton:{
         backgroundColor: '#be4def',
         borderRadius: 8,

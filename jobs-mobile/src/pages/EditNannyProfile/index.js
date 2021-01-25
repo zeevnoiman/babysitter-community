@@ -16,7 +16,7 @@ import styles from './styles';
 import anonimusImage from '../../assets/anonimo.png';
 import { userContext } from '../../contexts/UserContext';
 import { babysitterContext } from '../../contexts/BabysitterContext';
-import ScheduleForm from './ScheduleForm';
+import ScheduleForm from '../../components/ScheduleForm/ScheduleForm';
 
 export default function EditNannyProfile({navigation}){
     
