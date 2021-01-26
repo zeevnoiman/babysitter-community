@@ -111,76 +111,93 @@ function SearchBabysitters({navigation}){
                 ios: 'padding'
             })}
             style={styles.searchForm}>
-                <View style={styles.inputBox}>    
-                    <TextInput 
-                    style={styles.searchInput}
-                    placeholder= 'Name'
-                    placeholderTextColor='#999' 
-                    autoCapitalize='words'
-                    autoCorrect={false}
-                    value={name}
-                    onChangeText={text=>setName(text)}/>
-
-                    <TextInput 
-                    style={styles.searchInput}
-                    placeholder= 'City'
-                    placeholderTextColor='#999' 
-                    autoCapitalize='words'
-                    autoCorrect={false}
-                    value={city}
-                    onChangeText={text=>setCity(text)}/>
-                </View>
-
-                <ScheduleForm position={0} callbackFunction={setScheduleItemValue} />
-
-                <Text style={styles.subtitle}>Range of payment</Text>
-                <MultiSlider
-                values={rate}
-                onValuesChangeFinish={(values) => setRate(values)}
-                min={0}
-                max={100}
-                step={5}
-                enableLabel={true}
-                customLabel={() => { 
-                    return(
-                        <View style={styles.sliderLabelContainer}>
-                            <Text>{rate[0]} Shekel</Text>
-                            <Text>{rate[1]} Shekel</Text>
+                <View style={styles.checkboxContainer}>
+                    <View style={styles.firstColumn}>
+                        <View style={[styles.checkboxBox]}>
+                            <CheckBox
+                            value={checkboxName}
+                            onValueChange={value => setCheckbox(value, criteriasNames.babysitter_name)}
+                            style={styles.checkbox} /> 
+                            <Text style={styles.checkboxText}>By name</Text>   
                         </View>
-                    )
-                }}
-                />
-
-                <View>
-                    <View style={styles.checkboxBox}>
-                        <Text style={styles.checkboxText}>By name</Text>   
-                        <CheckBox
-                        value={checkboxName}
-                        onValueChange={value => setCheckbox(value, criteriasNames.babysitter_name)}
-                        style={styles.checkbox} /> 
+                        <View style={styles.checkboxBox}>
+                            <CheckBox
+                            value={checkboxSchedule}
+                            onValueChange={value => setCheckbox(value, criteriasNames.schedule)}
+                            style={styles.checkbox} /> 
+                            <Text style={styles.checkboxText}>By work hour</Text>
+                        </View>
                     </View>
-                    <View style={styles.checkboxBox}>
-                        <Text style={styles.checkboxText}>By city</Text>   
+                    <View style={styles.secondColumn}>
+                        <View style={styles.checkboxBox}>
                         <CheckBox
-                        value={checkboxCity}
-                        onValueChange={value => setCheckbox(value, criteriasNames.city)}
-                        style={styles.checkbox} /> 
-                    </View>
-                    <View style={styles.checkboxBox}>
-                        <Text style={styles.checkboxText}>By work hour</Text>   
-                        <CheckBox
-                        value={checkboxSchedule}
-                        onValueChange={value => setCheckbox(value, criteriasNames.schedule)}
-                        style={styles.checkbox} /> 
-                    </View>
-                    <View style={styles.checkboxBox}>
-                        <Text style={styles.checkboxText}>By range of price</Text>   
-                        <CheckBox
-                        value={checkboxRange}
-                        onValueChange={value => setCheckbox(value, criteriasNames.range)}
-                        style={styles.checkbox} /> 
+                            value={checkboxCity}
+                            onValueChange={value => setCheckbox(value, criteriasNames.city)}
+                            style={styles.checkbox} /> 
+                            <Text style={styles.checkboxText}>By city</Text>   
+                        </View>
+                        <View style={styles.checkboxBox}>
+                            <CheckBox
+                            value={checkboxRange}
+                            onValueChange={value => setCheckbox(value, criteriasNames.range)}
+                            style={styles.checkbox} /> 
+                            <Text style={styles.checkboxText}>By range of price</Text>   
+                        </View>
                     </View>
                 </View>
+                <View style={styles.inputBox}>    
+                    {
+                        checkboxName && 
+                        <TextInput 
+                        style={styles.searchInput}
+                        placeholder= 'Name'
+                        placeholderTextColor='#999' 
+                        autoCapitalize='words'
+                        autoCorrect={false}
+                        value={name}
+                        onChangeText={text=>setName(text)}/>
+                    }
+                    {
+                        checkboxCity &&
+                        <TextInput 
+                        style={styles.searchInput}
+                        placeholder= 'City'
+                        placeholderTextColor='#999' 
+                        autoCapitalize='words'
+                        autoCorrect={false}
+                        value={city}
+                        onChangeText={text=>setCity(text)}/>
+                    }
+                </View>
+
+                {
+                    checkboxSchedule &&
+                    <ScheduleForm position={0} callbackFunction={setScheduleItemValue} />
+                }
+
+                {
+                    checkboxRange &&
+                    (
+                    <>
+                        <Text style={styles.subtitle}>Range of payment</Text>
+                        <MultiSlider
+                        values={rate}
+                        onValuesChangeFinish={(values) => setRate(values)}
+                        min={0}
+                        max={100}
+                        step={5}
+                        enableLabel={true}
+                        customLabel={() => { 
+                            return(
+                                <View style={styles.sliderLabelContainer}>
+                                    <Text>{rate[0]} Shekel</Text>
+                                    <Text>{rate[1]} Shekel</Text>
+                                </View>
+                            )
+                        }}
+                        />
+                    </>)
+                }
                 <TouchableOpacity
                 style={styles.loadButton} 
                 onPress={() => handleSubmitSearch()} >

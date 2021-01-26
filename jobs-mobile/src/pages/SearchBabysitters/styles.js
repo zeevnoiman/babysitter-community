@@ -42,9 +42,16 @@ const styles = StyleSheet.create({
         marginTop: 8,
         color: '#333'
     },
-    checkboxBox:{
+    checkboxContainer:{
+        width: '90%',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        marginBottom: 10
+
+    },
+    checkboxBox:{
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
         alignItems: 'stretch'
     },
     checkboxText:{
