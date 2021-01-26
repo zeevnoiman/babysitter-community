@@ -74,7 +74,9 @@ function SchedulesCard({babysitter : nanny}){
     const [schedules, setSchedules] =  useState([]);
 
     if(nanny){
-        nanny.id = nanny.babysitter_id;
+        if(nanny['babysitter_id']){
+            nanny.id = nanny.babysitter_id;
+        }
         babysitter = nanny
     }
 

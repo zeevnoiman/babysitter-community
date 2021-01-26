@@ -71,6 +71,25 @@ const FamilyProvider = ({children}) => {
         }
     }
 
+    const searchFilterBabysitter = async ({babysitter_name, city, schedule, range, criterias}) => {
+        console.log('filter')
+        try{
+            const res = await api.get('/filter', {
+                params:{
+                    babysitter_name,
+                    city,
+                    schedule,
+                    range,
+                    criterias
+                }
+            });
+
+            return res.data
+        } catch(err){
+            console.log(err);
+        }
+    }
+
     return (
         <familyContext.Provider value={
            {
@@ -79,6 +98,7 @@ const FamilyProvider = ({children}) => {
             getLikedBabysitters,
             addLikedBabysitter,
             deleteLikedBabysitter,
+            searchFilterBabysitter
             }
         }>
             {children}

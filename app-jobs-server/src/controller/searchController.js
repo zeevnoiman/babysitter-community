@@ -61,6 +61,8 @@ module.exports = {
         ))
 
         const babysittersLists = await Promise.all(babysittersPromisses);
+
+        //Algorithm to get the common babysitters in all the arrays returned from the promisses
         const lengthOfArrays = babysittersLists.map(babysitters => babysitters.length)
         const maxLenght = Math.max(...lengthOfArrays);
         const maxLenghtIndex = lengthOfArrays.indexOf(maxLenght);

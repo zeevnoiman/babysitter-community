@@ -6,7 +6,8 @@ const styles = StyleSheet.create({
     },
     searchForm:{
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderBottomWidth: 1
     },
     inputBox:{
         flexDirection: 'row',
@@ -40,6 +41,76 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 8,
         color: '#333'
+    },
+    checkboxBox:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'stretch'
+    },
+    checkboxText:{
+        lineHeight: 33,
+        fontFamily: 'Montserrat-Medium'
+    },
+    LayoutAnimationButton:{
+        alignSelf: 'center',
+        padding: 5,
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        borderWidth: 1,
+        borderColor : '#333'
+    },
+
+    babysitterItem:{
+        height: 200,
+        borderColor: '#999',
+        borderRadius: 5,
+        marginHorizontal: 5,
+        flexDirection: 'row',
+        marginVertical: 10,
+        backgroundColor: 'rgba(255,255, 255, 0.8)'
+    },
+    starsContainer:{
+        position: 'absolute',
+        right: 15,
+        top: 5,
+        width: 85
+    },
+    imageBabysitter:{
+        height: '100%',
+        width: 120,
+        marginRight: 5
+    },
+    babysitterInfo:{
+        alignItems: 'flex-start',
+        paddingRight: 5,
+        marginLeft: 5
+    },
+    infoText:{
+        fontFamily: 'Montserrat',
+        color: '#80039a',
+        fontSize: 22,
+        marginTop: 30
+    },
+    ageText:{
+        fontFamily: 'Montserrat',
+        color: '#333',
+        marginBottom: 5,
+        fontSize: 16
+    },
+    rateBox:{
+        flexDirection: 'row',
+    },
+    ratePrice:{
+        fontFamily: 'Montserrat',
+        fontSize: 14,
+        marginLeft: 5,
+        color:'#f20079'
+        //color:'#c88802'
+    },
+    shekel:{
+        lineHeight: 20,
+        color:'#f20079'
+        //color:'#c88802'
     },
 
 })

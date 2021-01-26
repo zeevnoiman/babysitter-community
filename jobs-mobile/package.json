@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@ptomasroos/react-native-multi-slider": "^2.2.2",
+    "@react-native-community/checkbox": "^0.5.7",
     "@react-native-community/datetimepicker": "3.0.4",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-picker/picker": "1.9.2",

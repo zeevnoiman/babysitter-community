@@ -4,7 +4,6 @@ import {MaterialIcons, Ionicons, FontAwesome,
     FontAwesome5} from '@expo/vector-icons';
 import StarRating from 'react-native-star-rating';
 import {staticAddress} from '../../services/api';
-import api from '../../services/api'
 import { userContext } from '../../contexts/UserContext';
 import { familyContext } from '../../contexts/FamilyContext';
 import styles from './styles';
@@ -36,7 +35,7 @@ export default function LikedNannies({navigation}){
             <FlatList
             style={styles.babysittersList}
             data={babysitters}
-            keyExtractor={ babysitter => String(babysitter._id)}
+            keyExtractor={ babysitter => String(babysitter.id)}
             showsVerticalScrollIndicator={false}
             renderItem={({item : babysitter}) => (
                 <View>

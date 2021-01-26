@@ -1,10 +1,10 @@
 import React, {useState, useContext, useEffect} from 'react';
 import { View, Text, TextInput,
-        TouchableOpacity, Image,
-        CheckBox, ScrollView,
+        TouchableOpacity, Image, ScrollView,
         KeyboardAvoidingView, Platform,
         Modal, LogBox
        } from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 import {Entypo, FontAwesome, 
     EvilIcons} from '@expo/vector-icons'
 import {staticAddress} from '../../services/api';
