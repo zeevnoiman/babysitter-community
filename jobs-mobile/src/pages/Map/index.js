@@ -73,9 +73,13 @@ function Map({navigation}) {
         const {latitude, longitude} = currentRegion;
         
         const babySitters = await searchBabysitters(latitude, longitude);
-
-        const isEqual = babysitters.every((babysitter, index) => babysitter.id == babysitters[index].id);
+        
+        const isEqual = false;
+        if(babysitters.length > 0){
+            isEqual = babySitters.every((babysitter, index) => babysitter.id == babysitters[index].id);
+        }
         if(isEqual){
+            console.log('not render');
             return;
         }
         setBabysitters(babySitters);
