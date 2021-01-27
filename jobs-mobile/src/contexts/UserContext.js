@@ -32,6 +32,11 @@ const UserProvider = ({children}) => {
                         user_id: JSON.parse(user).id
                     }
                 });
+                if(!user_from_api){
+                    setUser(false)
+                    setLoading(false)
+                    return;
+                }
                 setUser(user_from_api);
                 setToken(token);                                                 
                 setLoading(false);
