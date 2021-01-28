@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent: 'center',
         height: 30,
-        backgroundColor: 'rgba(128, 3, 154, 0.8)',
+        backgroundColor: '#d16088',
         marginTop: 5,
     },
     subtitleText:{

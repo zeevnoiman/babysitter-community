@@ -121,7 +121,7 @@ const UserProvider = ({children}) => {
         if(res.data.role != role){
             throw(`You are not registered as ${role}, please enter with your correct user`);
         }
-        api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
+        api.defaults.headers.Authorization = `Bearer ${res.data.token}`;
         console.log(api.defaults.headers);
         await AsyncStorage.removeItem('BS:User');
         await AsyncStorage.removeItem('BS:Token');

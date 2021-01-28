@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "jobs-mobile",
-    "slug": "jobs-mobile",
+    "name": "Click Nanny",
+    "slug": "click-nanny",
     "privacy": "public",
     "platforms": [
       "ios",
@@ -12,7 +12,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./src/assets/background.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

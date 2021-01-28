@@ -42,19 +42,19 @@ export default function PastWorks({navigation}){
     }, [modalVisible])
 
     
-    useEffect(() => {
-        function sortWorks(){
-            works.sort((a, b) => { 
-                if(isBefore(a.dateHourStartDateFormat, b.dateHourStartDateFormat)){
-                    return -1;
-                }
-                else{
-                    return 1;
-                }
-            })
-        }
-        sortWorks();
-    }, works)
+    // useEffect(() => {
+    //     function sortWorks(){
+    //         works.sort((a, b) => { 
+    //             if(isBefore(a.dateHourStartDateFormat, b.dateHourStartDateFormat)){
+    //                 return -1;
+    //             }
+    //             else{
+    //                 return 1;
+    //             }
+    //         })
+    //     }
+    //     sortWorks();
+    // }, works)
 
     async function handleSubmit(){
         if(reviewText == ''){
@@ -78,18 +78,18 @@ export default function PastWorks({navigation}){
         }
     }
 
-    if(works.length < 1 || isBefore(new Date(), works[0].dateHourStartDateFormat,)) {
-        return(
-            <View style={styles.container}>
-                <View style={styles.loadingContainer}>
-                    <FontAwesome name="calendar" size={118} color="#f20079" />
-                    <Text style={styles.waitText}>
-                        There are no past works in your calendary :(
-                    </Text>
-                </View>
-            </View>
-        )
-    }
+    // if(works.length < 1 || isBefore(new Date(), works[0].dateHourStartDateFormat,)) {
+    //     return(
+    //         <View style={styles.container}>
+    //             <View style={styles.loadingContainer}>
+    //                 <FontAwesome name="calendar" size={118} color="#f20079" />
+    //                 <Text style={styles.waitText}>
+    //                     There are no past works in your calendary :(
+    //                 </Text>
+    //             </View>
+    //         </View>
+    //     )
+    // }
     return (
         <View style={styles.container}>
             <FlatList
@@ -136,7 +136,7 @@ export default function PastWorks({navigation}){
                                     </View>
                                     <View style={styles.dateRow}>
                                     <Text style={styles.ageText}>To:</Text>                     
-                                    <Text style={[styles.ageText, {marginLeft: 10}]}>{work.dateHourFinishReadable}</Text>                     
+                                    <Text style={[styles.ageText, {marginLeft: 10}]}>{format(work.dateHourFinishDateFormat, 'HH:mm:ss')}</Text>                     
                                     </View>
                                     <View style={styles.rateBox}>
                                             <Text style={styles.ageText}>Paid:</Text>

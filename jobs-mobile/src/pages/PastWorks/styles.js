@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     modalConfirmButton: {
-        backgroundColor: '#be4def',
+        backgroundColor: '#5a7a7d',
         borderRadius: 8,
         height: 50,
         width: 100,
