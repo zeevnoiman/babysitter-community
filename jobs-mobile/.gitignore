@@ -12,3 +12,4 @@ web-report/
 keys.js
 # macOS
 .DS_Store
+cores.txt

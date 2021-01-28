@@ -74,7 +74,7 @@ function Map({navigation}) {
         
         const babySitters = await searchBabysitters(latitude, longitude);
         
-        const isEqual = false;
+        let isEqual = false;
         if(babysitters.length > 0){
             isEqual = babySitters.every((babysitter, index) => babysitter.id == babysitters[index].id);
         }

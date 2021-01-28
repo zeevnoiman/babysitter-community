@@ -65,6 +65,16 @@ export default function PastWorks({navigation}){
         }
     }
 
+    if(works.length < 1) {
+        return(
+            <View style={styles.loadingContainer}>
+            <FontAwesome name="calendar" size={118} color="#f20079" />
+            <Text style={styles.waitText}>
+                There are no past works in your calendary :(
+            </Text>
+        </View>
+        )
+    }
     return (
         <View style={styles.container}>
             <ImageBackground source={backgroundPattern} style={{height: '100%', width: '100%', position: 'absolute'}}></ImageBackground>        
@@ -82,7 +92,6 @@ export default function PastWorks({navigation}){
             showsVerticalScrollIndicator={false}
             renderItem={({item : work, index}) => {
                 day = [...day, getDate(work.dateHourStartDateFormat)];
-                
                 return ( 
                     
                         isBefore(work.dateHourStartDateFormat, new Date()) ?

@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginLeft: 5,
         color:'#f20079'
-        //color:'#c88802'
     },
     shekel:{
         lineHeight: 20,

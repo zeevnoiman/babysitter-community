@@ -6,6 +6,13 @@ const styles = StyleSheet.create({
     container:{
         flex: 1
     },
+    loadingContainer:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '80%',
+        alignSelf: 'center'
+    },
     subtitle:{
         width:'100%',
         justifyContent: 'space-between',
@@ -20,6 +27,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat',
         color: '#fff',
         marginLeft: 5
+    },
+    waitText:{
+        fontFamily: 'Montserrat',
+        color: '#333',
+        marginTop: 20,
+        fontSize: 32
     },
     babysitterItem:{
         height: 100,
