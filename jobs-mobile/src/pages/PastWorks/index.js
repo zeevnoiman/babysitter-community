@@ -1,14 +1,11 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {Text, View, Image, FlatList, TouchableOpacity, Alert, ImageBackground, TextInput, Modal} from 'react-native';
-import {EvilIcons, Ionicons, FontAwesome, 
-    FontAwesome5} from '@expo/vector-icons';
-import {isBefore, getDate, getDay, formatRelative, parseISO} from 'date-fns'
-import { zonedTimeToUtc, format } from 'date-fns-tz';
+import {EvilIcons, FontAwesome} from '@expo/vector-icons';
+import {isBefore, getDate} from 'date-fns'
+import { format } from 'date-fns-tz';
 import StarRating from 'react-native-star-rating';
 
 import anonimusImage from '../../assets/anonimo.png';
-import backgroundPattern from '../../assets/backgroundPattern.png';
-import api from '../../services/api';
 import {staticAddress} from '../../services/api';
 import { userContext } from '../../contexts/UserContext';
 import styles from './styles';
@@ -43,6 +40,22 @@ export default function PastWorks({navigation}){
             }
         }
     }, [modalVisible])
+
+    
+    useEffect(() => {
+        function sortWorks(){
+            works.sort((a, b) => { 
+                if(isBefore(a.dateHourStartDateFormat, b.dateHourStartDateFormat)){
+                    return -1;
+                }
+                else{
+                    return 1;
+                }
+            })
+        }
+        sortWorks();
+    }, works)
+
     async function handleSubmit(){
         if(reviewText == ''){
             setReviewRequiredShow(true);
@@ -65,19 +78,20 @@ export default function PastWorks({navigation}){
         }
     }
 
-    if(works.length < 1) {
+    if(works.length < 1 || isBefore(new Date(), works[0].dateHourStartDateFormat,)) {
         return(
-            <View style={styles.loadingContainer}>
-            <FontAwesome name="calendar" size={118} color="#f20079" />
-            <Text style={styles.waitText}>
-                There are no past works in your calendary :(
-            </Text>
-        </View>
+            <View style={styles.container}>
+                <View style={styles.loadingContainer}>
+                    <FontAwesome name="calendar" size={118} color="#f20079" />
+                    <Text style={styles.waitText}>
+                        There are no past works in your calendary :(
+                    </Text>
+                </View>
+            </View>
         )
     }
     return (
         <View style={styles.container}>
-            <ImageBackground source={backgroundPattern} style={{height: '100%', width: '100%', position: 'absolute'}}></ImageBackground>        
             <FlatList
             style={styles.worksList}
             data={works.sort((a, b) => { 

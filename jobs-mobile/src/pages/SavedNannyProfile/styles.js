@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     yearsOld:{
         fontFamily: 'Montserrat',
         fontSize: 18,
-        color: '#9338ba'
+        color: '#d16088'
     },
     addressBox:{
         width: '80%',
@@ -82,11 +82,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Medium',
         fontSize: 18,
         marginLeft: 5,
-        color:'#c88802'
+        color:'#5a7a7d'
     },
     shekel:{
         lineHeight: 25,
-        color:'#c88802'
+        // color:'#c88802'
+        color:'#5a7a7d'
     },
     languagesBox:{
         marginTop: 30,
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     },
 
     action:{
-        backgroundColor: '#be4def',
+        backgroundColor: '#d16088',
         borderRadius: 8,
         height: 50,
         width: 50,

@@ -6,7 +6,6 @@ import {isBefore, getDate, isAfter} from 'date-fns'
 import { zonedTimeToUtc, format } from 'date-fns-tz';
 
 import anonimusImage from '../../assets/anonimo.png';
-import backgroundPattern from '../../assets/backgroundPattern.png';
 import {staticAddress} from '../../services/api';
 import { userContext } from '../../contexts/UserContext';
 import { workContext } from '../../contexts/WorkContext';
@@ -24,23 +23,38 @@ export default function OpenWorks({navigation}){
         loadWorks();
     }, [likedBabysitters])
     
+    useEffect(() => {
+        function sortWorks(){
+            works.sort((a, b) => { 
+                if(isBefore(a.dateHourStartDateFormat, b.dateHourStartDateFormat)){
+                    return -1;
+                }
+                else{
+                    return 1;
+                }
+            })
+        }
+        sortWorks();
+    }, works)
     var day = []
     
-    if(works.length < 1) {
+
+
+    if(works.length < 1 || isBefore(works[0].dateHourStartDateFormat, new Date())) {
         return(
+        <View style={styles.container}>
             <View style={styles.loadingContainer}>
-            <FontAwesome name="calendar" size={118} color="#f20079" />
-            <Text style={styles.waitText}>
-                There are no future works in your calendary :(
-            </Text>
+                <FontAwesome name="calendar" size={118} color="#f20079" />
+                <Text style={styles.waitText}>
+                    There are no future works in your calendary :(
+                </Text>
+            </View>
         </View>
         )
     }
 
     return (
         <View style={styles.container}>
-            <ImageBackground source={backgroundPattern} style={{height: '100%', width: '100%', position: 'absolute'}}></ImageBackground>
-            
         <FlatList
         style={styles.worksList}
         data={works.sort((a, b) => { 
@@ -85,7 +99,7 @@ export default function OpenWorks({navigation}){
                                 <Text style={[styles.ageText, {marginLeft: 10}]}>{format(work.dateHourStartDateFormat, 'HH:mm:ss')}</Text>
                                 </View>
                                 <Text style={styles.ageText}>To:</Text>                     
-                                <Text style={styles.ageText}>{work.dateHourFinishReadable}</Text>                     
+                                <Text style={styles.ageText}>{format(work.dateHourFinishDateFormat, 'HH:mm:ss')}</Text>                     
                             </View>
                             <View style={styles.rateBox}>
                                     <FontAwesome name='shekel' size={15} style={styles.shekel} ></FontAwesome>

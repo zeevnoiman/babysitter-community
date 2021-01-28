@@ -8,7 +8,6 @@ import { userContext } from '../../contexts/UserContext';
 import { familyContext } from '../../contexts/FamilyContext';
 import styles from './styles';
 import anonimusImage from '../../assets/anonimo.png';
-import backgroundPattern from '../../assets/backgroundPattern.png';
 
 export default function LikedNannies({navigation}){
 
@@ -29,9 +28,7 @@ export default function LikedNannies({navigation}){
         }
     }
     return(
-        <View style={styles.container}>
-            <ImageBackground source={backgroundPattern} style={{height: '100%', width: '100%', position: 'absolute'}}></ImageBackground>
-            
+        <View style={styles.container}> 
             <FlatList
             style={styles.babysittersList}
             data={babysitters}
@@ -51,7 +48,7 @@ export default function LikedNannies({navigation}){
                            rating={babysitter.stars}
                            fullStarColor={'#fff000'}
                         />
-                        <View >
+                        <View style={styles.photoBox} >
                             { babysitter.photo.length > 0 ?
                             <Image style={styles.imageBabysitter} source={{uri : `${staticAddress}${babysitter.photo}`}}/> 
                             :

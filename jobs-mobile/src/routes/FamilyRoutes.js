@@ -54,7 +54,7 @@ const FamilyRoutes = () => {
                         <FamilyStack.Screen name='LikedNannies' component={LikedNannies} 
                         options={{ headerTitle : 'Favorites'}}/>
                         <FamilyStack.Screen name='Works' component={Works} 
-                        options={{ headerTitle : 'Bookings'}}/>
+                        options={{ headerTitle : ''}}/>
                         <FamilyStack.Screen name='OpenWorks' component={OpenWorks} />
                         <FamilyStack.Screen name='PastWorks' component={PastWorks} />
                         <FamilyStack.Screen name='NannyReviews' component={NannyReviews} 

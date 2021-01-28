@@ -204,6 +204,7 @@ function SearchBabysitters({navigation}){
                     <Ionicons name='md-search'
                     size={28}
                     color='#759d81'/>
+                    <Text style={styles.ageText}>Find</Text>
                 </TouchableOpacity>
         </KeyboardAvoidingView> 
         :

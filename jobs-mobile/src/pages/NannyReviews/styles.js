@@ -3,7 +3,22 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
 
     container:{
-        flex: 1
+        flex: 1,
+        backgroundColor: '#eee'
+    },
+    loadingContainer:{
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+        width: '80%',
+        alignSelf: 'center',
+        backgroundColor: '#eee'
+    },
+    waitText:{
+        fontFamily: 'Montserrat',
+        color: '#333',
+        marginTop: 20,
+        fontSize: 32
     },
     perfil:{
         justifyContent: 'center',

@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     },
     infoText:{
         fontFamily: 'Montserrat',
-        color: '#80039a',
+        color: '#d16088',
         fontSize: 18,
         marginTop: 30
     },
@@ -150,12 +150,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat',
         fontSize: 14,
         marginLeft: 5,
-        color:'#f20079'
+        color:'#5a7a7d'
     },
     shekel:{
         lineHeight: 20,
-        color:'#f20079'
-        //color:'#c88802'
+        color:'#5a7a7d'
+        // color:'#f20079'
     },
     likeButton:{      
         position: 'absolute',

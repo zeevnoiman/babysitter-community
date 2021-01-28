@@ -1,15 +1,10 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {Text, View, Image, FlatList, TouchableOpacity, Alert, ImageBackground, TextInput, Modal} from 'react-native';
-import {EvilIcons, Ionicons, FontAwesome, 
-    FontAwesome5} from '@expo/vector-icons';
-import {isBefore, getDate, getDay, formatRelative, parseISO} from 'date-fns'
-import { zonedTimeToUtc, format } from 'date-fns-tz';
+import {Text, View, Image, FlatList, TouchableOpacity} from 'react-native';
 import StarRating from 'react-native-star-rating';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 import anonimusImage from '../../assets/anonimo.png';
-import backgroundPattern from '../../assets/backgroundPattern.png';
 import {staticAddress} from '../../services/api';
-import api from '../../services/api';
 import { userContext } from '../../contexts/UserContext';
 import { workContext } from '../../contexts/WorkContext';
 import styles from './styles';
@@ -34,12 +29,18 @@ export default function NannyReviews({route}){
      
     if(reviews.length < 1){
         return(
-            <Text>There are no reviews to show...</Text>
+        <View style={styles.container}>
+            <View style={styles.loadingContainer}>
+                <MaterialIcons name="rate-review" size={118} color="#f20079" />
+                <Text style={styles.waitText}>
+                There are no reviews to show...
+                </Text>
+            </View>
+        </View>
         )
     }
     return (
         <View style={styles.container}>
-            <ImageBackground source={backgroundPattern} style={{height: '100%', width: '100%', position: 'absolute'}}></ImageBackground>
             <View style={styles.perfil}>
                 <View style={styles.avatarContainer}>
                     { nanny.photo.length > 0 ?

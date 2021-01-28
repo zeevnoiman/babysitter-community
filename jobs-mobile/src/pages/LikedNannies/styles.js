@@ -1,15 +1,14 @@
 import {StyleSheet} from 'react-native';
 
-
-
 const styles = StyleSheet.create({
 container:{
-    flex: 1
+    flex: 1,
+    backgroundColor: '#eee'
 },
 babysitterItem:{
-    height: 200,
+    height: 170,
     borderColor: '#999',
-    borderRadius: 5,
+    borderRadius: 8,
     marginHorizontal: 5,
     flexDirection: 'row',
     marginVertical: 10,
@@ -21,10 +20,12 @@ starsContainer:{
     top: 5,
     width: 85
 },
-imageBabysitter:{
-    height: '100%',
-    width: 120,
+photoBox:{
+    width: '45%',
     marginRight: 5
+},
+imageBabysitter:{
+    flex: 1,
 },
 babysitterInfo:{
     alignItems: 'flex-start',
@@ -33,7 +34,7 @@ babysitterInfo:{
 },
 infoText:{
     fontFamily: 'Montserrat',
-    color: '#80039a',
+    color: '#d16088',
     fontSize: 22,
     marginTop: 30
 },
@@ -50,13 +51,11 @@ ratePrice:{
     fontFamily: 'Montserrat',
     fontSize: 14,
     marginLeft: 5,
-    color:'#f20079'
-    //color:'#c88802'
+    color:'#5a7a7d'
 },
 shekel:{
     lineHeight: 20,
-    color:'#f20079'
-    //color:'#c88802'
+    color:'#5a7a7d'
 },
 deleteButton:{
     position: 'absolute',

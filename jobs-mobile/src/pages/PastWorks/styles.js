@@ -4,21 +4,24 @@ import {StyleSheet} from 'react-native';
 const styles = StyleSheet.create({
 
     container:{
-        flex: 1
+        flex: 1,
+        backgroundColor: '#eee'
     },
     loadingContainer:{
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
         width: '80%',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        backgroundColor: '#eee'
     },
     subtitle:{
         width:'100%',
         justifyContent: 'space-between',
         alignItems: 'center',
         height: 50,
-        backgroundColor: 'rgba(54, 52, 52, 0.8)',
+        // backgroundColor: 'rgba(54, 52, 52, 0.8)',
+        backgroundColor: '#5a7a7d',
         marginTop: 5,
         flexDirection: 'row'
     },
