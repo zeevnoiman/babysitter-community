@@ -2,7 +2,8 @@ import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1
+        flex: 1,
+        backgroundColor: '#eee'
     },
     searchForm:{
         justifyContent: 'center',
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat',
         fontSize: 16,
         marginTop: 8,
-        color: '#333'
+        color: '#eee'
     },
     checkboxContainer:{
         width: '90%',
@@ -63,10 +64,19 @@ const styles = StyleSheet.create({
         padding: 5,
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
-        borderWidth: 1,
-        borderColor : '#333'
+        backgroundColor: '#d16088'
     },
-
+    searchButton:{
+        alignSelf: 'flex-end',
+        marginRight: 10,
+        marginBottom: 3,
+        justifyContent: 'center',
+        alignItems:'center',
+        padding: 5,
+        // borderWidth: 1,
+        // borderColor : '#333',
+        borderRadius: 100
+    },
     babysitterItem:{
         height: 200,
         borderColor: '#999',

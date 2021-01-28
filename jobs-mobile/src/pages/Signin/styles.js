@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
         color: '#971300'
     },
     action:{
-        backgroundColor: '#be4def',
+        backgroundColor: '#d16088',
         borderRadius: 8,
         height: 50,
         width: '50%',
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     actionText:{
         color: '#fff',
         fontSize: 16,
-        fontFamily: 'Montserrat-Medium'
+        fontFamily: 'Montserrat'
     }
 })
 

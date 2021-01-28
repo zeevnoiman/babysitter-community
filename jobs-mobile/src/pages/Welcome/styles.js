@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     },
     actions:{
         height: '80%',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
     loginBox:{
         flexDirection: 'row',
@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
     },
     action:{
         marginTop: 10,
-        backgroundColor: '#80039a',
+        backgroundColor: '#d16088',
         borderRadius: 8,
-        height: 35,
+        height: 45,
         width: '48%',
         justifyContent: 'center',
         alignItems: 'center',
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
     },
     actionText:{
         color: '#fff',
-        fontSize: 14,
-        fontFamily: 'Montserrat-Medium'
+        fontSize: 18,
+        fontFamily: 'Montserrat'
     }
 })
 

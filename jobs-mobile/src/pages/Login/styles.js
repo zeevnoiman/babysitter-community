@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     action:{
         marginTop: 30,
-        backgroundColor: '#be4def',
+        backgroundColor: '#d16088',
         borderRadius: 8,
         height: 50,
         width: '50%',

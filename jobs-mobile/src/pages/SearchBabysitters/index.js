@@ -199,11 +199,11 @@ function SearchBabysitters({navigation}){
                     </>)
                 }
                 <TouchableOpacity
-                style={styles.loadButton} 
+                style={styles.searchButton} 
                 onPress={() => handleSubmitSearch()} >
                     <Ionicons name='md-search'
-                    size={25}
-                    color='#333'/>
+                    size={28}
+                    color='#759d81'/>
                 </TouchableOpacity>
         </KeyboardAvoidingView> 
         :

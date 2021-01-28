@@ -35,7 +35,7 @@ export default function Login({route, navigation}){
     }
     return(
         <View style={styles.container}>
-            <Text style={styles.helloText}>Hello {role}, login here:</Text>
+            <Text style={styles.helloText}>Hello {role}!</Text>
             <View style={styles.inputBox}>
                 <TextInput 
                     style={styles.textInput}
@@ -67,7 +67,11 @@ export default function Login({route, navigation}){
              </TouchableOpacity>
               
             <TouchableOpacity style={styles.signinBox} onPress={navigateToSignin}>
-                <Text style={styles.signinText}>Not registered yet? Click here to signin</Text>
+                <Text style={styles.signinText}>
+                    <Text>Not registered yet? Click </Text>
+                    <Text style={{textDecorationLine: 'underline'}}>here</Text>
+                    <Text> to signin</Text>
+                </Text>
             </TouchableOpacity>
                 
         </View>

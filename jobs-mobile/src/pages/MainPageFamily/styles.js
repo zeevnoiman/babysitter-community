@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#ffff'
+        backgroundColor: '#eee'
     },
     firstLine:{
         flexDirection: 'row',
@@ -18,17 +18,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '80%'
     },
+    titleBox:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 40
+    },
     title:{
         fontFamily: 'Montserrat',
         fontSize: 26,
         color: '#80039a',
-        marginBottom: 40
-        
     },
     buttonv1:{
         flex: 1,
-        borderWidth: StyleSheet.hairlineWidth,
-        borderColor: '#fafafa',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8

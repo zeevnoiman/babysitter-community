@@ -64,35 +64,36 @@ export default function MainPageFamily({navigation}){
                 }}
                 source={
                     // isDay ? 
-                    // require('../../../assets/')  ://not found good lottiefile compatible with expo
+                    // require('../../../assets/baby2.json')  ://not found good lottiefile compatible with expo
                      require('../../../assets/28912-baby-sleeping.json')}
-                // OR find more Lottie files @ https://lottiefiles.com/featured
-                // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
                 />
-                <Text style={styles.title}>{welcomePhrase} {user.name}</Text>
+                <View style={styles.titleBox}>
+                    <Text style={styles.title}>{welcomePhrase}</Text>
+                    <Text style={styles.title}>{user.name}</Text>
+                </View>
             </View>
             <View style={styles.firstLine}>
                 <TouchableOpacity style={styles.buttonv1} onPress={() => navigation.navigate('Map')}>
                     {/* <Text style={styles.text}>Map</Text> */}
-                    <FontAwesome name="map-o" size={24} color="#80039a" />
+                    <FontAwesome name="map-o" size={28} color="#d16088" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonv1} onPress={() => navigation.navigate('LikedNannies')}>
-                    <FontAwesome name="heart" size={24} color="#80039a" />
+                    <FontAwesome name="heart" size={28} color="#d16088" />
                     {/* <Text style={styles.text}>Favorites</Text> */}
                 </TouchableOpacity>
             {/* </View> */}
             {/* <View style={styles.secondLine}> */}
                 <TouchableOpacity style={styles.buttonv1} onPress={() => navigation.navigate('Works')}>
                     {/* <Text style={styles.text}>Bookings</Text> */}
-                    <FontAwesome name="calendar" size={24} color="#80039a" />
+                    <FontAwesome name="calendar" size={28} color="#d16088" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonv1} onPress={() => navigation.navigate('SearchBabysitters')}>
                     {/* <Text style={styles.text}>Search</Text> */}
-                    <FontAwesome name="search" size={24} color="#80039a" />
+                    <FontAwesome name="search" size={28} color="#d16088" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonv1} onPress={() => navigation.navigate('UserProfile')}>
                     {/* <Text style={styles.text}>Search</Text> */}
-                    <Ionicons name="person-circle-outline" size={24} color="#80039a" />
+                    <Ionicons name="person-circle-outline" size={28} color="#d16088" />
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

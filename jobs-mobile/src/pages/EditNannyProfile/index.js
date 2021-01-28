@@ -209,7 +209,7 @@ export default function EditNannyProfile({navigation}){
             }
           }
           else{//screen in creation mode
-            await saveBabysitter(data);
+            await saveBabysitter(data, user.id);
 
           }
         } catch (error) {

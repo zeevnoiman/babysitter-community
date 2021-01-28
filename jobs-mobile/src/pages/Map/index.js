@@ -82,6 +82,8 @@ function Map({navigation}) {
             console.log('not render');
             return;
         }
+        console.log('render');
+        console.log(babySitters);
         setBabysitters(babySitters);
     }
 
